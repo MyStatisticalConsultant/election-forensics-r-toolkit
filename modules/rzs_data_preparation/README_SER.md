@@ -57,8 +57,9 @@ Internet je potreban za preuzimanje R-a, paketa i izvora, ali ne i za lokalno iz
 
 Na GitHub-u izabrati **Code → Download ZIP**, raspakovati arhivu i otvoriti direktorijum `modules/rzs_data_preparation`, odnosno klonirati repozitorijum kada bude objavljen. U tom direktorijumu napraviti folder `raw_data/`. Zvanični izvori:
 
-- 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
-- 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
+- Predsednički izbori 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
+- Predsednički izbori 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
+- Parlamentarni izbori 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219002.xlsx>
 
 Sačuvati fajlove pod nazivima navedenim u odeljku `INPUTS$source`, ili promeniti putanje u delu **EDITABLE**. Nema automatskog preuzimanja izvora. Ne dodavati lični `setwd("C:/Users/...")` u programski kod.
 
