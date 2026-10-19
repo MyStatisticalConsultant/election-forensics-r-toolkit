@@ -1,0 +1,19 @@
+Election_type,Year,Metric,Expected,Mismatch_policy,Source_URL,Reference_note
+presidential,2017,Stations,8396,FAIL,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php,RIK 2017 final-candidate bulletin; registered and attendance figures separately cross-checked to published election report.
+presidential,2017,E,6724949,REVIEW,https://arhiva.rik.parlament.gov.rs/latinica/izbori-za-predsednika-republike-2017-broj-biraca.php,"RIK final pre-election registered-voter figure (6,724,949); source RZS station-level data sum to 6,723,177. Do not change either figure. Reconcile with RIK final report and precinct register."
+presidential,2017,A,3655365,FAIL,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php,RIK 2017 final-candidate bulletin; registered and attendance figures separately cross-checked to published election report.
+presidential,2017,C,3654014,FAIL,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php,RIK 2017 final-candidate bulletin; registered and attendance figures separately cross-checked to published election report.
+presidential,2017,I,60378,FAIL,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php,RIK 2017 final-candidate bulletin; registered and attendance figures separately cross-checked to published election report.
+presidential,2017,B,3593636,FAIL,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php,RIK 2017 final-candidate bulletin; registered and attendance figures separately cross-checked to published election report.
+presidential,2022,Stations,8267,FAIL,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+presidential,2022,E,6502307,FAIL,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+presidential,2022,A,3811585,FAIL,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+presidential,2022,C,3797612,FAIL,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+presidential,2022,I,89933,FAIL,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+presidential,2022,B,3707679,FAIL,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+parliamentary,2022,Stations,8267,FAIL,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+parliamentary,2022,E,6502307,FAIL,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+parliamentary,2022,A,3810559,FAIL,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+parliamentary,2022,C,3806050,FAIL,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+parliamentary,2022,I,112722,FAIL,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.
+parliamentary,2022,B,3693328,FAIL,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php,RIK final result adopted on official meeting date.

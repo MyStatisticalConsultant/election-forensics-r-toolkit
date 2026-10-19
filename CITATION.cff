@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this research software, cite the repository's tagged version or commit."
+title: "Election Forensics R Toolkit"
+authors:
+  - family-names: "Kovačić"
+    given-names: "Zlatko J."
+version: "1.6.1-dev"
+date-released: "2026-10-19"
+type: software
+license: MIT
+keywords:
+  - election forensics
+  - R
+  - Serbia
+  - reproducibility
+  - descriptive statistics

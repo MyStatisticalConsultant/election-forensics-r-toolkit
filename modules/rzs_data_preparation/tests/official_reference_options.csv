@@ -1,0 +1,39 @@
+Election_type,Year,Option_number,Official_votes,Option_name_for_identification,Source_URL
+presidential,2017,1,597728,Saša Janković,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,2,206676,Vuk Jeremić,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,3,11540,Miroslav Parović,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,4,51651,Saša Radulović,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,5,344498,Luka Maksimović,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,6,2012788,Aleksandar Vučić,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,7,83523,Boško Obradović,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,8,163802,dr Vojislav Šešelj,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,9,38167,prof. dr Aleksandar Popović,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,10,42193,Milan Stamatović,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2017,11,41070,Nenad Čanak,https://arhiva.rik.parlament.gov.rs/english/arhiva-sednice-2017.php
+presidential,2022,1,32947,MIŠA VACIĆ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,2,122378,BILjANA STOJKOVIĆ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,3,77031,BRANKA STAMENKOVIĆ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,4,698538,ZDRAVKO PONOŠ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,5,160553,MILICA ĐURĐEVIĆ STAMENKOVSKI,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,6,2224914,ALEKSANDAR VUČIĆ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,7,226137,DR MILOŠ JOVANOVIĆ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+presidential,2022,8,165181,BOŠKO OBRADOVIĆ,https://www.rik.parlament.gov.rs/vest/sr/317359/70-sednica-republicke-izborne-komisije.php
+parliamentary,2022,1,1635101,ALEKSANDAR VUČIĆ – Zajedno možemo sve,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,2,435274,IVICA DAČIĆ-PREMIJER SRBIJE,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,3,60313,SAVEZ VOJVOĐANSKIH MAĐARA-IŠTVAN PASTOR,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,4,82066,DR VOJISLAV ŠEŠELj – SRPSKA RADIKALNA STRANKA,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,5,520469,MARINIKA TEPIĆ – UJEDINjENI ZA POBEDU SRBIJE,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,6,204444,DR MILOŠ JOVANOVIĆ - NADA ZA SRBIJU,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,7,141227,MILICA ĐURĐEVIĆ STAMENKOVSKI - SRPSKA STRANKA ZAVETNICI,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,8,35850,MUFTIJIN AMANET – STRANKA PRAVDE I POMIRENjA,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,9,178733,MORAMO – AKCIJA – EKOLOŠKI USTANAK – NE DAVIMO BEOGRAD,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,10,86362,"SUVERENISTI – DJB, ZS,ŽZS",https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,11,144762,SRPSKI POKRET DVERI - POKS,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,12,24024,ZAJEDNO ZA VOJVODINU - VOJVOĐANI,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,13,20553,SDA SANDžAKA – DR SULEJMAN UGLjANIN,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,14,63560,BORIS TADIĆ – AJMO LjUDI,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,15,3267,ALTERNATIVA ZA PROMENE - ALBANSKA DEMOKRATSKA ALTERNATIVA,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,16,10165,KOALICIJA ALBANACA DOLINE,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,17,31196,OTETE BEBE ANA PEJIĆ,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,18,6393,ROMSKA PARTIJA – SRĐAN ŠAJN,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php
+parliamentary,2022,19,9569,RUSKI MANjINSKI SAVEZ,https://www.rik.parlament.gov.rs/vest/sr/324925/79-sednica-republicke-izborne-komisije.php

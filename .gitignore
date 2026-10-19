@@ -1,0 +1,18 @@
+# Official raw election data and generated workbooks
+**/raw_data/
+**/RZS_prepared/
+**/RZS_station_status_overrides.csv
+**/sessionInfo.txt
+*.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+~$*.xlsx
+.DS_Store
+
+# Independent validation reports
+validation_results/
+**/validation_results/
+
+# Generated descriptive-statistics outputs (local reproducible artifacts)
+**/descriptive_outputs/
