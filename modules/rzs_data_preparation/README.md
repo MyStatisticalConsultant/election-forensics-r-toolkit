@@ -71,8 +71,9 @@ Use GitHub **Code → Download ZIP**, extract it, or clone the eventual reposito
 
 Download the original official workbooks from the RZS publications site:
 
-- 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
-- 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
+- Presidential election 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
+- Presidential election 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
+- Parliamentary election 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219002.xlsx>
 
 Create `raw_data/` inside the module directory; save the official files there, using the names expected in the EDITABLE section (or edit the `source` paths). Verify schema/version and attribution against the original RZS publication. The supplied paths and templates are examples of supported layouts, **not automatic download logic**.
 
