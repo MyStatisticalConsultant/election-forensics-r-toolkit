@@ -1,20 +1,27 @@
 # Kontrolna lista za objavljivanje — Election Forensics R Toolkit
 
-[English](RELEASE_CHECKLIST.md)
+[English](RELEASE_CHECKLIST.md) · [Registar](MODULE_REGISTRY_SER.md) · [Tok rada](WORKFLOW_SER.md)
 
-Ispunjenje jedne provere ne znači automatsku validaciju svih statističkih zaključaka.
+## Repozitorijum i dokumentacija — pri svakom novom modulu
 
-- [ ] U osnovnom folderu su README na **engleskom i srpskom latinicom**, MIT licenca, metapodaci citiranja, `.gitignore`, oba modula i dvojezična dokumentacija.
-- [ ] Nazivi/verzije koda odgovaraju dokumentaciji (postojeći provereni `RZS_data_preparation.R`; deskriptivni modul **v0.3.1**).
-- [ ] `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `validation_results/` nisu greškom dodati u Git.
-- [ ] RZS izvori su neizmenjeni; izvršeni su testovi prethodnog modula, uz jasno navedenu stavku **REVIEW** za upisane 2017.
-- [ ] Uspešno se izvršava svih sedam komandi testiranja i analize deskriptivnog modula za ista tri Excel ulaza i isti commit.
-- [ ] Sačuvan je datiran konzolni RStudio zapis i `sessionInfo()` bez ličnih putanja; evidentirane verzije softvera i hash ulaza.
-- [ ] `100 or more` je identičan `Main` za sva tri izbora; `All` i obe klasifikacije daju proverene nacionalne i teritorijalne zbirove.
-- [ ] Ključni glasovi, robusne mere i reprezentativne p/q-vrednosti poređeni su sa nezavisnim referencama; svaka razlika u zaokruživanju ili vezanim rangovima objašnjena.
-- [ ] Postoji 16 matrica po izborima, izlaz sprovedenih testova, tačna slova ŠĐŽČĆšđžčć i zaseban Word izveštaj po izborima.
-- [ ] Provereni su naslovi, prelomi širokih Word tabela, oznake priloga i prikaz p-vrednosti.
-- [ ] Svi EN/SR linkovi ispravno rade na GitHub-u; u publikaciji se navodi tag/commit.
-- [ ] Objavljena tvrdnja ostaje **validirano za tri proverena izborna skupa**, bez garancije za sve buduće podatke i bez tvrdnje o dokazu izborne prevare.
+- [ ] Pregledati **sve aktuelne** `.md` datoteke u osnovnom folderu i svim modulima, EN/SR. Ispraviti zastarele tvrdnje o postojećim, planiranim i validiranim modulima.
+- [ ] Uskladiti korenske README dokumente, registar, arhitekturu EN/SR, GitHub uputstva, tok rada, instalaciju, linkove, liste izlaza, podatke o citiranju i verzije.
+- [ ] Proveriti sve interne linkove, radne direktorijume i relativne `INPUTS` putanje. Razlikovati prvo pripremanje baze od kasnijeg izvršavanja samo izabranog modula.
+- [ ] Proveriti `LICENSE`, `CITATION.cff`, `.gitignore`, SHA-256 manifest i dvojezične korisničke/metodološke dokumente i testove novog modula.
+- [ ] Sačuvati stare dnevnike promena i beleške o ranijim izdanjima kao istorijske dokaze; dodati beleške o novoj verziji.
+- [ ] Potvrditi da dodavanje modula nije slučajno promenilo ranije provereni R kod ili lokalne podatke.
 
-Veliki generisani rezultati mogu se objaviti kao zasebni GitHub Release dodaci uz dokumentovan izvor, hash i proveru uslova daljeg deljenja — ne kao obični Git izvorni fajlovi.
+## Provere podataka i analiza
+
+- [ ] Priprema RZS: upoređivanje sa zvaničnim zbirovima, ugovor `Main`/`Master`/`Options` i dokumentovana stavka **REVIEW** za upisane 2017.
+- [ ] Deskriptivni modul v0.3.1: sintetički, integracioni i izlazni testovi za tri izbora; `100 or more == Main`, osam delimično preklapajućih grupa, 16 agregatnih korelacionih matrica, izveštaji i ćirilično/latinično kodiranje.
+- [ ] Klimek v0.1.0-dev: iz `modules/klimek/` izvršiti `source("tests/run_tests.R")`, `source("tests/integration_real_data.R")`, `source("Klimek.R")` i `source("tests/check_exports.R")`.
+- [ ] Proveriti obe normalizacije kumulativnih krivih, svih osam grupa, krajnje vrednosti za sve opcije, EN/SR grafikone, dijakritike i eventualno izabrane oblasti.
+- [ ] Sačuvati datiran zapis testova, `sessionInfo()`, parametre i hash ulaza. Ne proglašavati Klimek validiranim dok provere ne prođu.
+- [ ] Jasno navesti da statističke anomalije nisu samostalni dokaz izborne manipulacije.
+
+## Objavljivanje
+
+- [ ] U Git idu samo kod, testovi, dokumentacija i namerno objavljene reference; izvori i generisani izveštaji ostaju lokalno ili se objavljuju posebno sa poreklom.
+- [ ] Proveriti Git diff, linkove, oznaku verzije i tačne statuse sva tri modula.
+- [ ] Beleške o izdanju moraju razlikovati promene dokumentacije od promena statističkog metoda.

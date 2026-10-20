@@ -10,6 +10,8 @@ The Election Forensics R Toolkit is an open-source, **locally run** collection o
 |---|---|---|
 | `rzs_data_preparation` | Established preparation workflow for **2017 and 2022 presidential and 2022 parliamentary** RZS source formats; exports `Master`, `Main`, `Options`, QC and metadata | [English](modules/rzs_data_preparation/README.md) · [Serbian](modules/rzs_data_preparation/README_SER.md) |
 | `descriptive_statistics` **v0.3.1** | National, district and municipality summaries; eight overlapping reporting groups; 16 aggregate correlation matrices per election; robust measures, rank tests, CSV, Excel and optional Word | [English](modules/descriptive_statistics/README.md) · [Serbian](modules/descriptive_statistics/README_SER.md) |
+| `klimek` **v0.1.0-dev** | Klimek-style cumulative vote-versus-turnout curves for eight station groups; both normalisations, two figure families, EN/SR figures, optional area plots and explicit descriptive T90/T95 | [English](modules/klimek/README.md) · [Serbian](modules/klimek/README_SER.md) |
+
 
 **Validation boundary:** descriptive output from the three named elections was checked against independently calculated reference results as reported by the researcher. The repository includes tests to reproduce these checks. This is not blanket certification for other elections, newly inserted source columns or causal/fraud conclusions. The preparation module retains a documented **2017 registered-voter REVIEW** discrepancy; see [validation findings](modules/rzs_data_preparation/VALIDATION_FINDINGS.md) and the [descriptive-module validation guide](modules/descriptive_statistics/VALIDATION.md).
 
@@ -28,13 +30,21 @@ RZS_prepared/<election>_RZS_prepared.xlsx
     `  Options = candidate/list dictionary
            |
            v
-modules/descriptive_statistics/Descriptive_statistics.R
-           |
-           v
-descriptive_outputs/  (XLSX, UTF-8 BOM CSV, optional DOCX)
+  +--------+----------------------------------+
+  |                                           |
+  v                                           v
+modules/descriptive_statistics/             modules/klimek/
+Descriptive_statistics.R                     Klimek.R
+  |                                           |
+  v                                           v
+descriptive_outputs/                         klimek_outputs/
+(XLSX, CSV, optional DOCX)                   (CSV, XLSX, EN/SR PNG/PDF)
 ```
 
 `Main` is the default population for subsequent methods. The descriptive module also includes **QC-accepted** stations with fewer than 100 registered voters in its explicitly defined supplementary `All` and `Less than 100` groups. The eight rows must not be summed together.
+
+
+**Klimek validation:** v0.1.0-dev is a new module requiring its own RStudio synthetic, three-election integration and export tests. Its cumulative curves are exploratory and are not the complete formal JHK statistical test.
 
 ## Repository organisation
 
@@ -52,23 +62,33 @@ election-forensics-r-toolkit/
     │   ├── README.md / README_SER.md
     │   ├── tests/
     │   └── ... method, QC and bilingual documentation
-    └── descriptive_statistics/
+    ├── descriptive_statistics/
         ├── Descriptive_statistics.R
         ├── R/                 # reusable descriptive functions
         ├── tests/             # synthetic, integration and export checks
         ├── examples/          # usage guidance, no official data
         ├── docs/publication/  # explanatory EN/SR Word guides
         └── ... bilingual .md documentation
+    └── klimek/
+        ├── Klimek.R                 # one self-documented script
+        ├── tests/                 # synthetic, real-data, export checks
+        ├── USER_GUIDE.md / USER_GUIDE_SER.md
+        └── ... bilingual methods, outputs and reproducibility docs
 ```
 
-The folders `raw_data/`, `RZS_prepared/`, `descriptive_outputs/` and automatically generated `validation_results/` are **local working/output folders** and are excluded from ordinary Git commits. Verified validation evidence may be tracked separately under a documentation path, with clear provenance. See the [upload guide](GITHUB_UPLOAD_GUIDE.md).
+The folders `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/` and automatically generated `validation_results/` are **local working/output folders** and are excluded from ordinary Git commits. Verified validation evidence may be tracked separately under a documentation path, with clear provenance. See the [upload guide](GITHUB_UPLOAD_GUIDE.md).
+
+## Reusing prepared data — no full restart required
+
+When `modules/rzs_data_preparation/RZS_prepared/*.xlsx` already exists, run only the desired downstream module. Descriptive and Klimek are independent consumers; their results are stored in separate local output directories. See the [step-by-step workflow](WORKFLOW.md), the [current module registry](MODULE_REGISTRY.md), and the [GitHub update guide](GITHUB_UPLOAD_GUIDE.md). Adding a module does not require re-running all prior modules.
 
 ## First use
 
 1. Install [R](https://cran.r-project.org/) and optionally [RStudio](https://posit.co/download/rstudio-desktop/).
-2. Download official RZS XLSX files using links in the [preparation README](modules/rzs_data_preparation/README.md), saving them to the preparation module's `raw_data/` folder with the filenames expected by its editable configuration.
-3. Run the preparation module, then run its syntax and official-total validation scripts.
+2. **Only for first-time setup or changed source data:** download official RZS XLSX files using links in the [preparation README](modules/rzs_data_preparation/README.md), saving them to the preparation module's `raw_data/` folder with the filenames expected by its editable configuration.
+3. If the prepared workbooks are missing, run the preparation module and its validation; otherwise reuse the existing workbooks.
 4. Run the descriptive module's tests, runner and export verification from **its own module directory**. [Installation guide](modules/descriptive_statistics/INSTALLATION.md).
+5. From `modules/klimek/`, run the new module's three tests and its runner; see the bilingual [user guide](modules/klimek/USER_GUIDE.md). The Klimek module remains **v0.1.0-dev**, pending your first RStudio results.
 
 ## Publication and future development
 

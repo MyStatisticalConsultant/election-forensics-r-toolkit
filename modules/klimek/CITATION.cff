@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Please cite this software and the relevant RZS primary sources."
+type: software
+title: "Election Forensics R Toolkit: Klimek-style cumulative curves"
+authors:
+  - family-names: "Kovačić"
+    given-names: "Zlatko J."
+version: "0.1.0-dev"
+license: "MIT"

@@ -1,20 +1,27 @@
 # Release checklist — Election Forensics R Toolkit
 
-[Srpski](RELEASE_CHECKLIST_SER.md)
+[Srpski (latinica)](RELEASE_CHECKLIST_SER.md) · [Registry](MODULE_REGISTRY.md) · [Workflow](WORKFLOW.md)
 
-Use this list before marking the GitHub release stable. Checking one item does **not** imply that unrelated statistical claims have been independently validated.
+## Repository and documentation — required on every new module
 
-- [ ] Repository tree contains root README in **EN and SR-Lat**, MIT licence, citation metadata, `.gitignore`, both modules and their paired documentation.
-- [ ] Code filenames/version match documentation (`RZS_data_preparation.R` in its existing tested version; descriptive module **v0.3.1**).
-- [ ] `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `validation_results/` are not accidentally staged for Git.
-- [ ] Official RZS files are preserved unmodified; upstream preparation tests and official-total comparison run, with 2017 registered-voter **REVIEW** prominently recorded.
-- [ ] All seven descriptive test/run commands succeed against the same three source workbooks and same commit.
-- [ ] Preserve a complete, dated RStudio console log and sanitized `sessionInfo()`; archive software/package versions and input file hashes.
-- [ ] Check `100 or more` equals `Main` for all three elections; `All` and both size partitions reconcile nationally and geographically.
-- [ ] Compare key R-generated vote counts, robust statistics and representative p/q-values with independent implementations/references; document any tolerance/tie differences.
-- [ ] Confirm 16 ecological matrices per election, group significance test export, Unicode display of ŠĐŽČĆšđžčć and separate Word for each election.
-- [ ] Check Word table headings, wide table pagination, journal appendix labels and p-value formatting.
-- [ ] Inspect all relative EN/SR documentation links on GitHub; record release tag and commit SHA in journal citations.
-- [ ] Describe scope as **validated for the three tested election datasets**, not universally guaranteed or evidence of election fraud.
+- [ ] Inventory **all current** `.md` files in the root and every module, EN/SR: no obsolete claims about which modules exist, are planned, or are validated.
+- [ ] Check root README/README_SER, module registry, architecture EN/SR, upload guide, workflow EN/SR, installation sections, method links, output lists, citations and version information.
+- [ ] Verify all documentation navigation links, working-directory commands and relative `INPUTS` paths; distinguish new module prerequisites from the first-time preparation workflow.
+- [ ] Check `LICENSE`, `CITATION.cff`, `.gitignore`, SHA-256 manifest, new module tests and bilingual method/user guides.
+- [ ] Keep historical changelogs and prior release notes intact as evidence of earlier states; publish new release notes for the current release.
+- [ ] Confirm new-module changes do not accidentally alter previously validated R source files or existing local data.
 
-A versioned generated workbook/report may be attached separately to a GitHub Release only with provenance, checksum and applicable redistribution review; not as ordinary Git source.
+## Data and analytical checks
+
+- [ ] RZS preparation: source/official-total checks, `Main`/`Master`/`Options` data contract, and documented 2017 registered-voter **REVIEW**.
+- [ ] Descriptive v0.3.1: synthetic + integration + export tests for three named elections; `100 or more == Main`; eight overlapping groups, 16 aggregate correlation matrices, publication outputs and Unicode.
+- [ ] Klimek v0.1.0-dev: `source("tests/run_tests.R")`; `source("tests/integration_real_data.R")`; `source("Klimek.R")`; `source("tests/check_exports.R")` executed in `modules/klimek/`.
+- [ ] Klimek: both cumulative normalisations reconcile, eight polling-station groups, all option endpoints, EN/SR figures, font/diacritic rendering, and optional geography checked.
+- [ ] Save a dated test log, `sessionInfo()`, configuration and input hashes. Do not call Klimek validated before the tests and figure checks pass.
+- [ ] Do not claim that graphical irregularities or descriptive significance constitute proof of fraud.
+
+## Publishing
+
+- [ ] Only source, tests, documentation and intentional reference results are committed; raw XLSX, prepared XLSX and generated reports remain excluded unless separately published with provenance.
+- [ ] Check Git status/diff, README link rendering, release tag and accurate statuses for all three modules.
+- [ ] Provide honest release notes distinguishing documentation-only changes from methodological/code changes.
