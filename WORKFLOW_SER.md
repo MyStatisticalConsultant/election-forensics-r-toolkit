@@ -32,10 +32,13 @@ Rezultati su u `descriptive_outputs/`. Nema ponovnog izvršavanja pripreme ili m
 
 ## 3. Samo Klimek
 
-U RStudio-u postavite radni direktorijum na `election-forensics-r-toolkit/modules/klimek`. Podrazumevane putanje traže pripremljene fajlove u `../rzs_data_preparation/RZS_prepared/`. Pre prvog rada sa razvojnim modulom:
+U RStudio-u postavite radni direktorijum na `election-forensics-r-toolkit/modules/klimek`. Podrazumevane putanje traže pripremljene fajlove u `../rzs_data_preparation/RZS_prepared/`. Za proveru Klimek modula pre prve upotrebe:
 
 ```r
 source("tests/run_tests.R")
+source("tests/test_graphics_layout.R")
+source("tests/test_single_station_plots.R")
+source("tests/test_zero_station_groups.R")
 source("tests/integration_real_data.R")
 source("Klimek.R")
 source("tests/check_exports.R")
@@ -49,11 +52,7 @@ source("Klimek.R")
 
 Rezultati su u `klimek_outputs/`, bez menjanja ulaznih Excel fajlova. Skript obrađuje **sve izbore iz EDITABLE tabele `INPUTS`**. Za samo jedne izbore zadržite jedan odgovarajući red; ostale kasnije možete vratiti. `GRAPH_LANGUAGES <- "EN"`, `"SR"` ili `c("EN","SR")` određuje jezik grafikona; `CURVE_NORMALISATIONS <- "both"` uključuje oba načina normalizacije.
 
-## 4. Dodavanje narednog modula
-
-Sačuvajte postojeći folder Toolkit-a i lokalne pripremljene baze. Dodajte samo `modules/<naziv>/`, zatim usaglasite korensku dokumentaciju i zastarela aktuelna uputstva drugih modula. Novi modul može zahtevati dodatne R pakete, ali to **nije ponovna instalacija celog Toolkit-a**. Proverite njegove ulazne putanje i izvršite njegove testove. Stari moduli ne moraju ponovo da rade ako je njihov ulazni ugovor i sadržaj podataka nepromenjen.
-
-## 5. Kada šta ponovo izvršiti
+## 4. Kada šta ponovo izvršiti
 
 | Promena | Priprema RZS | Deskriptivna statistika | Klimek |
 |---|---|---|---|
@@ -66,11 +65,11 @@ Sačuvajte postojeći folder Toolkit-a i lokalne pripremljene baze. Dodajte samo
 
 **Važno:** postojeći skriptovi ne poseduju automatski sistem za otkrivanje zastarelih podataka. Ako se ulaz ili QC definicija promeni, stari rezultat može ostati pod istim imenom. Beležite hash izvora, verziju koda, parametre i datum. Rezultati istog naziva mogu biti prepisani pri ponavljanju, pa publikacione kopije čuvajte posebno.
 
-## 6. GitHub naspram lokalnih podataka
+## 5. GitHub naspram lokalnih podataka
 
 Na GitHub-u su *programski kod, metodologija i testovi*; na Vašem računaru su *originalni Excel podaci, pripremljene baze i rezultati*. Pri ažuriranju koda zaštitite lokalne `raw_data/`, `RZS_prepared/`, `descriptive_outputs/` i `klimek_outputs/`. `.gitignore` štiti pri uobičajenom Git radu, ali ne sprečava ručno prepisivanje datoteka tokom kopiranja ZIP arhive.
 
-Pogledajte [GitHub uputstvo](GITHUB_UPLOAD_GUIDE_SER.md) i [kontrolnu listu](RELEASE_CHECKLIST_SER.md).
+Uputstva za instalaciju i korišćenje dostupna su u glavnom [README-u](README_SER.md) i dokumentaciji svakog modula.
 
 
 **Klimek v0.1.4:** Pokrenite i `source("tests/test_zero_station_groups.R")`; prazne teritorijalne grupe eksplicitno se beleže, a zastarele Klimek slike izabrane oblasti uklanjaju se pre crtanja.

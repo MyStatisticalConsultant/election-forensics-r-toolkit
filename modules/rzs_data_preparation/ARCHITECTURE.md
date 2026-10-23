@@ -1,55 +1,48 @@
-# Proposed architecture and development plan
+# Toolkit architecture and modular development plan
 
-## Verdict on step-by-step development
+[Srpski (latinica)](ARCHITECTURE_SER.md) · [Current module registry](../../MODULE_REGISTRY.md) · [Execution workflow](../../WORKFLOW.md)
 
-**Yes, gradual implementation is appropriate — but not as one progressively larger script.** Start with this reproducible data-preparation baseline and add separately tested modules behind a common data contract. A method should be independently executable before any user interface is built. This balances incremental delivery with traceable scientific software engineering.
+## Why modular development is appropriate
 
-## Benefits and risks
+Developing one method at a time is appropriate when each module is independently testable, consumes a stable data contract and emits documented numerical results. The alternative—a single script continually expanded with many unrelated models—would increase coupling, make failures harder to trace, encourage repeated imports and risk inconsistent definitions of eligible polling stations.
 
-Advantages: early usable results, easier peer review, controlled validation of each forensic method, reusable common source interpretation, lower up-front cost, clean version history, and gradual improvements to public reporting.
-
-Risks of an ever-growing single script: tightly coupled global settings, repeated or divergent data cleaning, hard-to-reproduce method-specific exclusions, fragile updates when RZS schemas change, increased regression risk, and unmaintainable UI integration. Separate but unrelated script folders can also drift apart unless schemas, test data, metadata and interfaces are shared.
-
-## Recommended repository roadmap
+## Implemented structure (Toolkit v1.7.9)
 
 ```text
 election-forensics-r-toolkit/
-├── modules/
-│   ├── rzs_data_preparation/     # Current self-contained first module
-│   ├── descriptive_statistics/           # Future
-│   ├── election_fingerprints/            # Future
-│   ├── election_contours/                # Future
-│   ├── normality_diagnostics/            # Future
-│   ├── turnout_vote_regression/          # Future
-│   └── mebane_fmm/                       # Future
-├── R/                                    # Future shared: import, QC, selection, reporting
-├── tests/                                # Future cross-module integration tests
-├── inst/                                 # Future schemas/example non-sensitive fixtures
-├── docs/                                 # Future method explanations and limitations
-└── app/                                  # Future optional Shiny presentation layer
+├── README.md / README_SER.md
+├── MODULE_REGISTRY.md / MODULE_REGISTRY_SER.md
+├── WORKFLOW.md / WORKFLOW_SER.md
+└── modules/
+    ├── rzs_data_preparation/      # implemented; tested for three elections
+    │   └── RZS_data_preparation.R
+    ├── descriptive_statistics/    # implemented v0.3.1; validated within scope
+    │   ├── Descriptive_statistics.R
+    │   └── R/                     # reusable descriptive functions
+    └── klimek/                    # v0.1.4; researcher-validated for parliamentary 2022
+        └── Klimek.R
 ```
 
-**Now:** only `modules/rzs_data_preparation` exists, with real code. Future entries above are illustrative architecture, **not files already implemented**.
+**Planned, not implemented:** fingerprints, contours, normality diagnostics, turnout–vote regressions, Mebane finite-mixture models, shared orchestration, full R package metadata and a public Shiny interface. Never describe these as existing code.
 
-## Proposed interface contracts
+## Data contract and execution independence
 
-**Input contract:** consistent station identifiers, year, administrative names, turnout/count fields, candidate-vote columns and provenance. Schema version must be explicit. **Sample contract:** `Master` never loses audit records; `Main` is a default, not universal, eligible sample; each method declares its selection rule and denominators. **Output contract:** method results are structured tables with configuration, warnings, reproducibility metadata and human-readable interpretations. **Reporting contract:** public-facing visuals include units, sample size, uncertainty, alternative explanations and no unjustified fraud claims.
+The data-preparation module reads official RZS source XLSX files and writes election-specific workbooks with `Master`, `Main`, `Options` and QC/metadata. The descriptive and Klimek modules each read those outputs **directly and independently**. Neither downstream module needs the other to be run; upstream preparation is not rerun unless input workbooks are missing, changed or incompatible with the code/assumptions. See [workflow](../../WORKFLOW.md).
 
-As soon as methods start sharing code, refactor canonical import/validation into `R/` functions and consider an R package (`DESCRIPTION`, `NAMESPACE`, `renv.lock`) with testthat and continuous integration. Avoid moving to a package before the data model and first two method interfaces are stable. For ongoing automation, add an orchestrator that runs import → validation → analyses → reports; attach Shiny only after output contracts are established. Maintain CLI/batch execution so researchers can reproduce results without opening the app.
+`Master` retains QC context, `Main` is the standard eligible analysis set (E >= 100), and the `Options` worksheet maps all candidates/electoral lists into neutral `Option_*` fields. Method-specific definitions must describe sample selection and denominators. The descriptive and Klimek modules can separately report QC-accepted polling stations with fewer than 100 voters; neither silently promotes them into `Main`.
 
-## Practical phased delivery
+Each method must declare its output tables, configuration, diagnostic warnings, numerical assumptions, validation evidence and interpretation limits. Figure appearance and public-facing narrative are distinct from inference; no curve or significant correlation proves manipulation without corroboration.
 
-**Phase 1 (now):** publish RZS importer, transparent outputs and tests; validate official totals and edge cases. **Phase 2:** centralize schema, provenance, QC, fixtures and reproducible dependency versions. **Phase 3:** implement descriptive summaries and fingerprints/contours as separate validated methods. **Phase 4:** add regression and model-heavy methods with tests of assumptions, simulation/sensitivity and interpretation. **Phase 5:** implement bilingual public-facing report templates and an optional Shiny UI consuming precomputed outputs. **Phase 6:** versioned release and continuous validation on newly published RZS schemas.
+## Evolution without breaking existing modules
 
-A public dashboard must not turn statistical indicators into automated determinations of misconduct. Require method passports documenting assumptions, uncertainty, false positives and scientific validation.
+1. Freeze/document a working input schema and versioned output contract; record source hash, run parameters and software environment.
+2. Develop a new method as a separate `modules/<name>/` folder, starting with synthetic tests and then three-election integration tests, where applicable.
+3. Ensure the new module reads prepared datasets in place; it should not rewrite the source or other module outputs.
+4. Add bilingual documentation, update the repository root and *all affected existing modules' current documents*, and run the release checklist.
+5. Only later consider shared library extraction (`R/`), `testthat`, `renv`, GitHub Actions, orchestrated execution and a Shiny reporting interface once data contracts are stable. Preserve simple stand-alone execution.
 
+## Scope restrictions
 
-## Election-type coverage and v1.2 data contract
+The current preparation importer handles validated 2017/2022 presidential/parliamentary positional templates. New RZS columns can change option positions; add a **versioned, heading/role-based schema mapping** before claiming compatibility with an extended source. Local elections require separately tested source schemas and electoral-unit rules.
 
-This module processes Serbian **presidential** candidates and **parliamentary** electoral lists as neutral vote **options**. Set `election_type` to `presidential` or `parliamentary`; combined input rows may share a year, but must not share the same type/year pair. The 2022 parliamentary source is [`G202219002.xlsx`](https://publikacije.stat.gov.rs/G2022/Xls/G202219002.xlsx); save it as `raw_data/Parliament 2022 ~ G202219002.xlsx`. The other configured inputs are the 2017 and 2022 presidential results.
-
-**Validation limitation:** the structure of the 2022 parliamentary XLSX could not be directly inspected in this preparation environment. It is provisionally assigned the `2022` column template; **validate its headers, row totals, option columns and QC results** against the official workbook before analytical use. The script does not support local-election source files without a separately validated schema and (where applicable) constituency-specific winner/list logic.
-
-For both supported types, `Main` remains the default analysis worksheet and `Master` the complete audit-preserving dataset. `Option_01_votes`, `Option_01_pct`, etc., have type-neutral meanings; `Options` maps each option to its source heading. `Winner_*` / `Second_*` are the top two **national vote totals** in the input, not automatically the winner of every constituency or an allocation of seats. No parliamentary seat allocation is performed. Election identifiers now include `Election_type`, protecting against same-year collisions. Outputs are `presidential_2017_RZS_prepared.xlsx`, `presidential_2022_RZS_prepared.xlsx` and `parliamentary_2022_RZS_prepared.xlsx`.
-
-Existing downstream scripts that expected `Candidate_*`, `Candidates`, a year-only station key, or `P2022_RZS_prepared.xlsx` must be adapted to the v1.2 contract.
+The 2017 RZS/RIK registered-electorate difference remains documented as **REVIEW**, not silently corrected. See [validation findings](VALIDATION_FINDINGS.md).

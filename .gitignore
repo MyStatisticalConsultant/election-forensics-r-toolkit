@@ -16,3 +16,6 @@ validation_results/
 
 # Generated descriptive-statistics outputs (local reproducible artifacts)
 **/descriptive_outputs/
+
+# Generated Klimek cumulative curves and plots (reproducible local outputs)
+**/klimek_outputs/

@@ -21,7 +21,7 @@ When filing an issue, attach the precise R error, relevant EDITABLE values witho
 
 ### `subscript out of bounds` in `tests/test_graphics_layout.R`
 
-The v0.1.3 script introduced a six-argument title function while the old test still called its earlier four-argument interface. Replace **both** `Klimek.R` and `tests/test_graphics_layout.R` from v0.1.3.1-dev, then rerun the tests. Do not change input workbooks.
+The v0.1.3 script introduced a six-argument title function while the old test still called its earlier four-argument interface. This issue is fixed in the complete v0.1.4 module. If it reappears, ensure `Klimek.R` and all `tests/` files are from the same release, then rerun the tests. Do not change input workbooks.
 
 
 ### `geom_line(): Each group consists of only one observation`

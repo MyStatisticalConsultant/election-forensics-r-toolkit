@@ -13,7 +13,7 @@ The Election Forensics R Toolkit is an open-source, **locally run** collection o
 | `klimek` **v0.1.4** | Klimek-style cumulative vote-versus-turnout curves for eight station groups; both normalisations, two figure families, EN/SR figures, optional area plots and explicit descriptive T90/T95 | [English](modules/klimek/README.md) · [Serbian](modules/klimek/README_SER.md) |
 
 
-**Validation boundary:** descriptive output from the three named elections was checked against independently calculated reference results as reported by the researcher. The repository includes tests to reproduce these checks. This is not blanket certification for other elections, newly inserted source columns or causal/fraud conclusions. The preparation module retains a documented **2017 registered-voter REVIEW** discrepancy; see [validation findings](modules/rzs_data_preparation/VALIDATION_FINDINGS.md) and the [descriptive-module validation guide](modules/descriptive_statistics/VALIDATION.md).
+**Validation status:** Klimek v0.1.4 was successfully tested in RStudio by the researcher for **all three supported elections: presidential 2017, presidential 2022 and parliamentary 2022**. All regression, integration, execution and export checks are reported PASS. The detailed console transcript provided for parliamentary 2022 records 7,787 Main polling stations and 436 figures; successful presidential tests are additionally confirmed by the researcher, without separate console transcripts. See the [validation record](modules/klimek/VALIDATION_RECORD_2026-10-23.md). Testing was not independently rerun when packaging this release. Results should not be generalized automatically to new RZS schemas or treated as evidence of election fraud. The upstream preparation module retains a documented **2017 registered-voter REVIEW** discrepancy; see [findings](modules/rzs_data_preparation/VALIDATION_FINDINGS.md).
 
 ## How modules connect
 
@@ -46,7 +46,7 @@ descriptive_outputs/                         klimek_outputs/
 
 **[Current Klimek release and validation](modules/klimek/README.md)**.
 
-**Klimek validation:** v0.1.4 preserves the code-aware special RZS area titles (33 Overseas, 55 Prisons, 25–29 source labels); the new version requires local RStudio regression tests and figure inspection. Its cumulative curves are exploratory and are not the complete formal JHK statistical test.
+**Klimek validation:** v0.1.4 preserves code-aware special RZS area titles (33 Overseas, 55 Prisons, 25–29 source labels); the researcher confirms passing RStudio tests for all three supported elections; the detailed shared console transcript covers parliamentary 2022. Its cumulative curves are exploratory and are not the complete formal JHK statistical test.
 
 ## Repository organisation
 
@@ -56,8 +56,9 @@ election-forensics-r-toolkit/
 ├── LICENSE
 ├── CITATION.cff
 ├── .gitignore
-├── GITHUB_UPLOAD_GUIDE.md / GITHUB_UPLOAD_GUIDE_SER.md
-├── RELEASE_CHECKLIST.md / RELEASE_CHECKLIST_SER.md
+├── WORKFLOW.md / WORKFLOW_SER.md
+├── MODULE_REGISTRY.md / MODULE_REGISTRY_SER.md
+├── RELEASE_NOTES_v1.7.9.md / RELEASE_NOTES_SER_v1.7.9.md
 └── modules/
     ├── rzs_data_preparation/
     │   ├── RZS_data_preparation.R
@@ -78,11 +79,11 @@ election-forensics-r-toolkit/
         └── ... bilingual methods, outputs and reproducibility docs
 ```
 
-The folders `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/` and automatically generated `validation_results/` are **local working/output folders** and are excluded from ordinary Git commits. Verified validation evidence may be tracked separately under a documentation path, with clear provenance. See the [upload guide](GITHUB_UPLOAD_GUIDE.md).
+The folders `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/` and automatically generated `validation_results/` are **local working/output folders** and are excluded from ordinary Git commits. Verified validation evidence may be tracked separately under a documentation path, with clear provenance.
 
 ## Reusing prepared data — no full restart required
 
-When `modules/rzs_data_preparation/RZS_prepared/*.xlsx` already exists, run only the desired downstream module. Descriptive and Klimek are independent consumers; their results are stored in separate local output directories. See the [step-by-step workflow](WORKFLOW.md), the [current module registry](MODULE_REGISTRY.md), and the [GitHub update guide](GITHUB_UPLOAD_GUIDE.md). Adding a module does not require re-running all prior modules.
+When `modules/rzs_data_preparation/RZS_prepared/*.xlsx` already exists, run only the desired downstream module. Descriptive and Klimek are independent consumers; their results are stored in separate local output directories. See the [step-by-step workflow](WORKFLOW.md), the [current module registry](MODULE_REGISTRY.md). Adding a module does not require re-running all prior modules.
 
 ## First use
 
@@ -90,7 +91,7 @@ When `modules/rzs_data_preparation/RZS_prepared/*.xlsx` already exists, run only
 2. **Only for first-time setup or changed source data:** download official RZS XLSX files using links in the [preparation README](modules/rzs_data_preparation/README.md), saving them to the preparation module's `raw_data/` folder with the filenames expected by its editable configuration.
 3. If the prepared workbooks are missing, run the preparation module and its validation; otherwise reuse the existing workbooks.
 4. Run the descriptive module's tests, runner and export verification from **its own module directory**. [Installation guide](modules/descriptive_statistics/INSTALLATION.md).
-5. From `modules/klimek/`, run its synthetic, plot-layout, singleton, integration and export tests and its runner; see the bilingual [user guide](modules/klimek/USER_GUIDE.md). Klimek v0.1.4 includes the consolidated visual fixes; retain the complete local R test log before claiming verified runtime validation.
+5. From `modules/klimek/`, run its synthetic, plot-layout, singleton, integration and export tests and its runner; see the bilingual [user guide](modules/klimek/USER_GUIDE.md). Klimek v0.1.4 includes the consolidated visual fixes; the author-reported successful RStudio test log is documented in the [validation record](modules/klimek/VALIDATION_RECORD_2026-10-23.md).
 
 ## Publication and future development
 
@@ -102,4 +103,3 @@ Copyright © 2026 **Zlatko J. Kovačić**. [MIT licence](LICENSE). Feedback and 
 
 **Small-area graph handling (v0.1.4):** See [Klimek user guide](modules/klimek/USER_GUIDE.md) for zero-, one- and multi-station behaviour.
 
-**GitHub replacement:** [Klimek v0.1.4 clean-folder upload](GITHUB_REPLACE_KLIMEK.md).

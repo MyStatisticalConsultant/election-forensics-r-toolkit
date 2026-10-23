@@ -8,7 +8,7 @@
 - Dvojezični naslovi, lokalizacija oblasti, posebne RZS kategorije, oznake y-ose na svakih 10 procentnih poena, razdvojene B slike i pregledni A podnaslovi i legende.
 - Prazne grupe u teritorijalnim tabelama; 0 BM = bez grafikona, 1 BM = tačka, 2+ BM = kriva; selektivno uklanjanje zastarelih slika.
 - Usklađene oznake izdanja, vodiči, testovi, manifest i citiranje. Analitički R kod i statističke formule isti su kao u v0.1.3.4-dev.
-- Autor je potvrdio očekivani izgled grafikona za 0/1/više BM; kompletan zapisnik R testova tek treba evidentirati (VALIDATION_SER.md).
+- Autor je potvrdio PASS za sva tri podržana izbora; detaljni konzolni log postoji za parlamentarne 2022, a predsednički su potvrđeni bez zasebnih logova (VALIDATION_SER.md).
 
 ## 0.1.1-dev — 21. oktobar 2026. (samo grafička korekcija)
 

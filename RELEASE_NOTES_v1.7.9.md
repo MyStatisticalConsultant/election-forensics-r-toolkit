@@ -1,11 +1,15 @@
-# Election Forensics R Toolkit v1.7.9 — consolidated Klimek publication
+# Election Forensics R Toolkit v1.7.9 — clean consolidated publication
 
-**Date:** 2026-10-23  
-**Klimek:** v0.1.4  
-**Other two modules:** unchanged R source since v1.7.8-dev
+[Srpski (latinica)](RELEASE_NOTES_SER_v1.7.9.md)
 
-This release consolidates the successive Klimek graphical, geographic-label and zero/one/multiple-station fixes into a clean GitHub replacement of `modules/klimek/`. It updates the README, bilingual module registry and workflow/upload documentation, and versioned citation and SHA-256 manifests. No Klimek vote, turnout, sample, cumulative-curve or T90/T95 mathematical formulas were altered compared with v0.1.3.4-dev.
+**Klimek module:** v0.1.4. **Descriptive Statistics:** v0.3.1. **RZS Data Preparation:** existing version unchanged.
 
-The researcher reported satisfactory graph output for 0, 1 and multiple polling stations; local seven-command regression and integration tests must still be retained before a fully validated release is claimed. This is exploratory curve analysis, not proof of irregularities or the complete JHK statistical test.
+This clean GitHub snapshot replaces the earlier root-level patch-by-patch instructions and superseded development release notes. It includes one current release-note pair, the current documentation, the full three-module source tree, tests, examples, licences, reference files and refreshed SHA-256 manifests. The original historical commits and the module changelogs preserve development history.
 
-See [replacement instructions](GITHUB_REPLACE_KLIMEK.md) and [module validation](modules/klimek/VALIDATION.md).
+**Klimek changes consolidated from v0.1.3.4-dev:** multilingual graph titles, full group subtitles, A/B visual formatting, standard/JHK separation, 10-point percentage ticks, RZS special district labels, 0/1/multiple-station plotting and complete zero-station territorial rows. **No analytical R source code or numerical formulas were changed for this clean publication.** The two other modules' R sources are unchanged from the previous consolidated snapshot.
+
+**Validation confirmed by the researcher:** All Klimek tests and end-to-end checks passed for presidential 2017, presidential 2022 and parliamentary 2022. The detailed console log supplied for parliamentary 2022 records 7,787 Main stations, 480 QC-accepted stations below 100, 436 figures and a passing export check. For the two presidential elections the author confirmed PASS without supplying equivalent console transcripts. See the [validation record](modules/klimek/VALIDATION_RECORD_2026-10-23.md). Tests were not independently rerun by the release packager.
+
+**Public repository scope:** Maintainer-only instructions for uploading, replacing repository contents and release checklists are kept privately, outside this distribution. Public README, workflow, module registry, release notes, validation evidence, methods and contributing documents remain in the repository.
+
+These are descriptive cumulative curves; neither their shapes nor these software tests prove electoral misconduct or constitute the complete JHK inferential test.

@@ -1,14 +1,14 @@
 # Election Forensics R Toolkit — Modul 01: Priprema podataka RZS (predsednički i parlamentarni izbori)
 
-**Verzija 1.1 · R skript · uputstvo na srpskom (latinica)**
+**RZS pripremni kod v1.3 · provereni paket v1.3.1 · dvojezična dokumentacija**
 
-Ovo je prvi, samostalni modul budućeg paketa **Election Forensics R Toolkit**. Skript priprema podatke Republičkog zavoda za statistiku (RZS) o rezultatima predsedničkih i parlamentarnih izbora po biračkim mestima, uz očuvanje izvornog zapisa, transparentnu kontrolu kvaliteta i dokumentovanje kriterijuma za uključivanje u analitički uzorak. Podržani su formati izvora za **2017. i 2022. godinu**, a ne bilo koji izbori. Skript se izvršava lokalno; **ne postoji onlajn Shiny aplikacija**.
+Ovo je prvi (pripremni) modul postojećeg paketa sa tri modula **Election Forensics R Toolkit**. Skript priprema podatke Republičkog zavoda za statistiku (RZS) o rezultatima predsedničkih i parlamentarnih izbora po biračkim mestima, uz očuvanje izvornog zapisa, transparentnu kontrolu kvaliteta i dokumentovanje kriterijuma za uključivanje u analitički uzorak. Podržani su formati izvora za **2017. i 2022. godinu**, a ne bilo koji izbori. Skript se izvršava lokalno; **ne postoji onlajn Shiny aplikacija**.
 
 **Važno:** Kontrola kvaliteta i budući forenzički indikatori nisu dokaz izborne prevare. Ovaj modul ne izvodi statističke testove izborne forenzike, uključujući kompletan Jiménez–Hidalgo–Klimek (JHK) test, niti popravlja ili zamenjuje zvanično prijavljene glasove.
 
 ## Zašto je potreban ovaj modul?
 
-Zvanični Excel fajlovi imaju različite rasporede kolona i zahtevaju standardizaciju, proveru aritmetičkih identiteta, jasno definisanje uzorka i revizijski trag. Dobijena baza poslužiće kao ulaz za buduće metode: opisnu statistiku po okruzima i opštinama, izborne otiske (engl. election fingerprints), izborne konture (engl. election contours), dijagnostiku približne normalnosti, regresione modele i Mebaneove modele konačnih mešavina (engl. finite mixture models – FMM). **Nijedna od tih budućih metoda nije implementirana u ovoj verziji.**
+Zvanični Excel fajlovi imaju različite rasporede kolona i zahtevaju standardizaciju, proveru aritmetičkih identiteta, jasno definisanje uzorka i revizijski trag. Dobijena baza poslužiće kao ulaz za buduće metode: opisnu statistiku po okruzima i opštinama, izborne otiske (engl. election fingerprints), izborne konture (engl. election contours), dijagnostiku približne normalnosti, regresione modele i Mebaneove modele konačnih mešavina (engl. finite mixture models – FMM). Posebni moduli `descriptive_statistics` i `klimek` već postoje; napredni modeli ostaju planirani. **Ovaj pripremni modul ne izvodi te analize.**
 
 ## Šta skript radi?
 
@@ -20,28 +20,7 @@ Skript učitava zvanične Excel fajlove (2017/2022), čuva izvorne kolone `V1`, 
 
 ## Struktura repozitorijuma
 
-```text
-election-forensics-r-toolkit/
-├── README.md
-├── LICENSE
-├── .gitignore
-└── modules/
-    └── rzs_data_preparation/
-        ├── RZS_data_preparation.R
-        ├── README.md / README_SER.md
-        ├── METHODOLOGY.md / METHODOLOGY_SER.md
-        ├── DATA_DICTIONARY.md / DATA_DICTIONARY_SER.md
-        ├── OUTPUT_GUIDE.md / OUTPUT_GUIDE_SER.md
-        ├── REPRODUCIBILITY.md / REPRODUCIBILITY_SER.md
-        ├── ARCHITECTURE.md / ARCHITECTURE_SER.md
-        ├── CHANGELOG.md / CHANGELOG_SER.md
-        ├── CONTRIBUTING.md / CONTRIBUTING_SER.md
-        ├── CITATION.cff / LICENSE
-        ├── RZS_station_status_overrides_TEMPLATE.csv
-        └── tests/run_tests.R
-```
-
-Folderi `raw_data/` (izvori) i `RZS_prepared/` (rezultati) postoje samo lokalno i isključeni su iz Git-a. **Originalni RZS Excel fajlovi nisu priloženi na GitHub.**
+Ovaj modul se nalazi u `modules/rzs_data_preparation/` uz već postojeće module [`descriptive_statistics`](../descriptive_statistics/README_SER.md) i [`klimek`](../klimek/README_SER.md). Aktuelnu strukturu prikazuju [registar](../../MODULE_REGISTRY_SER.md) i [arhitektura](ARCHITECTURE_SER.md); [tok rada](../../WORKFLOW_SER.md) objašnjava kako se već pripremljene baze neposredno koriste u narednim modulima. Ovde su R skript, dvojezična dokumentacija, `examples/`, `tests/` i referentni podaci.
 
 ## Zahtevi i instalacija
 
@@ -57,9 +36,8 @@ Internet je potreban za preuzimanje R-a, paketa i izvora, ali ne i za lokalno iz
 
 Na GitHub-u izabrati **Code → Download ZIP**, raspakovati arhivu i otvoriti direktorijum `modules/rzs_data_preparation`, odnosno klonirati repozitorijum kada bude objavljen. U tom direktorijumu napraviti folder `raw_data/`. Zvanični izvori:
 
-- Predsednički izbori 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
-- Predsednički izbori 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
-- Parlamentarni izbori 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219002.xlsx>
+- 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
+- 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
 
 Sačuvati fajlove pod nazivima navedenim u odeljku `INPUTS$source`, ili promeniti putanje u delu **EDITABLE**. Nema automatskog preuzimanja izvora. Ne dodavati lični `setwd("C:/Users/...")` u programski kod.
 

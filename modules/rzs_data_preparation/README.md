@@ -1,14 +1,14 @@
 # Election Forensics R Toolkit — Module 01: RZS Data Preparation (Presidential and Parliamentary Elections)
 
-**Version 1.1 · R script · English documentation · Serbian-Latin companion files**
+**RZS preparation code v1.3 · tested release package v1.3.1 · English / Serbian-Latin documentation**
 
-This is the first standalone module of a planned open, reproducible **Election Forensics R Toolkit**. It converts official Republic of Serbia Statistical Office (RZS) presidential/parliamentary-election polling-station Excel workbooks into analysis-ready, source-preserving workbooks. The current implementation is designed for the **2017 and 2022 schemas** for presidential and parliamentary elections, not arbitrary election years or unvalidated local formats. It is run **locally**, not on Posit Connect, Shiny or an online service.
+This is the first (upstream) module of the existing three-module **Election Forensics R Toolkit**. It converts official Republic of Serbia Statistical Office (RZS) presidential/parliamentary-election polling-station Excel workbooks into analysis-ready, source-preserving workbooks. The current implementation is designed for the **2017 and 2022 schemas** for presidential and parliamentary elections, not arbitrary election years or unvalidated local formats. It is run **locally**, not on Posit Connect, Shiny or an online service.
 
 **Important distinction:** Data validation flags and election-forensics visualizations are *diagnostics*, not findings of fraud. This module does **not** implement election-fraud tests, the full Jiménez–Hidalgo–Klimek (JHK) significance test, or any causal inference about irregularities.
 
 ## Why this module?
 
-Official election spreadsheets vary across years and do not generally arrive with ready-to-use, harmonized variables, documented eligibility decisions, or transparent quality-control (QC) traces. This script creates an auditable upstream data contract for subsequent methods: descriptive analyses by district and municipality, turnout/vote fingerprints, contours, approximate-normality diagnostics, regression models, and, potentially, Mebane finite-mixture models (FMM). Those methods are **planned**, not implemented here.
+Official election spreadsheets vary across years and do not generally arrive with ready-to-use, harmonized variables, documented eligibility decisions, or transparent quality-control (QC) traces. This script creates an auditable upstream data contract for subsequent methods: descriptive analyses by district and municipality, turnout/vote fingerprints, contours, approximate-normality diagnostics, regression models, and, potentially, Mebane finite-mixture models (FMM). The separate `descriptive_statistics` and `klimek` modules now exist; the advanced forensic methods named above remain planned. This **preparation module** itself performs no downstream statistical inference.
 
 ## What it does
 
@@ -30,30 +30,7 @@ Official election spreadsheets vary across years and do not generally arrive wit
 
 ## Repository structure
 
-```text
-election-forensics-r-toolkit/
-├── README.md                        # Planned ecosystem and module directory
-├── LICENSE
-├── .gitignore
-└── modules/
-    └── rzs_data_preparation/
-        ├── RZS_data_preparation.R
-        ├── README.md
-        ├── README_SER.md
-        ├── METHODOLOGY.md / METHODOLOGY_SER.md
-        ├── DATA_DICTIONARY.md / DATA_DICTIONARY_SER.md
-        ├── REPRODUCIBILITY.md / REPRODUCIBILITY_SER.md
-        ├── OUTPUT_GUIDE.md / OUTPUT_GUIDE_SER.md
-        ├── ARCHITECTURE.md / ARCHITECTURE_SER.md
-        ├── CHANGELOG.md / CHANGELOG_SER.md
-        ├── CONTRIBUTING.md / CONTRIBUTING_SER.md
-        ├── LICENSE / CITATION.cff
-        ├── RZS_station_status_overrides_TEMPLATE.csv
-        ├── tests/run_tests.R
-        └── examples/README.md
-```
-
-Local-only directories `raw_data/` and `RZS_prepared/` are created by the user/run; their contents are excluded from Git. Original official XLSX files and derived election workbooks are **not distributed** in this repo.
+This module lives at `modules/rzs_data_preparation/` in a **three-module repository**. Its sibling modules are [`descriptive_statistics`](../descriptive_statistics/README.md) and [`klimek`](../klimek/README.md). The root [module registry](../../MODULE_REGISTRY.md) and [architecture guide](ARCHITECTURE.md) show the current layout; the [workflow](../../WORKFLOW.md) explains how to run downstream modules using already prepared workbooks. This module contains `RZS_data_preparation.R`, bilingual methodology/dictionaries/user documentation, `examples/`, `tests/` and reference data.
 
 ## Requirements and dependencies
 
@@ -71,9 +48,8 @@ Use GitHub **Code → Download ZIP**, extract it, or clone the eventual reposito
 
 Download the original official workbooks from the RZS publications site:
 
-- Presidential election 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
-- Presidential election 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
-- Parliamentary election 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219002.xlsx>
+- 2017: <https://publikacije.stat.gov.rs/G2017/Xls/G20176004.xlsx>
+- 2022: <https://publikacije.stat.gov.rs/G2022/Xls/G202219003.xlsx>
 
 Create `raw_data/` inside the module directory; save the official files there, using the names expected in the EDITABLE section (or edit the `source` paths). Verify schema/version and attribution against the original RZS publication. The supplied paths and templates are examples of supported layouts, **not automatic download logic**.
 
@@ -174,9 +150,9 @@ The tests are **not a substitute for empirical verification against published RZ
 
 **Missing package:** run `install.packages(c("readxl","openxlsx"))`. **Source workbook not found:** check working directory and `INPUTS$source`. **Unsupported schema:** choose `2017` or `2022`, only for actually compatible sources. **Missing station identifiers / candidate header:** confirm you downloaded the correct publication and first worksheet. **No eligible stations / overlapping size thresholds:** inspect `Master`/QC logic or source data and avoid relaxing checks simply to force an output. **Duplicate or unmatched overrides:** validate exact source codes and station keys. **Excel locked:** close the generated output workbook and rerun. For reports, include the exact error, source provenance (not confidential information), R version, `sessionInfo()` and steps to reproduce.
 
-## Planned modules and software architecture
+## Current modules, planned methods and software architecture
 
-This script is intentionally self-contained. For the future toolkit, use shared tested **R functions**, not a chain of copy-pasted, ever-growing scripts. A recommended project structure, interface contracts, and phased roadmap are in [ARCHITECTURE.md](ARCHITECTURE.md). New modules should consume `Main` by default, expose explicit selection decisions, offer method-specific eligibility checks, and publish their assumptions, uncertainty and interpretive caveats. A Shiny public dashboard is a **separate future layer**.
+This script is intentionally self-contained. For future extensions, use shared tested **R functions**, not a chain of copy-pasted, ever-growing scripts. A recommended project structure, interface contracts, and phased roadmap are in [ARCHITECTURE.md](ARCHITECTURE.md). New modules should consume `Main` by default, expose explicit selection decisions, offer method-specific eligibility checks, and publish their assumptions, uncertainty and interpretive caveats. A Shiny public dashboard is a **separate future layer**.
 
 ## Citation, contributions, feedback and copyright
 

@@ -21,7 +21,7 @@ Pri prijavi greške navedite ceo R tekst greške, vrednosti postavki bez privatn
 
 ### `subscript out of bounds` u `tests/test_graphics_layout.R`
 
-Verzija v0.1.3 uvela je funkciju naslova sa šest argumenata, a prethodni test ju je pozivao sa četiri. Zamenite **obe** datoteke, `Klimek.R` i `tests/test_graphics_layout.R`, verzijom v0.1.3.1-dev, pa ponovo pokrenite testove. Pripremljene Excel baze ne menjajte.
+Verzija v0.1.3 uvela je funkciju naslova sa šest argumenata, a prethodni test ju je pozivao sa četiri. Problem je rešen u kompletnom modulu v0.1.4. Ako se ponovo pojavi, proverite da su `Klimek.R` i svi fajlovi iz `tests/` iz iste verzije, pa ponovite testove. Pripremljene Excel baze ne menjajte.
 
 
 ### `geom_line(): Each group consists of only one observation`

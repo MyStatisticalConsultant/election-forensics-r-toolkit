@@ -8,8 +8,8 @@ This is the current module inventory for the **v1.7.9 consolidated release codeb
 |---|---|---|---|---|
 | [`rzs_data_preparation`](modules/rzs_data_preparation/README.md) | `RZS_data_preparation.R` | Previously tested on presidential 2017/2022 and parliamentary 2022; documented 2017 registered-voter REVIEW | Official RZS `raw_data/*.xlsx` | `RZS_prepared/*.xlsx`, QC CSV |
 | [`descriptive_statistics`](modules/descriptive_statistics/README.md) | `Descriptive_statistics.R` plus `R/` helpers | v0.3.1 checked against independent results for three elections, within that scope | `Main`, `Master`, `Options` | `descriptive_outputs/` |
-| [`klimek`](modules/klimek/README.md) | `Klimek.R` | **v0.1.4 — consolidated source; researcher reports figures as expected; full R test log pending** | `Main`, `Master`, `Options` | `klimek_outputs/` |
+| [`klimek`](modules/klimek/README.md) | `Klimek.R` | **v0.1.4 — researcher-confirmed PASS for presidential 2017/2022 and parliamentary 2022; detailed parliamentary test transcript [recorded here](modules/klimek/VALIDATION_RECORD_2026-10-23.md)** | `Main`, `Master`, `Options` | `klimek_outputs/` |
 
 All modules run **locally**. The preparation module is an upstream dependency for their **data products**, not a command that must be rerun before every analysis. Descriptive and Klimek are parallel downstream consumers: neither calls the other's runner. Versioned contracts, data provenance, and method-specific sample rules remain important. No general Shiny interface is implemented.
 
-Future/planned (not present): election fingerprints, contours, normality diagnostics, regressions, Mebane FMM. Each addition requires synchronized EN/SR documentation and the [release checklist](RELEASE_CHECKLIST.md).
+Future/planned (not present): election fingerprints, contours, normality diagnostics, regressions, Mebane FMM. Each addition requires synchronized EN/SR documentation, testing and release records.

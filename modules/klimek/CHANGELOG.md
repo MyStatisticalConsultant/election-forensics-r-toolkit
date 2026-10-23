@@ -8,7 +8,7 @@
 - Includes bilingual presentation, national/area title localization, RZS special reporting categories, 10-percentage-point y-axis tick labels, separate standard/JHK B graphics, and readable A-subtitles and legends.
 - Explicit zero-station district/municipality rows; 0 stations = no plot, 1 = point, 2+ = curve; area-scoped stale-figure cleanup.
 - Updated release identifiers, bilingual guides, tests, manifest and citation. Calculation methods and numerical R code are unchanged from v0.1.3.4-dev.
-- Researcher confirmed plot appearance for zero/one/multiple stations; the complete local R test log remains to be recorded (see VALIDATION.md).
+- Researcher confirmed PASS for all supported presidential/parliamentary elections; detailed parliamentary test log is archived in the validation record, while presidential success is attested without separate transcripts (see VALIDATION.md).
 
 ## 0.1.1-dev — 2026-10-21 (visual-only patch)
 

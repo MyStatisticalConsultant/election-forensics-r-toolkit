@@ -4,7 +4,7 @@
 
 Ovaj lokalno pokretani modul je **jedan R skript** koji generiše kumulativne krive glasova u funkciji izlaznosti, uporedne grafikone i reproduktivne numeričke preglede na osnovu listova `Main`, `Master` i `Options` koje kreira `RZS_data_preparation.R`. Predviđen je za prethodno proverene formate predsedničkih izbora 2017. i 2022. i parlamentarnih izbora 2022. Novi formati Republičkog zavoda za statistiku (RZS) zahtevaju posebnu proveru.
 
-**Izdanje v0.1.4 (23. oktobar 2026):** Ovo objedinjeno izdanje zamenjuje razvojne zakrpe do v0.1.3.4-dev. Autor je potvrdio da grafikoni za nula, jedno i više biračkih mesta izgledaju kako je očekivano. **Nisu dostavljeni kompletni zapisnici uspešnog izvršavanja svih šest lokalnih R provera**, pa to ne predstavljamo kao nezavisno potvrđenu potpunu validaciju. Analitičke definicije i formule nisu menjane. Modul **ne sprovodi kompletan Jiménez–Hidalgo–Klimek (JHK) forenzički test**, niti neuobičajena kriva dokazuje izbornu prevaru.
+**Izdanje v0.1.4 (23. oktobar 2026):** Ovo objedinjeno izdanje zamenjuje razvojne zakrpe do v0.1.3.4-dev. Autor je potvrdio da grafikoni za nula, jedno i više biračkih mesta izgledaju kako je očekivano. **Autor je potvrdio PASS za regresione, integracione i izvozne testove za sva tri izbora: predsedničke 2017. i 2022. i parlamentarne 2022.** Dostavljeni detaljni log odnosi se na parlamentarne 2022. (7.787 Main BM, 436 figura); [zapisnik validacije](VALIDATION_RECORD_2026-10-23_SER.md). Za predsedničke izbore nisu priloženi zasebni logovi. Testovi nisu nezavisno ponovljeni u okruženju za pakovanje. Analitičke definicije i formule nisu menjane. Modul **ne sprovodi kompletan Jiménez–Hidalgo–Klimek (JHK) forenzički test**, niti neuobičajena kriva dokazuje izbornu prevaru.
 
 ## Šta modul radi
 
@@ -48,3 +48,5 @@ Oblik krive može odražavati demografiju, geografiju, mobilizaciju ili greške 
 ### Prazne grupe (uključeno u v0.1.4)
 
 U teritorijalne tabele unose se kombinacije oblast × svih osam grupa BM × izborna opcija i kada nema nijednog BM (`Stations=0`, zbirni brojači nula, nedefinisani procenti kao doslovni `NA` u tabelama za okruge i opštine). Za takvu grupu **ne crta se kriva**. Jedno BM prikazuje se tačkom, a dva ili više linijom. Program ispisuje jednu poruku po oblasti. Pri ponovnom izvršavanju brišu se ranije Klimek A/B slike samo te izabrane oblasti, čime se izbegavaju zastareli grafikoni. Videti `tests/test_zero_station_groups.R` i `USER_GUIDE_SER.md`. Teritorijalne tabele obuhvataju samo oblasti koje postoje u prihvaćenoj populaciji `ALL`.
+
+**Završna potvrda testiranja:** Autor je potvrdio uspeh svih testova za sva tri izbora. Detaljni završni log dostavljen je za `parliamentary_2022`, a za predsedničke 2017. i 2022. PASS je potvrđen bez zasebnog loga. [Zapisnik validacije](VALIDATION_RECORD_2026-10-23_SER.md).

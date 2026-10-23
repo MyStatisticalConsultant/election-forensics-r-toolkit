@@ -26,10 +26,13 @@ Outputs appear under `descriptive_outputs/`. The preparation and Klimek scripts 
 
 ## 3. Run Klimek alone
 
-In RStudio set the **working directory** to `election-forensics-r-toolkit/modules/klimek`. Its default `INPUTS` expects the same workbooks in sibling `../rzs_data_preparation/RZS_prepared/`. To verify the new development module before first use:
+In RStudio set the **working directory** to `election-forensics-r-toolkit/modules/klimek`. Its default `INPUTS` expects the same workbooks in sibling `../rzs_data_preparation/RZS_prepared/`. To verify the Klimek module before first use:
 
 ```r
 source("tests/run_tests.R")
+source("tests/test_graphics_layout.R")
+source("tests/test_single_station_plots.R")
+source("tests/test_zero_station_groups.R")
 source("tests/integration_real_data.R")
 source("Klimek.R")
 source("tests/check_exports.R")
@@ -43,11 +46,7 @@ source("Klimek.R")
 
 Results are written into `klimek_outputs/`, not the prepared workbooks. The script runs **all elections listed in its editable `INPUTS`**. To analyse only one election, retain just one corresponding row in all `INPUTS` columns; restore rows later as needed. Adjust `GRAPH_LANGUAGES <- "EN"`, `"SR"`, or `c("EN","SR")`; `CURVE_NORMALISATIONS <- "both"` generates both denominators.
 
-## 4. Add the next module
-
-Keep your current toolkit directory (and local prepared XLSX files). Place only the new module at `modules/<name>/`; merge the updated **repository-level documentation** and affected older docs. You may need to install additional R packages required by the new module; this is not the same as reinstalling the toolkit. Check its `INPUTS` and run its own tests. No previous module is rerun unless the **data contract** or relevant input content changes.
-
-## 5. When to rerun what
+## 4. When to rerun what
 
 | Change | RZS preparation | Descriptive | Klimek |
 |---|---|---|---|
@@ -60,11 +59,11 @@ Keep your current toolkit directory (and local prepared XLSX files). Place only 
 
 **Important:** The current scripts use local file presence, not a full dependency manager. They do not automatically detect stale inputs. A previously generated workbook may be out of date after a source/schema/QC change even if its filename is unchanged. Record source checksums, script version, configuration and run dates; if in doubt revalidate/recompute the affected outputs. Generated output filenames can be overwritten on reruns, so save publication snapshots separately.
 
-## 6. GitHub and local files are different layers
+## 5. GitHub and local files are different layers
 
 GitHub stores *code, methods and tests*. Your PC holds *raw official XLSX, prepared XLSX, and exported graphs/tables*. When syncing new code, preserve `raw_data/`, `RZS_prepared/`, `descriptive_outputs/` and `klimek_outputs/`. `.gitignore` protects them from normal Git commits; copying a full ZIP over a local folder is a different operation and should be reviewed before overwriting anything.
 
-See [GitHub update guide](GITHUB_UPLOAD_GUIDE.md) and [release checklist](RELEASE_CHECKLIST.md).
+For installation and module instructions, see the repository [README](README.md) and individual module documentation.
 
 
 **Klimek v0.1.4:** Run `source("tests/test_zero_station_groups.R")` alongside the existing tests; empty district/municipality groups are explicitly exported and old selected-area Klimek images are removed on rerun.

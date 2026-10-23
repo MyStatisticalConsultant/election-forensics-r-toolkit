@@ -1,13 +1,12 @@
-# Testiranje i granice validacije
+# Validacija — Klimek v0.1.4
 
-**Stanje izdanja v0.1.4 (23. oktobar 2026):** Autor je potvrdio očekivan izgled slika za grupe sa nula, jednim i više BM. Sve dole navedene R provere **nisu nezavisno izvršene u ovom okruženju za pakovanje**. Pre tvrdnje o potpunoj validaciji sačuvati zapisnik uspešnog izvršavanja šest provera (uz izvršavanje glavnog skripta) u RStudio. Starije napomene *-dev ispod su istorijske.
+[English](VALIDATION.md) · [Stvarni autorov zapisnik testiranja](VALIDATION_RECORD_2026-10-23_SER.md)
 
+**Status: autor je lokalno validirao sva tri podržana izbora (`presidential_2017`, `presidential_2022`, `parliamentary_2022`) i proverene numeričke/grafičke funkcije.** Za sva tri izbora potvrdio je PASS. Detaljni završni zapis svih sedam RStudio komandi dostavljen je za parlamentarne 2022; za predsedničke nisu dostavljeni zasebni logovi. Testovi nisu nezavisno izvršeni pri pakovanju.
 
-[English](VALIDATION.md)
+Potvrđeni su sintetički testovi, obe normalizacije, klasifikacije BM, izjednačenja izlaznosti, dvojezični naslovi, korak y-ose od 10 procentnih poena, grupe sa 0/1/više BM, posebne RZS kategorije, krajevi nacionalnih krivih za `parliamentary_2022` i 436 generisanih figura uz uspešnu proveru izvoza. Detalji su u [zapisniku validacije](VALIDATION_RECORD_2026-10-23_SER.md).
 
-**Status v0.1.3.3-dev: vizuelna korekcija zahteva novo izvršavanje testova i pregled slika.** Korisnik je generisao grafikone prethodnom verzijom; to ne validira automatski izmenjeno iscrtavanje. Pored provere arhive i statičkog koda neophodni su R parser, izvršavanje testova nad stvarnim bazama i pregled slika.
-
-Pokrenite **iz direktorijuma modula**:
+Iz direktorijuma `modules/klimek` ponoviti po potrebi:
 
 ```r
 source("tests/run_tests.R")
@@ -19,27 +18,6 @@ source("Klimek.R")
 source("tests/check_exports.R")
 ```
 
-Prva skripta proverava sintaksu, kontrolisane primere, izjednačenja izlaznosti, obe normalizacije, grupisanje, prazne skupove, Unicode nazive i opcione repne metrike. Druga čita sve tri pripremljene baze i proverava veličine `Main` uzoraka (8.023 / 7.787 / 7.787), identitete podele BM i birača, zbir važećih glasova i krajnje vrednosti svih izbornih opcija. Glavni skript generiše izlaz, a poslednja provera traži očekivane fajlove i kontrolne odnose. Ovo ne garantuje ispravno ponašanje prema budućem neproverenom RZS formatu.
+**Granice dokaza:** Dostavljeni detaljni završni log obuhvata aktivni `parliamentary_2022`. Autor je zasebno potvrdio PASS za predsedničke 2017. i 2022. To predstavlja potvrđenu validaciju sva tri izbora od strane autora; zasebni logovi bi samo unapredili arhiviranu dokaznu dokumentaciju i **nisu preostali uslov za validaciju**. R testovi nisu nezavisno ponavljani u okruženju za pakovanje.
 
-Dodatno pregledajte engleske i srpske slike oba tipa, kombinujuće i panelne grafikone, tačnost punih naziva, krajnje procente prema zbiru glasova i listića, posebne administrativne kategorije i BM ispod 100. Sačuvajte `sessionInfo()` i MD5 ulaznog XLSX. Ako koristite T90/T95, prethodno pregledajte svaku političku grupu. Opisni rezultati sami nemaju potvrđenu statističku značajnost.
-
-Za akademsku publikaciju sačuvajte Git commit, postavke, MD5 izvora i nezavisne kontrole; jasno navedite sve promene u pravilima ulaza i uzorkovanja.
-
-**Vizuelna provera v0.1.1:** (a) glavni naslov B-slike bez imena liste, puno ime u podnaslovu, (b) `combined_standard` bez JHK krivih, (c) `combined_jhk` samo JHK par, (d) `faceted` sa dva panela, (e) A-legenda u dva reda za tri ili više opcija, bez odsecanja. Proveriti da nisu ostale stare datoteke `B_*_combined.png`/PDF. Statistički proračuni nisu menjani; novu vizuelnu verziju ipak treba proveriti u RStudio.
-
-
-**v0.1.3.2-dev ispravka:** `tests/test_graphics_layout.R` sada koristi šest argumenata funkcije `b_titles()` i proverava nacionalne i okružne naslove na oba jezika. Nepoznat tip izbora daje razumljivu poruku. Naslovi grupa na A-figurama ostaju u zasebnom podnaslovu. Računanje krivih nije menjano.
-
-
-
-**Provera posebnih kategorija u v0.1.3.2-dev:** `tests/test_graphics_layout.R` dodatno proverava nazive Inostranstvo (`33`), Zavodi za izvršenje krivičnih sankcija (`55`), obične okruge i kategorije 25–29 na oba jezika. Ponovo izvršite kompletan niz od pet komandi i, ako se ove kategorije nalaze u podacima, pregledajte A i B grafikone za izabranu oblast na oba jezika. Potvrda izvršavanja u RStudio je neophodna pre proglašenja verzije validiranom. Numerički proračuni nisu menjani.
-
-
-### Regresioni test v0.1.3.3 za jednu tačku
-
-Pokrenite `source("tests/test_single_station_plots.R")` da proverite prikaz grupe sa jednim BM kao tačke, bez lažne linije ili upozorenja `geom_line()`. Ovaj test ne zamenjuje numeričke/integracione provere. Za validaciju razvojne verzije potrebno je izvršavanje u RStudio i vizuelna kontrola.
-
-
-### Testiranje praznih grupa u v0.1.3.4
-
-`tests/test_zero_station_groups.R` proverava sintetičke slučajeve 0/1/2 BM, potpune teritorijalne kombinacije, `Stations=0`, nedefinisane procente `NA`, nepromenjene neprazne redove i brisanje starih slika samo određene oblasti. `tests/check_exports.R` dodatno proverava osam grupa za svaku oblast i opciju, kao i ispravan povratni uvoz praznih procenata. Testove treba izvršiti u lokalnom RStudio; ZIP arhiva sama po sebi nije potvrda validacije.
+Za reproduktivnost čuvati Git commit, `sessionInfo()`, hash vrednosti XLSX ulaza, EDITABLE postavke, ceo R log i reprezentativne slike na oba jezika. Klimek krive su opisne i nisu dokaz nepravilnosti niti potpuni inferencijalni JHK test.
