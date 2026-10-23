@@ -17,3 +17,18 @@
 **Greška T90/T95.** Za svake izbore definišite dva nepreklapajuća skupa opcija, ili isključite `ENABLE_BLOC_TAIL_METRICS`. Nema automatske p-vrednosti.
 
 Pri prijavi greške navedite ceo R tekst greške, vrednosti postavki bez privatnih putanja, `sessionInfo()`, MD5, izbore/grupu i korake reprodukcije.
+
+
+### `subscript out of bounds` u `tests/test_graphics_layout.R`
+
+Verzija v0.1.3 uvela je funkciju naslova sa šest argumenata, a prethodni test ju je pozivao sa četiri. Zamenite **obe** datoteke, `Klimek.R` i `tests/test_graphics_layout.R`, verzijom v0.1.3.1-dev, pa ponovo pokrenite testove. Pripremljene Excel baze ne menjajte.
+
+
+### `geom_line(): Each group consists of only one observation`
+
+Verzije pre v0.1.3.3 mogle su da ponavljaju upozorenje za teritorijalno izabrane grupe sa jednim BM. To nije fatalna greška. Verzija v0.1.3.3 prikazuje opažanje kao tačku i čuva numerički rezultat. Posle ažuriranja pokrenite `source("tests/test_single_station_plots.R")`.
+
+
+### Zašto nedostaje A-grafikon za izabrani okrug? (v0.1.3.4)
+
+Ako okrug nema nijedno prihvaćeno BM u toj grupi, to je očekivano. Program jednom po oblasti prijavljuje `zero-station group(s)` i ne izmišlja krivu niti tačku. Odgovarajući red u teritorijalnoj tabeli ima `Stations=0` i procente `NA`. Stare A/B slike te oblasti brišu se pre novog generisanja; ostali okruzi nisu pogođeni.

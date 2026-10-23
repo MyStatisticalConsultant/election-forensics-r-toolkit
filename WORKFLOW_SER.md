@@ -71,3 +71,6 @@ Sačuvajte postojeći folder Toolkit-a i lokalne pripremljene baze. Dodajte samo
 Na GitHub-u su *programski kod, metodologija i testovi*; na Vašem računaru su *originalni Excel podaci, pripremljene baze i rezultati*. Pri ažuriranju koda zaštitite lokalne `raw_data/`, `RZS_prepared/`, `descriptive_outputs/` i `klimek_outputs/`. `.gitignore` štiti pri uobičajenom Git radu, ali ne sprečava ručno prepisivanje datoteka tokom kopiranja ZIP arhive.
 
 Pogledajte [GitHub uputstvo](GITHUB_UPLOAD_GUIDE_SER.md) i [kontrolnu listu](RELEASE_CHECKLIST_SER.md).
+
+
+**Klimek v0.1.4:** Pokrenite i `source("tests/test_zero_station_groups.R")`; prazne teritorijalne grupe eksplicitno se beleže, a zastarele Klimek slike izabrane oblasti uklanjaju se pre crtanja.

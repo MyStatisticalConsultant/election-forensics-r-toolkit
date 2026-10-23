@@ -2,7 +2,7 @@
 
 [English](GITHUB_UPLOAD_GUIDE.md) · [Tok rada](WORKFLOW_SER.md) · [Kontrolna lista](RELEASE_CHECKLIST_SER.md)
 
-## Trenutni repozitorijum (razvojna verzija v1.7)
+## Trenutni repozitorijum (razvojna verzija v1.7.2)
 
 Koristite **jedan** GitHub repozitorijum `election-forensics-r-toolkit` sa tri modula:
 
@@ -10,7 +10,7 @@ Koristite **jedan** GitHub repozitorijum `election-forensics-r-toolkit` sa tri m
 |---|---|---|
 | [`rzs_data_preparation`](modules/rzs_data_preparation/README_SER.md) | Ranije proveren; jedna stavka REVIEW za upisane birače 2017. | Priprema `Master`, `Main`, `Options`, QC i metapodatke |
 | [`descriptive_statistics`](modules/descriptive_statistics/README_SER.md) v0.3.1 | Proveren za tri navedena izbora u dokumentovanim granicama | Deskriptivne analize, korelacije i izveštaji |
-| [`klimek`](modules/klimek/README_SER.md) v0.1.0-dev | **Još čeka testiranje u RStudio-u** | Kumulativne krive glasova i dvojezični grafikoni |
+| [`klimek`](modules/klimek/README_SER.md) v0.1.4 | **Još čeka testiranje u RStudio-u** | Kumulativne krive glasova i dvojezični grafikoni |
 
 Originalni i izvedeni Excel fajlovi ostaju lokalno. **Ne označavati Klimek kao validiran dok testovi i vizuelna provera nisu završeni.**
 
@@ -50,3 +50,5 @@ Ako tri pripremljena Excel fajla već postoje u `../rzs_data_preparation/RZS_pre
 Pri **svakom dodavanju modula** proveriti **sve aktuelne `.md` dokumente**, na engleskom i srpskom latinicom. Uskladiti spiskove modula, opise funkcionalnosti, dijagrame arhitekture, putanje, status validacije, korisnička uputstva, navigaciju i kontrolne liste. Istorijske dnevnike promena i beleške o prethodnim izdanjima zadržati kao istorijske izvore. Proveriti linkove i obnoviti `MANIFEST.sha256`.
 
 Autorsko pravo © 2026 Zlatko J. Kovačić. [MIT licenca](LICENSE).
+
+**Aktuelna zamena Klimek modula (v0.1.4):** [GITHUB_REPLACE_KLIMEK_SER.md](GITHUB_REPLACE_KLIMEK_SER.md).

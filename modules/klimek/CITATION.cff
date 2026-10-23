@@ -5,5 +5,5 @@ title: "Election Forensics R Toolkit: Klimek-style cumulative curves"
 authors:
   - family-names: "Kovačić"
     given-names: "Zlatko J."
-version: "0.1.0-dev"
+version: "0.1.4"
 license: "MIT"

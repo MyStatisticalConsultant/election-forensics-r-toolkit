@@ -10,7 +10,7 @@ The Election Forensics R Toolkit is an open-source, **locally run** collection o
 |---|---|---|
 | `rzs_data_preparation` | Established preparation workflow for **2017 and 2022 presidential and 2022 parliamentary** RZS source formats; exports `Master`, `Main`, `Options`, QC and metadata | [English](modules/rzs_data_preparation/README.md) · [Serbian](modules/rzs_data_preparation/README_SER.md) |
 | `descriptive_statistics` **v0.3.1** | National, district and municipality summaries; eight overlapping reporting groups; 16 aggregate correlation matrices per election; robust measures, rank tests, CSV, Excel and optional Word | [English](modules/descriptive_statistics/README.md) · [Serbian](modules/descriptive_statistics/README_SER.md) |
-| `klimek` **v0.1.0-dev** | Klimek-style cumulative vote-versus-turnout curves for eight station groups; both normalisations, two figure families, EN/SR figures, optional area plots and explicit descriptive T90/T95 | [English](modules/klimek/README.md) · [Serbian](modules/klimek/README_SER.md) |
+| `klimek` **v0.1.4** | Klimek-style cumulative vote-versus-turnout curves for eight station groups; both normalisations, two figure families, EN/SR figures, optional area plots and explicit descriptive T90/T95 | [English](modules/klimek/README.md) · [Serbian](modules/klimek/README_SER.md) |
 
 
 **Validation boundary:** descriptive output from the three named elections was checked against independently calculated reference results as reported by the researcher. The repository includes tests to reproduce these checks. This is not blanket certification for other elections, newly inserted source columns or causal/fraud conclusions. The preparation module retains a documented **2017 registered-voter REVIEW** discrepancy; see [validation findings](modules/rzs_data_preparation/VALIDATION_FINDINGS.md) and the [descriptive-module validation guide](modules/descriptive_statistics/VALIDATION.md).
@@ -44,7 +44,9 @@ descriptive_outputs/                         klimek_outputs/
 `Main` is the default population for subsequent methods. The descriptive module also includes **QC-accepted** stations with fewer than 100 registered voters in its explicitly defined supplementary `All` and `Less than 100` groups. The eight rows must not be summed together.
 
 
-**Klimek validation:** v0.1.0-dev is a new module requiring its own RStudio synthetic, three-election integration and export tests. Its cumulative curves are exploratory and are not the complete formal JHK statistical test.
+**[Current Klimek release and validation](modules/klimek/README.md)**.
+
+**Klimek validation:** v0.1.4 preserves the code-aware special RZS area titles (33 Overseas, 55 Prisons, 25–29 source labels); the new version requires local RStudio regression tests and figure inspection. Its cumulative curves are exploratory and are not the complete formal JHK statistical test.
 
 ## Repository organisation
 
@@ -88,7 +90,7 @@ When `modules/rzs_data_preparation/RZS_prepared/*.xlsx` already exists, run only
 2. **Only for first-time setup or changed source data:** download official RZS XLSX files using links in the [preparation README](modules/rzs_data_preparation/README.md), saving them to the preparation module's `raw_data/` folder with the filenames expected by its editable configuration.
 3. If the prepared workbooks are missing, run the preparation module and its validation; otherwise reuse the existing workbooks.
 4. Run the descriptive module's tests, runner and export verification from **its own module directory**. [Installation guide](modules/descriptive_statistics/INSTALLATION.md).
-5. From `modules/klimek/`, run the new module's three tests and its runner; see the bilingual [user guide](modules/klimek/USER_GUIDE.md). The Klimek module remains **v0.1.0-dev**, pending your first RStudio results.
+5. From `modules/klimek/`, run its synthetic, plot-layout, singleton, integration and export tests and its runner; see the bilingual [user guide](modules/klimek/USER_GUIDE.md). Klimek v0.1.4 includes the consolidated visual fixes; retain the complete local R test log before claiming verified runtime validation.
 
 ## Publication and future development
 
@@ -97,3 +99,7 @@ Current code is restricted to tested presidential/parliamentary RZS templates. N
 Planned, **not yet implemented**, modules include election fingerprints, turnout–vote contours, normality diagnostics, regression and Mebane FMM. The modular architecture is described in [ARCHITECTURE.md](modules/rzs_data_preparation/ARCHITECTURE.md). Keep interpretation and any future public interface separate from statistical computations.
 
 Copyright © 2026 **Zlatko J. Kovačić**. [MIT licence](LICENSE). Feedback and errors: GitHub Issues or `Zlatko@MyStatisticalConsultant.com`. See [citation metadata](CITATION.cff).
+
+**Small-area graph handling (v0.1.4):** See [Klimek user guide](modules/klimek/USER_GUIDE.md) for zero-, one- and multi-station behaviour.
+
+**GitHub replacement:** [Klimek v0.1.4 clean-folder upload](GITHUB_REPLACE_KLIMEK.md).

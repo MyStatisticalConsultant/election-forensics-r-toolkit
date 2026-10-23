@@ -65,3 +65,6 @@ Keep your current toolkit directory (and local prepared XLSX files). Place only 
 GitHub stores *code, methods and tests*. Your PC holds *raw official XLSX, prepared XLSX, and exported graphs/tables*. When syncing new code, preserve `raw_data/`, `RZS_prepared/`, `descriptive_outputs/` and `klimek_outputs/`. `.gitignore` protects them from normal Git commits; copying a full ZIP over a local folder is a different operation and should be reviewed before overwriting anything.
 
 See [GitHub update guide](GITHUB_UPLOAD_GUIDE.md) and [release checklist](RELEASE_CHECKLIST.md).
+
+
+**Klimek v0.1.4:** Run `source("tests/test_zero_station_groups.R")` alongside the existing tests; empty district/municipality groups are explicitly exported and old selected-area Klimek images are removed on rerun.

@@ -15,10 +15,12 @@
 
 - [ ] Priprema RZS: upoređivanje sa zvaničnim zbirovima, ugovor `Main`/`Master`/`Options` i dokumentovana stavka **REVIEW** za upisane 2017.
 - [ ] Deskriptivni modul v0.3.1: sintetički, integracioni i izlazni testovi za tri izbora; `100 or more == Main`, osam delimično preklapajućih grupa, 16 agregatnih korelacionih matrica, izveštaji i ćirilično/latinično kodiranje.
-- [ ] Klimek v0.1.0-dev: iz `modules/klimek/` izvršiti `source("tests/run_tests.R")`, `source("tests/integration_real_data.R")`, `source("Klimek.R")` i `source("tests/check_exports.R")`.
-- [ ] Proveriti obe normalizacije kumulativnih krivih, svih osam grupa, krajnje vrednosti za sve opcije, EN/SR grafikone, dijakritike i eventualno izabrane oblasti.
-- [ ] Sačuvati datiran zapis testova, `sessionInfo()`, parametre i hash ulaza. Ne proglašavati Klimek validiranim dok provere ne prođu.
-- [ ] Jasno navesti da statističke anomalije nisu samostalni dokaz izborne manipulacije.
+- [ ] Klimek v0.1.4: iz `modules/klimek/` izvršiti svih sedam komandi iz [uputstva za zamenu](GITHUB_REPLACE_KLIMEK_SER.md): `run_tests`, `test_graphics_layout`, `test_single_station_plots`, `test_zero_station_groups`, `integration_real_data`, `Klimek.R`, `check_exports`.
+- [ ] Proveriti SR/EN A i B naslove, čitljive legende, korake od 10 procentnih poena na y-osi, razdvajanje standardnih/JHK grupa i posebne RZS šifre 33, 55 i 25–29.
+- [ ] Proveriti 0 BM = nema slike uz `Stations=0` / `NA` u tabelama; 1 BM = tačka; 2+ BM = linija; nema zastarelih slika izabrane oblasti.
+- [ ] Proveriti krajnje vrednosti obe normalizacije, zbir glasova svih opcija, osam preklapajućih grupa i Unicode.
+- [ ] Sačuvati datiran zapis testova, R `sessionInfo()`, hash ulaza i izabrane slike; bez tih provera ne tvrditi da je Klimek nezavisno validiran.
+- [ ] Opisne krive ne dokaziju izbornu prevaru.
 
 ## Objavljivanje
 

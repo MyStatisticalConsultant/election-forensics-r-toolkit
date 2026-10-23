@@ -10,7 +10,7 @@ Election Forensics R Toolkit je otvoren, **lokalno pokretan** skup R modula za p
 |---|---|---|
 | `rzs_data_preparation` | Standardizacija RZS Excel podataka za predsedničke izbore 2017. i 2022. i parlamentarne izbore 2022; radni listovi `Master`, `Main`, `Options`, kontrola kvaliteta i metapodaci | [Srpski](modules/rzs_data_preparation/README_SER.md) · [English](modules/rzs_data_preparation/README.md) |
 | `descriptive_statistics` **v0.3.1** | Srbija, okruzi, opštine; osam grupa biračkih mesta, 16 korelacionih matrica po izborima, robusne mere, testovi, Excel/CSV i opcioni Word izveštaji | [Srpski](modules/descriptive_statistics/README_SER.md) · [English](modules/descriptive_statistics/README.md) |
-| `klimek` **v0.1.0-dev** | Kumulativne krive glasova u funkciji izlaznosti: osam grupa BM, dve normalizacije, EN/SR grafikoni i opisne T90/T95 metrike | [Srpski](modules/klimek/README_SER.md) · [English](modules/klimek/README.md) |
+| `klimek` **v0.1.4** | Kumulativne krive glasova u funkciji izlaznosti: osam grupa BM, dve normalizacije, EN/SR grafikoni i opisne T90/T95 metrike | [Srpski](modules/klimek/README_SER.md) · [English](modules/klimek/README.md) |
 
 
 **Domet validacije:** rezultati za tri navedena izbora upoređeni su sa nezavisno izračunatim referentnim rezultatima, prema potvrdi istraživača. U repozitorijumu se nalaze testovi za ponavljanje provera. To nije garancija ispravnosti za buduće formate ulaza, druge izbore ili zaključke o uzrocima nepravilnosti. Kod pripreme podataka ostaje dokumentovana stavka **REVIEW** za broj upisanih birača na predsedničkim izborima 2017: [nalazi validacije](modules/rzs_data_preparation/VALIDATION_FINDINGS_SER.md); [validacija deskriptivnog modula](modules/descriptive_statistics/VALIDATION_SER.md).
@@ -43,7 +43,9 @@ Excel, CSV, opcioni Word                    CSV, XLSX, EN/SR PNG/PDF
 Osnovni uzorak za buduće forenzičke metode je `Main`. Deskriptivni modul ima i posebno prikazana, kontrolom kvaliteta prihvaćena biračka mesta sa manje od 100 upisanih birača. **Osam redova u zbirnim tabelama nisu osam međusobno isključivih grupa** i ne smeju se sabirati.
 
 
-**Status modula Klimek:** razvojna verzija v0.1.0-dev zahteva samostalne RStudio testove na tri baze i proveru izvoza. Krive su eksploratorne i ne predstavljaju kompletan JHK test.
+**[Aktuelno izdanje Klimek modula](modules/klimek/README_SER.md)**.
+
+**Status modula Klimek:** v0.1.4 ispravlja nazive posebnih RZS kategorija (33 Inostranstvo, 55 Zavodi, 25–29 izvorni nazivi); ažurirane testove i slike treba proveriti u RStudio. Krive su eksploratorne i ne predstavljaju kompletan JHK test.
 
 ## Struktura repozitorijuma
 
@@ -64,3 +66,8 @@ Instalirajte [R](https://cran.r-project.org/) i po želji [RStudio](https://posi
 Planirani zasebni moduli su izborni otisci (*election fingerprints*), izborne konture, dijagnostika normalnosti, regresije i Mebane FMM. **Nisu još implementirani.** Arhitektura: [ARCHITECTURE_SER.md](modules/rzs_data_preparation/ARCHITECTURE_SER.md).
 
 Autorsko pravo © 2026 **Zlatko J. Kovačić**. [MIT licenca](LICENSE). Kontakt: `Zlatko@MyStatisticalConsultant.com`.
+
+**Prikaz malih grupa (v0.1.4):** Za 0 BM nema grafikona, za 1 BM prikazuje se tačka, a za 2+ BM kriva. Videti [korisničko uputstvo](modules/klimek/USER_GUIDE_SER.md).
+
+
+**Zamena na GitHub-u:** [Klimek v0.1.4 — kompletna zamena foldera](GITHUB_REPLACE_KLIMEK_SER.md).

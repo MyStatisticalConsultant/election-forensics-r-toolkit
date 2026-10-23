@@ -17,3 +17,18 @@
 **T90/T95 error.** Define both non-overlapping blocs separately for each election, or set `ENABLE_BLOC_TAIL_METRICS=FALSE`. No inferential p-value is supplied.
 
 When filing an issue, attach the precise R error, relevant EDITABLE values without private paths, `sessionInfo()`, source MD5, affected election/group and steps to reproduce.
+
+
+### `subscript out of bounds` in `tests/test_graphics_layout.R`
+
+The v0.1.3 script introduced a six-argument title function while the old test still called its earlier four-argument interface. Replace **both** `Klimek.R` and `tests/test_graphics_layout.R` from v0.1.3.1-dev, then rerun the tests. Do not change input workbooks.
+
+
+### `geom_line(): Each group consists of only one observation`
+
+Versions before v0.1.3.3 could repeat this warning for geographically selected, single-station size groups. This is not an execution failure. Version v0.1.3.3 shows the observation as a point and retains the numeric result. Run `source("tests/test_single_station_plots.R")` after upgrading.
+
+
+### Why is an A figure missing for a selected district? (v0.1.3.4)
+
+If that district has zero eligible stations for the requested group, this is expected: the console reports `zero-station group(s)` once for the area, and no line or dot is invented. The same area/group/option appears in district/municipality exports with `Stations=0` and percentages `NA`. Earlier A/B images for this area are removed before rendering; other districts are unaffected.

@@ -51,6 +51,16 @@ Use `CURVE_NORMALISATIONS <- "both"` to generate both. Do not compare height acr
 
 For 19 parliamentary lists, prefer `top_n` and perhaps `WRITE_FACETED=TRUE`. Avoid printing all options in one overlaid plot unless the result is legible.
 
+### B-graph titles, split overlays and panel layout (v0.1.1)
+
+The previous version put the full candidate/list name into the B graph's main title, which could be cropped. The new **main title** contains only the election and area; the **subtitle** always contains `Electoral option: <full label>`. `OPTION_LABELS_EN/SR` remains the place to supply translated full names; `CUSTOM_SUBTITLE_EN/SR`, if non-empty, is appended after that name. `TITLE_WRAP_CHARS` and `SUBTITLE_WRAP_CHARS` control line wrapping; the original labels and vote data are unchanged.
+
+B **combined** charts are split into two files when `B_SPLIT_COMBINED <- TRUE` (the default): `B_Option_XX_votes_combined_standard.png` for `ALL, GE100, LT100, SMALL, MIDDLE, LARGE` (only those selected in `PLOT_GROUPS`), and `B_Option_XX_votes_combined_jhk.png` for `JHK_SMALL, JHK_LARGE`. The previous eight-line `B_Option_XX_votes_combined.png` is deleted on rerun to avoid confusion. With `WRITE_FACETED <- TRUE` and `B_TWO_PANEL_FACET <- TRUE` (both defaults), `B_Option_XX_votes_faceted.png` is **one figure with two vertically stacked panels**, comparing standard and JHK curves using the same axes. `B_PANEL_COLUMNS=1L` and `B_PANEL_HEIGHT_MULTIPLIER=1.45` provide extra vertical room. To produce *only* the two-panel version, set `B_SPLIT_COMBINED <- FALSE` while keeping `WRITE_FACETED <- TRUE`. Set `B_TWO_PANEL_FACET <- FALSE` to omit it. PNG and PDF follow the same filename convention.
+
+For A graphs with **three or more** candidate/list curves, `A_LEGEND_ROWS_3PLUS=2L` explicitly puts the legend on **two rows**. One or two curves use one row. Complete long names wrap automatically after roughly `LEGEND_WRAP_CHARS=31L` characters; `LEGEND_FONT_SIZE=9.5` controls legend typography. For B graphs with more than two visible groups, `B_LEGEND_ROWS_3PLUS=2L` also applies. Choose a Unicode-capable font and, if necessary, increase `PLOT_WIDTH_IN`, `PLOT_HEIGHT_IN`, or shorten the *display translation* without changing the underlying `Votes_field`.
+
+This is a **presentation-only patch**: it does not change cumulative sums, turnout definitions, polling-station group membership, both normalisations, T90/T95 or numerical CSV/XLSX values. You only need to rerun `Klimek.R`, not upstream modules. After updating, execute `source("tests/test_graphics_layout.R")` and visually inspect a Serbian parliamentary B graph and an A graph with three options.
+
 ## 7. Geographical selection
 
 Regardless of graph settings, `district.csv` and `municipality.csv` provide *all* areas, all groups and all options. Graphs default to `GEOGRAPHIC_PLOTS="national"`. For selected areas set `"selected"`, `SELECT_DISTRICT_CODES <- c("01")`, or `SELECT_MUNICIPALITY_KEYS <- c("01|001")` with actual codes copied from `tables/areas.csv`. Municipality keys always combine district and municipality, avoiding ambiguous names. No station-size thresholds are re-estimated locally.
@@ -76,3 +86,29 @@ Run `source("tests/run_tests.R")`, `source("tests/integration_real_data.R")`, `s
 ## 10. Interpretation
 
 A curve rising steeply near very high turnout indicates that the option accumulated a relatively large share of its counted votes in those stations, under the chosen denominator; it is **not a direct estimate of fraud**. Plausible alternatives include stronghold geography, different electorate sizes, special voting categories, mobilisation, and composition. Follow up with spatial controls, observer reports, signed protocols and legally available audit material, not accusation from a curve alone.
+
+
+### Graph-title and axis refinements in v0.1.2-dev
+
+A-family figures place the full polling-station group name on the second title line. Both A and B families use 10-percentage-point spacing on the vertical axis, and B-family figures now display all expected percentage labels.
+
+
+### Title localization refinements in v0.1.3-dev
+
+Main chart titles now show reader-friendly election and area labels (for example, "parliamentary 2022 Serbia"). In A-family figures, the polling-station group appears on a separate subtitle-like line in a smaller, non-bold style. The same logic applies to selected district and municipality figures.
+
+
+
+### Special RZS reporting categories (v0.1.3.2-dev)
+
+District titles are **code-aware**. When creating selected district plots (`GEOGRAPHIC_PLOTS = "selected"`), use official `SELECT_DISTRICT_CODES` values. Code `33` is shown as **Overseas** (SR: **Inostranstvo**); code `55` is **Prisons** (SR: **Zavodi za izvršenje krivičnih sankcija**). Neither gets a fictitious `district`/`okrug` suffix. The source category remains unchanged in all numerical tables. For codes `25`–`29` (Kosovo-associated in the preparation module), graphs preserve the official RZS reporting label and only translate an **existing** district suffix. Those categories must not be interpreted as evidence that a polling station is physically inside the named territory. Ordinary districts continue to use localized `district`/`okrug` labels. The same names appear in A and B graphs and in either graph language.
+
+
+### Single-station groups (v0.1.3.3-dev)
+
+For selected district/municipality plots, a polling-station size group can contain exactly one eligible station. An example is the `Large` group for Overseas (district code 33) in the 2022 elections. Such an observation is shown as an isolated point (controlled by `SINGLE_POINT_SIZE`) because a cumulative line requires at least two observations. It remains part of all numeric summaries. This is not evidence of fraud or a script failure. One informational line per affected area replaces the repeated `geom_line()` warnings.
+
+
+### Zero, one, and multiple polling stations (v0.1.4)
+
+**0 stations:** The group is included in district/municipality summaries with `Stations=0`, count totals equal to zero, and undefined percentages marked `NA`. No A figure is drawn for it; B figures omit that group, and an area with no drawable data produces no new figures. An area-scoped cleanup removes earlier Klimek A/B PNG/PDF before redrawing so stale figures cannot remain. The console gives a single consolidated `zero-station group(s)` message per area. **1 station:** point only. **2+ stations:** cumulative line. For a release check, run `source("tests/test_zero_station_groups.R")` from `modules/klimek/`, followed by the existing tests and export verification. This does not require reprocessing the RZS workbooks.

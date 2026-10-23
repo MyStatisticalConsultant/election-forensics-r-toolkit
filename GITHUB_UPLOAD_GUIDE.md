@@ -2,7 +2,7 @@
 
 [Srpski (latinica)](GITHUB_UPLOAD_GUIDE_SER.md) · [Workflow](WORKFLOW.md) · [Release checklist](RELEASE_CHECKLIST.md)
 
-## Current repository (v1.7 development)
+## Current repository (v1.7.9 consolidated release)
 
 Maintain **one** GitHub repository, `election-forensics-r-toolkit`, containing three modules:
 
@@ -10,7 +10,7 @@ Maintain **one** GitHub repository, `election-forensics-r-toolkit`, containing t
 |---|---|---|
 | [`rzs_data_preparation`](modules/rzs_data_preparation/README.md) | Previously tested, one 2017 registered-voter REVIEW | Creates `Master`, `Main`, `Options`, QC and metadata |
 | [`descriptive_statistics`](modules/descriptive_statistics/README.md) v0.3.1 | Tested against the three supported elections, within documented scope | National/district/municipality descriptives, correlations and reports |
-| [`klimek`](modules/klimek/README.md) v0.1.0-dev | **Pending local RStudio validation** | Cumulative vote–turnout curves and EN/SR figures |
+| [`klimek`](modules/klimek/README.md) v0.1.4 | **Pending local RStudio validation** | Cumulative vote–turnout curves and EN/SR figures |
 
 The original data and generated workbooks stay on the user's machine. **Do not describe Klimek as validated until its tests and figure inspection have passed.**
 
@@ -50,3 +50,5 @@ You can execute **only Klimek** from `modules/klimek/` when the three prepared X
 Every module addition requires a full inventory check of **all current `.md` documentation** in the repository and **both languages**. Update module lists, availability statements, architecture diagrams, sample contracts, paths, status/validation claims, user guides, release checklists and root navigation. Historical changelogs and prior release notes remain historical records and should not be silently rewritten. Include a link/consistency audit and a regenerated `MANIFEST.sha256` in each new archive.
 
 Copyright © 2026 Zlatko J. Kovačić. [MIT licence](LICENSE).
+
+**Current Klimek replacement (v0.1.4):** [GITHUB_REPLACE_KLIMEK.md](GITHUB_REPLACE_KLIMEK.md).

@@ -43,6 +43,16 @@ BM se sortiraju po izlaznosti `100*C/E` rastuće, a mesta sa istom izlaznošću 
 
 `PLOT_WIDTH_IN`, `PLOT_HEIGHT_IN`, `PNG_DPI`, `BASE_FONT_SIZE`, `BASE_FONT_FAMILY`, `LINE_WIDTH`, `ADD_POINTS`, `POINT_SIZE`, `POINT_ALPHA`, `LEGEND_POSITION` i `FACET_COLUMNS` regulišu izgled. `SAVE_PNG` i `SAVE_PDF` uključuju formate. `LIMIT_X_TO_100=TRUE` samo zumira prikaz, bez izmene ulaznih podataka; podrazumevano je FALSE. Za 19 parlamentarnih lista uglavnom je čitljiviji izbor tri najveće, a ne svih 19 zajedno.
 
+### Naslovi B-grafikona, razdvojene krive i panelni prikaz (v0.1.1)
+
+Ranije je puno ime kandidata ili izborne liste bilo sastavni deo glavnog naslova B-grafikona, što je dovodilo do odsecanja teksta. Sada **glavni naslov** sadrži izbore i oblast, a **podnaslov** uvek sadrži `Izborna opcija: <puno ime>`. Pune nazive na oba jezika unosite kao i ranije u `OPTION_LABELS_EN/SR`. Tekst iz `CUSTOM_SUBTITLE_EN/SR`, ako postoji, dodaje se *posle* naziva. Prelamanje kontrolišu `TITLE_WRAP_CHARS` i `SUBTITLE_WRAP_CHARS`, bez izmena originalnih naziva i rezultata.
+
+Kada je `B_SPLIT_COMBINED <- TRUE` (podrazumevano), kombinovani B-grafikon se deli na **dve slike**: `B_Option_XX_votes_combined_standard.png` za standardne grupe (`ALL, GE100, LT100, SMALL, MIDDLE, LARGE`) i `B_Option_XX_votes_combined_jhk.png` za `JHK_SMALL, JHK_LARGE`. Prikazuju se samo grupe iz `PLOT_GROUPS`. Zastarela datoteka `B_Option_XX_votes_combined.png` sa osam preklopljenih krivih uklanja se prilikom ponovnog pokretanja. Kada su `WRITE_FACETED <- TRUE` i `B_TWO_PANEL_FACET <- TRUE`, dobija se **jedna panelna slika** `B_Option_XX_votes_faceted.png`, sa standardnim i JHK grupama u dva panela, na uporedivim osama. `B_PANEL_COLUMNS=1L` znači da su paneli jedan ispod drugog, a `B_PANEL_HEIGHT_MULTIPLIER=1.45` povećava visinu. Ako želite samo panelni B-prikaz, postavite `B_SPLIT_COMBINED <- FALSE`. Ako ne želite panelnu verziju, postavite `B_TWO_PANEL_FACET <- FALSE`. Isto važi za PDF datoteke.
+
+Za A-grafikone sa **tri ili više** kandidata/lista, `A_LEGEND_ROWS_3PLUS=2L` postavlja legendu u **dva reda**; jedna ili dve opcije ostaju u jednom redu. Duga puna imena prelamaju se prema `LEGEND_WRAP_CHARS=31L`, a veličina fonta podešava se kroz `LEGEND_FONT_SIZE=9.5`. Za B-grafikone sa više od dve grupe primenjuje se `B_LEGEND_ROWS_3PLUS=2L`. Po potrebi povećajte `PLOT_WIDTH_IN`/`PLOT_HEIGHT_IN` i koristite Unicode font.
+
+Ovo je **isključivo grafička korekcija**. Nisu menjane kumulativne sume, izlaznost, sastav grupa BM, normalizacije, T90/T95 ili numerički rezultati. Dovoljno je ponovo pokrenuti `Klimek.R`, bez ponavljanja pripreme baze i deskriptivne analize. Izvršite `source("tests/test_graphics_layout.R")` i vizuelno proverite B-grafikon parlamentarne liste i A-grafikon sa tri opcije.
+
 ## 7. Geografski prikaz
 
 Numerički rezimei se **uvek** računaju za sve okruge i opštine. Grafikoni su nacionalni ako je `GEOGRAPHIC_PLOTS="national"`. Za pojedinačne oblasti stavite `"selected"` i unesite `SELECT_DISTRICT_CODES <- c("01")` ili `SELECT_MUNICIPALITY_KEYS <- c("01|001")`, koristeći **stvarne šifre** iz `tables/areas.csv`. Složeni ključ sprečava pogrešno spajanje opština istog naziva u različitim okruzima.
@@ -68,3 +78,29 @@ Pokrenite redom `source("tests/run_tests.R")`, `source("tests/integration_real_d
 ## 10. Šta kriva znači, a šta ne znači
 
 Nagao rast krive kod visoke izlaznosti označava relativno veliko prikupljanje glasova opcije na BM sa takvom izlaznošću, uz izabrani imenitelj. Uzroci mogu biti regionalna struktura, veličina biračkih mesta, sociodemografske razlike, mobilizacija, posebna BM ili problemi evidencije. **Kriva nije dokaz krađe**; za dalju proveru potrebni su uporedivi uzorci, kontrola geografije, zapisnici, izveštaji posmatrača i drugi nezavisni nalazi.
+
+
+### Dorade naslova i osa u verziji v0.1.2-dev
+
+A figure prikazuju puni naziv grupe biračkih mesta u drugom redu glavnog naslova. A i B figure koriste korak od 10 procentnih poena na vertikalnoj osi, a B figure sada prikazuju sve očekivane procentne oznake.
+
+
+### Dorade lokalizacije naslova u verziji v0.1.3-dev
+
+Glavni naslovi grafikona sada prikazuju čitljive i lokalizovane oznake izbora i oblasti (na primer, "parlamentarni 2022 Srbija"). Kod A figura grupa biračkih mesta prikazuje se u zasebnom drugom redu, u subtitle stilu, manjim fontom i bez bold-a. Ista logika važi i za odabrane okruge i opštine.
+
+
+
+### Posebne kategorije RZS (v0.1.3.2-dev)
+
+Za grafikone odabranih okruga (`GEOGRAPHIC_PLOTS = "selected"`) koristite zvanične šifre `SELECT_DISTRICT_CODES`. Šifra `33` prikazuje se kao **Inostranstvo** (EN: **Overseas**), a `55` kao **Zavodi za izvršenje krivičnih sankcija** (EN: **Prisons**). Za ove kategorije ne dodaje se „okrug/district”. U numeričkim tabelama ostaju originalne RZS kategorije. Za šifre `25`–`29` (povezane sa Kosovom u pripremnom modulu) zadržava se izvorni naziv iz RZS, a prevodi se samo već postojeći nastavak „okrug/district”. Takve administrativne oznake same po sebi ne utvrđuju fizičku lokaciju biračkog mesta. Za obične okruge nastavlja se pravilno dodavanje/prevod nastavka „okrug/district”. Važi za A i B figure i oba jezika.
+
+
+### Grupe sa samo jednim biračkim mestom (v0.1.3.3-dev)
+
+Kod izabranih okruga/opština neka grupa veličine BM može imati samo jedno kvalifikovano biračko mesto. Primer je grupa `Large` za Inostranstvo (šifra 33) na izborima 2022. Takvo opažanje prikazuje se jednom tačkom (parametar `SINGLE_POINT_SIZE`), jer je za kumulativnu liniju potrebno bar dva opažanja. Opažanje ostaje uključeno u sve numeričke rezultate. Ova situacija nije dokaz izborne nepravilnosti niti greška skripta. Jedna kratka poruka po oblasti zamenjuje ponovljena upozorenja funkcije `geom_line()`.
+
+
+### Nula, jedno i više BM (v0.1.4)
+
+**0 BM:** Grupa se prikazuje u tabelama okruga/opština sa `Stations=0`, brojači su nula, a nedefinisani procenti označeni sa `NA`. A-grafikon se ne crta, a B-grafikoni tu grupu izostavljaju. Ako u oblasti nema podataka za crtanje, ne generišu se nove slike. Stare A/B PNG/PDF datoteke te oblasti uklanjaju se pre novog crtanja; program ispisuje samo jednu zbirnu poruku `zero-station group(s)` po oblasti. **1 BM:** tačka. **2 ili više BM:** linija. Iz foldera `modules/klimek/` pokrenite `source("tests/test_zero_station_groups.R")`, pa postojeće testove i proveru izvoza. Priprema RZS baza se ne ponavlja.

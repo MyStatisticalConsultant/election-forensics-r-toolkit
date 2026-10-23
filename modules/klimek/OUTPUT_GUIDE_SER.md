@@ -19,6 +19,15 @@ Skript pravi odvojen direktorijum `klimek_outputs/<vrsta_izbora>_<godina>/` za s
 | `curves/national/<grupa>_<opcija>.csv` | Tačke svih nacionalnih krivih ako su uključene |
 | `curves/<odabrana-oblast>_...csv` | Tačke dodatnih geografskih krivih |
 | `figures/<EN|SR>/<valid|option>/<oblast>/A_<grupa>_<combined|faceted>.<png|pdf>` | Više opcija u istoj grupi BM |
-| `figures/<EN|SR>/<valid|option>/<oblast>/B_<opcija>_<combined|faceted>.<png|pdf>` | Jedna opcija u različitim grupama BM |
+| `figures/<EN|SR>/<valid|option>/<oblast>/B_<opcija>_combined_standard.<png|pdf>` | Jedna opcija, najviše šest **standardnih** grupa BM |
+| `figures/<EN|SR>/<valid|option>/<oblast>/B_<opcija>_combined_jhk.<png|pdf>` | Jedna opcija, dve **JHK** grupe BM |
+| `figures/<EN|SR>/<valid|option>/<oblast>/B_<opcija>_faceted.<png|pdf>` | Jedna opcija, **dva panela** (standardne/JHK grupe) |
 
 CSV datoteke su UTF-8 sa BOM radi dijakritika u Excel-u; XLSX čuva Unicode. Dugačke serije tačaka se ne uključuju u Excel jer mogu premašiti dozvoljen broj redova. Izlazi se ne postavljaju u glavni Git repozitorijum. Ako nedostaje slika za grupu bez važećih glasova ili opciju bez glasova, to nije automatski programska greška: prvo proverite `coverage.csv` i `curve_endpoints.csv`.
+
+**v0.1.1:** Zastarela kombinovana B-slika sa osam krivih uklanja se pri ponovnom izvršavanju. Numeričke tabele i CSV tačke krivih ostaju iste. Legenda A-grafikona ima dva reda kada se prikazuju najmanje tri kandidata/liste.
+
+
+### Prazni redovi u teritorijalnim tabelama (v0.1.4)
+
+Listovi District i Municipality, odnosno `tables/district.csv` i `tables/municipality.csv`, sadrže svaku kombinaciju prisutna oblast × grupa BM × izborna opcija. `Stations=0` znači da u toj grupi nema prihvaćenih BM. Zbirni brojači su nula; izlaznost i udeo opcije su nedefinisani i eksportuju se kao doslovni `NA`. Takav red **nije** rezultat sa 0% izlaznosti ili 0% glasova. Oblasti koje uopšte ne postoje u prihvaćenoj populaciji `ALL` ne izmišljaju se.

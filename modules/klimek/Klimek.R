@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =============================================================================
-# ELECTION FORENSICS R TOOLKIT | KLIMEK-STYLE CUMULATIVE CURVES | v0.1.0-dev
+# ELECTION FORENSICS R TOOLKIT | KLIMEK-STYLE CUMULATIVE CURVES | v0.1.4
 # EN: Reproducible cumulative vote-versus-turnout curves, not a fraud test.
 # SR: Reproduktivne kumulativne krive glasovi–izlaznost; nisu test prevare.
 # EN: Run from modules/klimek with source("Klimek.R").
@@ -91,6 +91,30 @@ WRITE_COMBINED <- TRUE
 WRITE_FACETED <- TRUE
 FACET_FREE_Y <- FALSE              # EN/SR: TRUE = independent vertical scales / posebne Y skale
 
+# EN: Family B (one option across groups) is easier to read as two comparisons:
+#     standard groups (ALL, GE100, LT100, SMALL, MIDDLE, LARGE), and the
+#     separate JHK_SMALL/JHK_LARGE comparison. Combined plots are SPLIT by default.
+# SR: Porodica B (jedna opcija kroz grupe) razdvaja standardne grupe od dve
+#     JHK grupe. Kombinovani prikaz podrazumevano pravi DVE odvojene slike.
+B_SPLIT_COMBINED <- TRUE
+# EN: Family B "faceted" is now ONE TWO-PANEL figure: standard groups above,
+#     JHK groups below. Set FALSE to skip it when WRITE_FACETED is TRUE.
+# SR: Panelni B grafikon ima DVA panela: standardne grupe gore, JHK dole.
+B_TWO_PANEL_FACET <- TRUE
+B_PANEL_COLUMNS <- 1L           # EN/SR: 1 = vertical panels / paneli jedan ispod drugog
+B_PANEL_HEIGHT_MULTIPLIER <- 1.45  # EN/SR: Extra room for two panels / dodatna visina
+
+# EN: At least three options in Family A => legend automatically uses two rows.
+#     Long full candidate/list names wrap without being abbreviated.
+# SR: Kod tri ili više izbornih opcija legenda A-grafikona ima dva reda,
+#     a duga puna imena prelamaju se bez skraćivanja.
+A_LEGEND_ROWS_3PLUS <- 2L
+B_LEGEND_ROWS_3PLUS <- 2L
+LEGEND_WRAP_CHARS <- 31L        # EN/SR: Approx. characters per legend line / znakova po redu
+LEGEND_FONT_SIZE <- 9.5         # EN/SR: Legend text size / veličina legende
+TITLE_WRAP_CHARS <- 76L         # EN/SR: Approx. title wrap width / širina naslova
+SUBTITLE_WRAP_CHARS <- 86L      # EN/SR: Approx. subtitle width / širina podnaslova
+
 # EN: Output files and graphic appearance / SR: Izlazni formati i izgled.
 SAVE_PNG <- TRUE
 SAVE_PDF <- TRUE
@@ -106,12 +130,13 @@ BASE_FONT_FAMILY <- "sans"          # EN/SR: Choose Unicode-capable font if need
 LINE_WIDTH <- 0.9
 ADD_POINTS <- FALSE
 POINT_SIZE <- 0.35
+SINGLE_POINT_SIZE <- 2.3          # EN/SR: Visible isolated point / vidljiva usamljena tačka
 POINT_ALPHA <- 0.40
 LEGEND_POSITION <- "bottom"       # "bottom", "top", "right", "left", "none"
 PLOT_THEME <- "bw"                # EN/SR: "bw", "minimal" or "classic"
 SHOW_MAJOR_GRID <- TRUE           # EN/SR: Main grid lines / glavna mreža
 X_TICK_STEP <- 10                 # EN/SR: X-axis percentage-point tick gap
-Y_TICK_STEP <- 20                 # EN/SR: Y-axis percentage-point tick gap
+Y_TICK_STEP <- 10                 # EN/SR: Y-axis percentage-point tick gap
 X_LABEL_ANGLE <- 0               # EN/SR: Rotation in degrees / ugao oznaka
 COLOR_SCHEME <- "OkabeIto"        # "OkabeIto", "Dark2", "Viridis", "Custom"
 # EN: Custom HEX colour per option field or group code; names must match keys.
@@ -172,10 +197,16 @@ validate_settings <- function() {
     COLOR_SCHEME %in% c("OkabeIto","Dark2","Viridis","Custom"),
     LEGEND_POSITION %in% c("bottom","top","right","left","none"),
     PLOT_THEME %in% c("bw","minimal","classic"),
-    X_TICK_STEP>0,Y_TICK_STEP>0,is.finite(X_LABEL_ANGLE),
+    X_TICK_STEP>0,Y_TICK_STEP>0,SINGLE_POINT_SIZE>0,is.finite(X_LABEL_ANGLE),
     all(TAIL_PERCENTILES>0 & TAIL_PERCENTILES<1),
     length(PNG_DPI)==1L, PNG_DPI>=72,
     PLOT_WIDTH_IN>0, PLOT_HEIGHT_IN>0, FACET_COLUMNS>=1,
+    B_PANEL_COLUMNS>=1L, B_PANEL_HEIGHT_MULTIPLIER>=1,
+    A_LEGEND_ROWS_3PLUS>=1L, B_LEGEND_ROWS_3PLUS>=1L,
+    LEGEND_WRAP_CHARS>=10L, LEGEND_FONT_SIZE>0,
+    TITLE_WRAP_CHARS>=20L, SUBTITLE_WRAP_CHARS>=20L,
+    is.logical(B_SPLIT_COMBINED),length(B_SPLIT_COMBINED)==1L,!is.na(B_SPLIT_COMBINED),
+    is.logical(B_TWO_PANEL_FACET),length(B_TWO_PANEL_FACET)==1L,!is.na(B_TWO_PANEL_FACET),
     all(vapply(list(OPTION_LABELS_EN,OPTION_LABELS_SR,
                     OPTION_FIELDS_BY_ELECTION,BLOC_A_BY_ELECTION,BLOC_B_BY_ELECTION),
                is.list,logical(1))))
@@ -206,11 +237,35 @@ size_friendly <- function(gr, lang) {
   map <- if (lang=="SR") sr else en
   unname(map[gr])
 }
+size_friendly_full <- function(gr, lang) {
+  en <- c(
+    ALL="All polling stations",
+    GE100="Polling stations with 100 or more registered voters",
+    LT100="Polling stations with less than 100 registered voters",
+    SMALL="Small polling stations",
+    MIDDLE="Medium polling stations",
+    LARGE="Large polling stations",
+    JHK_SMALL="JHK small polling stations",
+    JHK_LARGE="JHK large polling stations"
+  )
+  sr <- c(
+    ALL="Sva biračka mesta",
+    GE100="Biračka mesta sa 100 ili više registrovanih birača",
+    LT100="Biračka mesta sa manje od 100 registrovanih birača",
+    SMALL="Mala biračka mesta",
+    MIDDLE="Srednja biračka mesta",
+    LARGE="Velika biračka mesta",
+    JHK_SMALL="JHK mala biračka mesta",
+    JHK_LARGE="JHK velika biračka mesta"
+  )
+  map <- if (lang=="SR") sr else en
+  unname(map[gr])
+}
 normalisations <- function() if (CURVE_NORMALISATIONS=="both") c("valid","option") else CURVE_NORMALISATIONS
 safe_name <- function(s) gsub("[^a-zA-Z0-9_-]","_",as.character(s))
-write_csv <- function(dat,path) {
+write_csv <- function(dat,path,na_string="") {
   dir.create(dirname(path),recursive=TRUE,showWarnings=FALSE)
-  readr::write_excel_csv(as.data.frame(dat,stringsAsFactors=FALSE),path,na="")
+  readr::write_excel_csv(as.data.frame(dat,stringsAsFactors=FALSE),path,na=na_string)
 }
 empty_curve <- function() data.frame(
   Station_key=character(), Turnout=numeric(), Cum_votes=numeric(),
@@ -441,11 +496,118 @@ plot_colors <- function(keys,kind="option") {
   }
   out
 }
+# EN/SR: Wrap titles and full legend names instead of clipping or shortening.
+# EN: The source option names and data are unchanged; only chart labels wrap.
+# SR: Originalna imena i podaci ostaju nepromenjeni; prelama se samo tekst slike.
+wrap_plot_text <- function(x, width) {
+  if (is.null(x) || length(x)!=1L || is.na(x) || !nzchar(x)) return("")
+  paste(strwrap(as.character(x),width=as.integer(width)),collapse="\n")
+}
+
 chart_title <- function(lang, family, id, extra) {
   custom <- if(lang=="EN") CUSTOM_MAIN_TITLE_EN else CUSTOM_MAIN_TITLE_SR
   if(nzchar(custom)) return(paste(custom,extra,sep=" | "))
   stem <- if(lang=="EN") "Cumulative turnout–vote curves" else "Kumulativne krive izlaznost–glasovi"
   paste(stem,extra,sep=" | ")
+}
+pretty_election_label <- function(lang, election_type, year) {
+  if (lang=="EN") {
+    type_map <- c(presidential="presidential", parliamentary="parliamentary", local="local")
+  } else {
+    type_map <- c(presidential="predsednički", parliamentary="parlamentarni", local="lokalni")
+  }
+  # EN: Validate the exact input contract; invalid labels must not produce
+  #     obscure 'subscript out of bounds' errors or misleading graph titles.
+  # SR: Jasna provera tipa izbora; nepoznata oznaka daje razumljivu grešku.
+  election_type <- as.character(election_type)
+  if(length(election_type)!=1L || is.na(election_type) ||
+     !election_type %in% names(type_map))
+    stop("Unknown election type: ",paste(election_type,collapse=", "),
+         ". Expected: ",paste(names(type_map),collapse=", "),call.=FALSE)
+  if(length(year)!=1L || is.na(suppressWarnings(as.integer(year))))
+    stop("Year must be a single integer.",call.=FALSE)
+  paste(unname(type_map[[election_type]]), as.integer(year))
+}
+# EN: District_code — not a translated name — identifies special RZS categories.
+# SR: Posebne kategorije RZS prepoznaju se po šifri, ne po prevedenom nazivu.
+normalise_district_code <- function(code) {
+  if(length(code)!=1L || is.na(code)) return(NA_character_)
+  code <- trimws(as.character(code))
+  if(!nzchar(code)) return(NA_character_)
+  if(grepl("^[0-9]+$",code)) {
+    code <- sub("^0+","",code)
+    if(!nzchar(code)) code <- "0"
+  }
+  code
+}
+district_reporting_category <- function(district_code=NA_character_) {
+  code <- normalise_district_code(district_code)
+  if(is.na(code)) return("ordinary")
+  if(code=="33") return("overseas")
+  if(code=="55") return("prisons")
+  if(code %in% as.character(25:29)) return("kosovo_associated")
+  "ordinary"
+}
+# EN: A Kosovo-associated code denotes an official RZS reporting category;
+#     it does NOT establish that stations are physically within Kosovo.
+#     Preserve that category's source label; translate an EXISTING suffix
+#     'okrug'/'district' but never invent one for codes 25–29.
+# SR: Šifre 25–29 označavaju RZS kategorije, a ne nužno fizičku lokaciju BM.
+#     Sačuvati naziv iz RZS; prevesti postojeći nastavak, ne dodavati novi.
+pretty_area_label <- function(lang, area_level, area_name, district_code=NA_character_) {
+  if(identical(area_level,"National")) return(if(lang=="EN") "Serbia" else "Srbija")
+  nm <- if(length(area_name)==1L && !is.na(area_name)) trimws(as.character(area_name)) else ""
+  if(identical(area_level,"District")) {
+    category <- district_reporting_category(district_code)
+    if(category=="overseas") return(if(lang=="EN") "Overseas" else "Inostranstvo")
+    if(category=="prisons") return(if(lang=="EN") "Prisons" else "Zavodi za izvršenje krivičnih sankcija")
+    # EN/SR: For nonstandard source labels, no silent geographical assumption.
+    if(!nzchar(nm)) nm <- paste0("RZS ",normalise_district_code(district_code))
+    if(lang=="EN") {
+      if(grepl("[[:space:]]+okrug$",nm,ignore.case=TRUE))
+        return(sub("[[:space:]]+okrug$"," district",nm,ignore.case=TRUE))
+      if(grepl("[[:space:]]+district$",nm,ignore.case=TRUE)) return(nm)
+      if(category=="kosovo_associated") return(nm)
+      nm <- sub("[[:space:]]+oblast$","",nm,ignore.case=TRUE)
+      return(paste(nm,"district"))
+    }
+    if(grepl("[[:space:]]+district$",nm,ignore.case=TRUE))
+      return(sub("[[:space:]]+district$"," okrug",nm,ignore.case=TRUE))
+    if(grepl("[[:space:]]+okrug$",nm,ignore.case=TRUE)) return(nm)
+    if(category=="kosovo_associated") return(nm)
+    return(paste(nm,"okrug"))
+  }
+  if(identical(area_level,"Municipality")) {
+    if(lang=="EN") {
+      if(grepl("municipality$",nm,ignore.case=TRUE)) return(nm)
+      return(paste(nm,"municipality"))
+    }
+    return(nm)
+  }
+  nm
+}
+context_label <- function(lang, election_type, year, area_level, area_name,
+                          district_code=NA_character_) {
+  paste(pretty_election_label(lang,election_type,year),
+        pretty_area_label(lang,area_level,area_name,district_code))
+}
+# EN: B title contains the election and area ONLY. The complete option name
+#     belongs in the subtitle (optionally followed by the custom subtitle).
+# SR: Naslov B slike sadrži SAMO izbore i oblast; puno ime opcije ide ispod.
+b_titles <- function(lang, election_type, year, area_level, area_name, option_label,
+                     district_code=NA_character_) {
+  main <- chart_title(lang,"B",paste(election_type,year,sep="_"),
+                      context_label(lang,election_type,year,area_level,area_name,district_code))
+  lead <- if (lang=="EN") "Electoral option: " else "Izborna opcija: "
+  extra <- if(lang=="EN") CUSTOM_SUBTITLE_EN else CUSTOM_SUBTITLE_SR
+  sub <- paste0(lead,option_label)
+  if(nzchar(extra)) sub <- paste(sub,extra,sep=" | ")
+  list(title=main,subtitle=sub)
+}
+# EN/SR: Standard and JHK curves are different size classifications.
+b_group_sets <- function(available) {
+  list(standard=intersect(c("ALL","GE100","LT100","SMALL","MIDDLE","LARGE"),available),
+       jhk=intersect(c("JHK_SMALL","JHK_LARGE"),available))
 }
 chart_y <- function(lang,norm) {
   if (lang=="EN") {
@@ -454,72 +616,143 @@ chart_y <- function(lang,norm) {
     if (norm=="valid") CUSTOM_Y_VALID_SR else CUSTOM_Y_OPTION_SR
   }
 }
-plot_curves <- function(curve_long,lang,norm,title,axis_map,color_map,facet=FALSE) {
+# EN: `axis_map` is named by option fields (family A) or group codes (B).
+# SR: `axis_map` povezuje šifre opcija (A) ili grupa BM (B) sa natpisima.
+plot_curves <- function(curve_long, lang, norm, title, axis_map, color_map,
+                        facet=FALSE, subtitle=NULL, legend_rows=1L,
+                        facet_variable="Series", facet_columns=FACET_COLUMNS) {
   if(!nrow(curve_long)) return(NULL)
   yy <- if(norm=="valid") "Y_valid" else "Y_option"
   d <- curve_long[is.finite(curve_long[[yy]]),,drop=FALSE]
   if(!nrow(d)) return(NULL)
   d$Series <- factor(as.character(d$Series),levels=unique(as.character(d$Series)))
+  if (facet && !facet_variable %in% names(d)) stop("Facet variable not found: ",facet_variable)
+  # EN: ggplot cannot draw a line for a series with only one observation.
+  #     Keep that station as a visible point; draw lines only for series with
+  #     two or more observations, separately within each facet panel.
+  # SR: Za jednu tačku ne postoji linija. Takvo BM prikazati kao tačku,
+  #     a linije crtati samo za serije sa najmanje dva opažanja po panelu.
+  panel_key <- if (facet && facet_variable != "Series") {
+    interaction(d$Series, d[[facet_variable]], drop=TRUE)
+  } else d$Series
+  n_per_series_panel <- as.integer(ave(rep.int(1L,nrow(d)), panel_key, FUN=length))
+  line_data <- d[n_per_series_panel>=2L,,drop=FALSE]
+  isolated_data <- d[n_per_series_panel==1L,,drop=FALSE]
+  if(is.null(subtitle)) subtitle <- if(lang=="EN") CUSTOM_SUBTITLE_EN else CUSTOM_SUBTITLE_SR
+  label_text <- vapply(unname(axis_map),wrap_plot_text,character(1),width=LEGEND_WRAP_CHARS)
   theme_base <- switch(PLOT_THEME,
     bw=ggplot2::theme_bw(base_size=BASE_FONT_SIZE,base_family=BASE_FONT_FAMILY),
     minimal=ggplot2::theme_minimal(base_size=BASE_FONT_SIZE,base_family=BASE_FONT_FAMILY),
     classic=ggplot2::theme_classic(base_size=BASE_FONT_SIZE,base_family=BASE_FONT_FAMILY))
   p <- ggplot2::ggplot(d,ggplot2::aes(x=Turnout,y=.data[[yy]],colour=Series,group=Series)) +
-    ggplot2::geom_line(linewidth=LINE_WIDTH) +
-    ggplot2::scale_colour_manual(values=stats::setNames(unname(color_map[names(axis_map)]),unname(axis_map)),drop=FALSE) +
+    ggplot2::scale_colour_manual(
+      values=stats::setNames(unname(color_map[names(axis_map)]),unname(axis_map)),
+      breaks=unname(axis_map),labels=label_text,drop=FALSE) +
     ggplot2::scale_y_continuous(
+      limits=c(0,max(Y_TICK_STEP,ceiling(max(d[[yy]],na.rm=TRUE)/Y_TICK_STEP)*Y_TICK_STEP)),
       labels=function(x)paste0(format(x,trim=TRUE),"%"),
-      breaks=function(limits)seq(0,max(0,ceiling(max(limits)/Y_TICK_STEP)*Y_TICK_STEP),by=Y_TICK_STEP)) +
+      breaks=function(limits)seq(0,max(limits),by=Y_TICK_STEP)) +
     ggplot2::scale_x_continuous(
       breaks=function(limits)seq(0,max(0,ceiling(max(limits)/X_TICK_STEP)*X_TICK_STEP),by=X_TICK_STEP)) +
-    ggplot2::labs(title=title,subtitle=if(lang=="EN") CUSTOM_SUBTITLE_EN else CUSTOM_SUBTITLE_SR,
+    ggplot2::labs(title=wrap_plot_text(title,TITLE_WRAP_CHARS),
+      subtitle=wrap_plot_text(subtitle,SUBTITLE_WRAP_CHARS),
       x=if(lang=="EN") CUSTOM_X_LABEL_EN else CUSTOM_X_LABEL_SR,
       y=chart_y(lang,norm),colour=NULL,
       caption=if(lang=="EN") "Descriptive curves; not a test of fraud" else
         "Opisne krive; nisu dokaz izborne prevare") +
     theme_base +
+    ggplot2::guides(colour=ggplot2::guide_legend(nrow=as.integer(legend_rows),byrow=TRUE)) +
     ggplot2::theme(legend.position=LEGEND_POSITION,
-      plot.title=ggplot2::element_text(face="bold"),
+      legend.text=ggplot2::element_text(size=LEGEND_FONT_SIZE),
+      legend.box="vertical",
+      plot.title=ggplot2::element_text(face="bold",margin=ggplot2::margin(b=5)),
+      plot.subtitle=ggplot2::element_text(margin=ggplot2::margin(b=9)),
+      plot.margin=ggplot2::margin(t=12,r=18,b=12,l=15),
       axis.text.x=ggplot2::element_text(angle=X_LABEL_ANGLE),
       panel.grid.major=if(SHOW_MAJOR_GRID) {
         ggplot2::element_line(colour="#E5E5E5",linewidth=0.3)
       } else {ggplot2::element_blank()},
       panel.grid.minor=ggplot2::element_blank())
+  # EN/SR: Separate layers avoid geom_line() warnings for singleton series.
+  # The isolated dot is compulsory even when ADD_POINTS is FALSE.
+  if (nrow(line_data)) p <- p + ggplot2::geom_line(data=line_data,linewidth=LINE_WIDTH)
+  if (nrow(isolated_data)) p <- p + ggplot2::geom_point(
+    data=isolated_data, size=SINGLE_POINT_SIZE, shape=16)
   if(ADD_POINTS) p <- p + ggplot2::geom_point(size=POINT_SIZE,alpha=POINT_ALPHA)
-  if(facet) p <- p + ggplot2::facet_wrap(~Series,ncol=FACET_COLUMNS,
-                           scales=if(FACET_FREE_Y)"free_y" else "fixed")
+  if(facet) {
+    fml <- stats::as.formula(paste0("~",facet_variable))
+    p <- p + ggplot2::facet_wrap(fml,ncol=as.integer(facet_columns),
+                                scales=if(FACET_FREE_Y)"free_y" else "fixed")
+  }
   if(LIMIT_X_TO_100) p <- p + ggplot2::coord_cartesian(xlim=c(0,100))
   p
 }
-save_plot <- function(p,folder,stem,faceted=FALSE) {
+save_plot <- function(p,folder,stem,height_multiplier=1) {
   if(is.null(p)) return(invisible(FALSE))
   dir.create(folder,recursive=TRUE,showWarnings=FALSE)
+  hh <- PLOT_HEIGHT_IN*height_multiplier
   if(SAVE_PNG) ggplot2::ggsave(file.path(folder,paste0(stem,".png")),plot=p,
-    width=PLOT_WIDTH_IN,height=PLOT_HEIGHT_IN,dpi=PNG_DPI,bg="white",limitsize=TRUE)
+    width=PLOT_WIDTH_IN,height=hh,dpi=PNG_DPI,bg="white",limitsize=TRUE)
   if(SAVE_PDF) {
     pdf_device <- if (capabilities("cairo")) grDevices::cairo_pdf else grDevices::pdf
     ggplot2::ggsave(file.path(folder,paste0(stem,".pdf")),plot=p,
-      width=PLOT_WIDTH_IN,height=PLOT_HEIGHT_IN,device=pdf_device,bg="white",limitsize=TRUE)
+      width=PLOT_WIDTH_IN,height=hh,device=pdf_device,bg="white",limitsize=TRUE)
   }
   invisible(TRUE)
+}
+
+# EN: Remove only OLD Klimek A/B PNG/PDF for THIS area before the rerun.
+#     This includes figures for groups that are now empty, and options/families
+#     that are no longer selected. Other areas and input files are untouched.
+# SR: Pre svakog prolaza obrisati samo prethodne Klimek A/B slike za OVU oblast,
+#     uključujući sada prazne grupe. Ostale oblasti/podaci nisu obuhvaćeni.
+clean_area_figures <- function(outdir, area_key) {
+  removed <- character()
+  for(lang in c("EN","SR")) for(norm in c("valid","option")) {
+    dir <- file.path(outdir,"figures",lang,norm,safe_name(area_key))
+    if(!dir.exists(dir)) next
+    imgs <- list.files(dir,pattern="\\.(png|pdf)$",full.names=TRUE,
+                       ignore.case=TRUE)
+    old_names <- basename(imgs)
+    a_fig <- grepl("^A_(ALL|GE100|LT100|SMALL|MIDDLE|LARGE|JHK_SMALL|JHK_LARGE)_(combined|faceted)\\.(png|pdf)$",old_names)
+    b_fig <- grepl("^B_Option_[0-9]+_votes_(combined(_(standard|jhk))?|faceted)\\.(png|pdf)$",old_names)
+    imgs <- imgs[a_fig | b_fig]
+    if(length(imgs)) {
+      unlink(imgs)
+      removed <- c(removed,imgs)
+    }
+  }
+  invisible(removed)
 }
 
 # ---------------- BLOCK 9: GEOGRAPHIC AGGREGATION / TERITORIJALNI REZIME ----
 # EN: District key and compound municipality key avoid same-name collisions.
 # SR: Šifre okruga i složeni ključ opštine čuvaju tačnu geografsku strukturu.
-area_slices <- function(groups,level) {
-  out <- list()
-  for (g in names(groups)) {
-    d <- groups[[g]]
-    if (!nrow(d)) next
-    key <- if (level=="District") {
-      as.character(d$District_code)
-    } else {
+# EN: With include_empty=TRUE, return EVERY area x reporting-group combination,
+#     including zero-station groups. Areas are drawn from the eligible ALL pool:
+#     an unknown/nonexistent code does not become a fabricated reporting area.
+# SR: include_empty=TRUE daje sve kombinacije oblast × grupa, uključujući
+#     grupe sa nula BM. Oblasti potiču iz prihvaćene grupe ALL.
+area_slices <- function(groups,level,include_empty=FALSE) {
+  stopifnot(level %in% c("District","Municipality"),
+            is.logical(include_empty),length(include_empty)==1L,!is.na(include_empty))
+  get_keys <- function(d) {
+    if(level=="District") as.character(d$District_code) else
       paste(as.character(d$District_code),as.character(d$Municipality_code),sep="|")
+  }
+  all_keys <- if(include_empty) sort(unique(get_keys(groups[["ALL"]]))) else character()
+  all_keys <- all_keys[!is.na(all_keys) & nzchar(all_keys)]
+  out <- list()
+  for(g in names(groups)) {
+    d <- groups[[g]]
+    keys <- get_keys(d)
+    area_keys <- if(include_empty) all_keys else sort(unique(keys))
+    area_keys <- area_keys[!is.na(area_keys) & nzchar(area_keys)]
+    for(nm in area_keys) {
+      rows <- which(!is.na(keys) & keys==nm)
+      out[[paste(g,nm,sep="::")]] <- list(group=g,key=nm,
+                                         data=d[rows,,drop=FALSE])
     }
-    ix <- split(seq_len(nrow(d)),key)
-    for (nm in names(ix)) out[[paste(g,nm,sep="::")]] <- list(group=g,key=nm,
-                       data=d[ix[[nm]],,drop=FALSE])
   }
   out
 }
@@ -558,7 +791,8 @@ write_workbook <- function(path,tables) {
     d <- as.data.frame(tables[[sheet]],stringsAsFactors=FALSE,check.names=FALSE)
     if(ncol(d)==0L) next
     openxlsx::addWorksheet(wb,sheet,gridLines=FALSE)
-    openxlsx::writeData(wb,sheet,d,keepNA=FALSE,withFilter=nrow(d)>0)
+    openxlsx::writeData(wb,sheet,d,keepNA=sheet %in% c("District","Municipality"),
+                        na.string="NA",withFilter=nrow(d)>0)
     openxlsx::freezePane(wb,sheet,firstRow=TRUE,firstCol=TRUE)
     h <- openxlsx::createStyle(fgFill="#17324D",fontColour="#FFFFFF",textDecoration="bold",wrapText=TRUE)
     openxlsx::addStyle(wb,sheet,h,rows=1,cols=seq_len(ncol(d)),gridExpand=TRUE)
@@ -598,7 +832,7 @@ run_one_election <- function(tp,yr,path) {
   nat <- do.call(rbind,lapply(names(groups),function(g)
      area_metric_rows(groups[[g]],g,"National","ALL",opt,id)))
   level_result <- function(lvl) {
-    a <- area_slices(groups,lvl)
+    a <- area_slices(groups,lvl,include_empty=TRUE)
     if(!length(a)) return(nat[FALSE,,drop=FALSE])
     do.call(rbind,lapply(a,function(z) area_metric_rows(z$data,z$group,lvl,z$key,opt,id)))
   }
@@ -620,7 +854,7 @@ run_one_election <- function(tp,yr,path) {
       }
     }
     for(lvl in c("District","Municipality")) {
-      sl <- area_slices(groups,lvl)
+      sl <- area_slices(groups,lvl,include_empty=TRUE)
       for(z in sl)for(p in TAIL_PERCENTILES) {
         t <- tail_metric(z$data,a_fields,b_fields,p)
         tm <- rbind(tm,cbind(data.frame(Election=id,Area_level=lvl,Area_key=z$key,Group=z$group),t))
@@ -632,7 +866,7 @@ run_one_election <- function(tp,yr,path) {
       Mean_station_margin_pp=numeric(),Pooled_margin_pp=numeric())
   meta <- data.frame(Item=c("Module","Version","Election","Input file","Input MD5",
     "Normalisations","Languages","Curve sort","Source workbook mutation",
-    "Groups","P-value"),Value=c("Klimek cumulative curves","0.1.0-dev",id,
+    "Groups","P-value"),Value=c("Klimek cumulative curves","0.1.4",id,
     basename(path),src$source_md5,paste(normalisations(),collapse=", "),
     paste(GRAPH_LANGUAGES,collapse=", "),"Turnout then Station_key","Never",
     "8 nationally defined reporting groups","None (descriptive only)"))
@@ -640,7 +874,8 @@ run_one_election <- function(tp,yr,path) {
     National=nat,District=dist,Municipality=muni,Areas=geo,Tail_metrics=tm)
   if(WRITE_EXCEL) write_workbook(file.path(outdir,paste0(id,"_klimek_summary.xlsx")),tabs)
   if(WRITE_CSV) for(nm in names(tabs))
-    write_csv(tabs[[nm]],file.path(outdir,"tables",paste0(tolower(nm),".csv")))
+    write_csv(tabs[[nm]],file.path(outdir,"tables",paste0(tolower(nm),".csv")),
+              na_string=if(nm %in% c("District","Municipality")) "NA" else "")
   # EN: Build national cumulative curves for EVERY candidate/list. By default,
   #     plots only display TOP_N; numeric endpoints and optional point CSV exist
   #     for ALL options, including those not selected for display.
@@ -665,20 +900,46 @@ run_one_election <- function(tp,yr,path) {
   # EN: Only selected curves are drawn and saved for optional geographic areas.
   plot_groups <- groups[PLOT_GROUPS]
   # EN/SR: Print selected district/municipality graphs only (all numeric summaries are saved).
-  plotting_areas <- list(National=list(ALL=groups))
+  geo_lookup <- area_dictionary(src$master)
+  first_nonempty <- function(x, fallback="") {
+    x <- unique(as.character(x[!is.na(x) & nzchar(as.character(x))]))
+    if(length(x)) x[[1]] else fallback
+  }
+  plotting_areas <- list(National=list(groups=groups, area_level="National",
+                                      area_name="National", district_code=NA_character_))
   if(GEOGRAPHIC_PLOTS=="selected") {
     for(code in SELECT_DISTRICT_CODES) {
       spl <- lapply(groups,function(d)d[as.character(d$District_code)==code,,drop=FALSE])
-      plotting_areas[[paste0("District_",safe_name(code))]] <- list(ALL=spl)
+      dname <- first_nonempty(geo_lookup$District[geo_lookup$District_code==code], code)
+      plotting_areas[[paste0("District_",safe_name(code))]] <- list(
+        groups=spl,area_level="District",area_name=dname,district_code=code)
     }
     for(key in SELECT_MUNICIPALITY_KEYS) {
       spl <- lapply(groups,function(d) d[paste(d$District_code,d$Municipality_code,sep="|")==key,,drop=FALSE])
-      plotting_areas[[paste0("Municipality_",safe_name(key))]] <- list(ALL=spl)
+      mname <- first_nonempty(geo_lookup$Municipality[geo_lookup$Municipality_key==key], key)
+      plotting_areas[[paste0("Municipality_",safe_name(key))]] <- list(
+        groups=spl,area_level="Municipality",area_name=mname,
+        district_code=strsplit(key,"|",fixed=TRUE)[[1]][1])
     }
   }
   nfig <- 0L
   for(an in names(plotting_areas)) {
-    local_groups <- plotting_areas[[an]]$ALL[PLOT_GROUPS]
+    area_info <- plotting_areas[[an]]
+    local_groups <- area_info$groups[PLOT_GROUPS]
+    # EN/SR: Remove old area figures BEFORE deciding which groups can be drawn.
+    #     This also handles a selected area with NO drawable observations.
+    clean_area_figures(outdir,an)
+    empty_groups <- names(local_groups)[vapply(local_groups,nrow,integer(1))==0L]
+    if(length(empty_groups)) message("[Klimek] ",id," / ",an,
+      ": zero-station group(s) ",paste(empty_groups,collapse=", "),
+      "; figures omitted; territorial summaries record Stations=0, percentages=NA.")
+    # EN: Inform once per area (not once per output figure) about singleton PS
+    #     groups. A single observation will appear as a dot, never a line.
+    # SR: Jedna poruka po oblasti za grupe sa samo jednim BM; prikaz je tačka.
+    singleton_groups <- names(local_groups)[vapply(local_groups,nrow,integer(1))==1L]
+    if (length(singleton_groups)) message("[Klimek] ",id," / ",an,
+      ": single-station group(s) ",paste(singleton_groups,collapse=", "),
+      "; shown as points rather than lines.")
     curves <- list()
     # EN/SR: Reuse exact cumulative curves for both normalisations and languages.
     for(g in names(local_groups)) for(f in plotopts) {
@@ -687,7 +948,7 @@ run_one_election <- function(tp,yr,path) {
       cr$Group <- g
       cr$Option_field <- f
       curves[[paste(g,f,sep="::")]] <- cr
-      if(SAVE_CURVE_POINTS && WRITE_CSV && an!="National")
+      if(SAVE_CURVE_POINTS && WRITE_CSV && area_info$area_level!="National")
         write_csv(cr,file.path(outdir,"curves",paste0(safe_name(an),"_",g,"_",f,".csv")))
     }
     if(!length(curves)) {
@@ -698,23 +959,34 @@ run_one_election <- function(tp,yr,path) {
     for(lang in GRAPH_LANGUAGES) {
       op_lab <- option_labels(opt,id,lang)
       grp_lab <- stats::setNames(size_friendly(names(local_groups),lang),names(local_groups))
+      grp_title_lab <- stats::setNames(size_friendly_full(names(local_groups),lang),names(local_groups))
       oc <- plot_colors(plotopts,"option")
       gc <- plot_colors(names(local_groups),"group")
       for(norm in normalisations()) {
         figdir <- file.path(outdir,"figures",lang,norm,safe_name(an))
+        # EN/SR: Clean old eight-line combined B files even for options no longer
+        # selected in the EDITABLE section; do not touch source data or CSV.
+        if(PLOT_FAMILY_B && dir.exists(figdir)) {
+          obsolete <- list.files(figdir,
+            pattern="^B_Option_[0-9]+_votes_combined\\.(png|pdf)$",full.names=TRUE)
+          if(length(obsolete)) unlink(obsolete)
+        }
         if(PLOT_FAMILY_A)for(g in names(local_groups)) {
           d <- long[long$Group==g,,drop=FALSE]
           if(!nrow(d)) next
           present <- plotopts[plotopts%in%unique(d$Option_field)]
           a <- op_lab[present]
           d$Series <- unname(op_lab[d$Option_field])
-          ttl <- chart_title(lang,"A",id,paste(id,an,grp_lab[[g]],sep=" · "))
+          ttl <- chart_title(lang,"A",id,context_label(
+            lang,tp,yr,area_info$area_level,area_info$area_name,area_info$district_code))
+          # EN/SR: Three+ options require TWO legend rows; full names may wrap.
+          nrows <- if(length(present)>2L) A_LEGEND_ROWS_3PLUS else 1L
           if(WRITE_COMBINED) {
-            p <- plot_curves(d,lang,norm,ttl,a,oc,FALSE)
+            p <- plot_curves(d,lang,norm,ttl,a,oc,FALSE,subtitle=grp_title_lab[[g]],legend_rows=nrows)
             if(!is.null(p)) {save_plot(p,figdir,paste0("A_",g,"_combined"));nfig<-nfig+1L}
           }
           if(WRITE_FACETED) {
-            p <- plot_curves(d,lang,norm,ttl,a,oc,TRUE)
+            p <- plot_curves(d,lang,norm,ttl,a,oc,TRUE,subtitle=grp_title_lab[[g]],legend_rows=nrows)
             if(!is.null(p)) {save_plot(p,figdir,paste0("A_",g,"_faceted"));nfig<-nfig+1L}
           }
         }
@@ -722,16 +994,55 @@ run_one_election <- function(tp,yr,path) {
           d <- long[long$Option_field==f,,drop=FALSE]
           if(!nrow(d)) next
           present <- names(local_groups)[names(local_groups)%in%unique(d$Group)]
-          a <- grp_lab[present]
           d$Series <- unname(grp_lab[d$Group])
-          ttl <- chart_title(lang,"B",id,paste(id,an,op_lab[[f]],sep=" · "))
-          if(WRITE_COMBINED) {
-            p <- plot_curves(d,lang,norm,ttl,a,gc,FALSE)
-            if(!is.null(p)) {save_plot(p,figdir,paste0("B_",f,"_combined"));nfig<-nfig+1L}
+          titles <- b_titles(lang,tp,yr,area_info$area_level,area_info$area_name,
+                             op_lab[[f]],area_info$district_code)
+          partitions <- b_group_sets(present)
+          # EN: Remove pre-v0.1.1 eight-line combined figures from an old run,
+          #     otherwise stale PNG/PDF files could be mistaken for new output.
+          # SR: Ukloniti zastarele kombinovane B slike sa osam krivih.
+          for(ext in c("png","pdf")) {
+            stale <- file.path(figdir,paste0("B_",f,"_combined.",ext))
+            if(file.exists(stale)) unlink(stale)
           }
-          if(WRITE_FACETED) {
-            p <- plot_curves(d,lang,norm,ttl,a,gc,TRUE)
-            if(!is.null(p)) {save_plot(p,figdir,paste0("B_",f,"_faceted"));nfig<-nfig+1L}
+          # EN: Two separate overlays: at most six standard curves / two JHK.
+          # SR: Dva odvojena grafikona: standardne grupe i JHK par.
+          if(WRITE_COMBINED && B_SPLIT_COMBINED)for(part in names(partitions)) {
+            subgroups <- partitions[[part]]
+            if(!length(subgroups)) next
+            ds <- d[d$Group%in%subgroups,,drop=FALSE]
+            keys <- subgroups[subgroups%in%unique(ds$Group)]
+            if(!length(keys)) next
+            a <- grp_lab[keys]
+            nrows <- if(length(keys)>2L) B_LEGEND_ROWS_3PLUS else 1L
+            p <- plot_curves(ds,lang,norm,titles$title,a,gc,FALSE,
+                             subtitle=titles$subtitle,legend_rows=nrows)
+            if(!is.null(p)) {
+              save_plot(p,figdir,paste0("B_",f,"_combined_",part))
+              nfig<-nfig+1L
+            }
+          }
+          # EN: Optional single B figure, TWO panels, each retaining the
+          #     grouping logic and the same axes. Not eight overlaid curves.
+          # SR: Opciono JEDNA B slika sa DVA panela i uporedivim osama.
+          if(WRITE_FACETED && B_TWO_PANEL_FACET) {
+            labels <- if(lang=="EN") c(standard="Standard polling-station groups",
+                                            jhk="JHK size classification") else
+              c(standard="Standardne grupe biračkih mesta",
+                jhk="JHK klasifikacija veličine BM")
+            d$Panel <- ifelse(d$Group%in%partitions$jhk,
+                              labels[["jhk"]],labels[["standard"]])
+            d$Panel <- factor(d$Panel,levels=unname(labels))
+            a <- grp_lab[present]
+            nrows <- if(length(present)>2L) B_LEGEND_ROWS_3PLUS else 1L
+            p <- plot_curves(d,lang,norm,titles$title,a,gc,TRUE,
+                             subtitle=titles$subtitle,legend_rows=nrows,
+                             facet_variable="Panel",facet_columns=B_PANEL_COLUMNS)
+            if(!is.null(p)) {
+              save_plot(p,figdir,paste0("B_",f,"_faceted"),
+                        height_multiplier=B_PANEL_HEIGHT_MULTIPLIER)
+              nfig<-nfig+1L
+            }
           }
         }
       }

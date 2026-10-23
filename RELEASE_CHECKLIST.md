@@ -15,10 +15,12 @@
 
 - [ ] RZS preparation: source/official-total checks, `Main`/`Master`/`Options` data contract, and documented 2017 registered-voter **REVIEW**.
 - [ ] Descriptive v0.3.1: synthetic + integration + export tests for three named elections; `100 or more == Main`; eight overlapping groups, 16 aggregate correlation matrices, publication outputs and Unicode.
-- [ ] Klimek v0.1.0-dev: `source("tests/run_tests.R")`; `source("tests/integration_real_data.R")`; `source("Klimek.R")`; `source("tests/check_exports.R")` executed in `modules/klimek/`.
-- [ ] Klimek: both cumulative normalisations reconcile, eight polling-station groups, all option endpoints, EN/SR figures, font/diacritic rendering, and optional geography checked.
-- [ ] Save a dated test log, `sessionInfo()`, configuration and input hashes. Do not call Klimek validated before the tests and figure checks pass.
-- [ ] Do not claim that graphical irregularities or descriptive significance constitute proof of fraud.
+- [ ] Klimek v0.1.4: from `modules/klimek/` run all seven commands in [the upload guide](GITHUB_REPLACE_KLIMEK.md): `run_tests`, `test_graphics_layout`, `test_single_station_plots`, `test_zero_station_groups`, `integration_real_data`, `Klimek.R`, `check_exports`.
+- [ ] Confirm SR/EN A and B titles, readable legends, 10%-point y-axis ticks, standard/JHK separation and RZS district categories 33, 55 and 25–29.
+- [ ] Check 0 BM = no plot and `Stations=0` / `NA` in territory tables; 1 BM = point; 2+ BM = line; no stale selected-area images.
+- [ ] Verify curve endpoints for both normalisations, all option totals, eight overlapping groups and colour/Unicode output.
+- [ ] Save dated test logs, R `sessionInfo()`, input hashes and representative screenshots; do not claim independent Klimek validation without those checks.
+- [ ] Do not interpret descriptive curves as proof of fraud.
 
 ## Publishing
 
