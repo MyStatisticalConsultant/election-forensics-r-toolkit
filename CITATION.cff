@@ -4,8 +4,7 @@ title: "Election Forensics R Toolkit"
 authors:
   - family-names: "Kovačić"
     given-names: "Zlatko J."
-version: "1.7.9"
-date-released: "2026-10-23"
+version: "1.8.4"
 type: software
 license: MIT
 keywords:
@@ -14,3 +13,5 @@ keywords:
   - Serbia
   - reproducibility
   - descriptive statistics
+  - election fingerprints
+  - two-dimensional histograms

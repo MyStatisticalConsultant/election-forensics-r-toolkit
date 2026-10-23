@@ -19,3 +19,11 @@ validation_results/
 
 # Generated Klimek cumulative curves and plots (reproducible local outputs)
 **/klimek_outputs/
+
+# New election-fingerprints figures, grids and audit tables
+**/fingerprint_outputs/
+
+# Local editor backups / temporary validation files
+*.Rproj.user
+*.tmp
+*.bak

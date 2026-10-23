@@ -1,17 +1,12 @@
-# Registar modula — Election Forensics R Toolkit
+# Registar modula — Toolkit v1.8.4
 
-[English](MODULE_REGISTRY.md) · [Tok rada](WORKFLOW_SER.md)
+[English](MODULE_REGISTRY.md) · [README](README_SER.md) · [Tok rada](WORKFLOW_SER.md)
 
-Trenutni spisak za **objedinjenu verziju v1.7.9**; sam spisak ne predstavlja potvrdu validacije svih modula.
-
-| Modul | R skript | Status | Ulaz | Lokalni izlaz |
+| Modul | Glavni skript | Izdanje / obim validacije | Ulazi | Lokalni izlazi |
 |---|---|---|---|---|
-| [`rzs_data_preparation`](modules/rzs_data_preparation/README_SER.md) | `RZS_data_preparation.R` | Ranije provereno za predsedničke 2017/2022. i parlamentarne 2022; dokumentovan REVIEW za broj upisanih 2017. | Originalni RZS `raw_data/*.xlsx` | `RZS_prepared/*.xlsx`, QC CSV |
-| [`descriptive_statistics`](modules/descriptive_statistics/README_SER.md) | `Descriptive_statistics.R` i funkcije `R/` | v0.3.1 proverena poređenjem sa nezavisnim rezultatima za tri izbora | `Main`, `Master`, `Options` | `descriptive_outputs/` |
-| [`klimek`](modules/klimek/README_SER.md) | `Klimek.R` | **v0.1.4 — autor je potvrdio PASS za predsedničke 2017/2022. i parlamentarne 2022; detaljni log postoji za parlamentarne 2022** | `Main`, `Master`, `Options` | `klimek_outputs/` |
+| [Priprema RZS podataka](modules/rzs_data_preparation/README_SER.md) | `RZS_data_preparation.R` | Prethodno validirana za sva tri izbora; dokumentovani REVIEW za broj upisanih 2017. | Zvanični Excel | `RZS_prepared/*.xlsx`, QC CSV |
+| [Deskriptivna statistika](modules/descriptive_statistics/README_SER.md) | `Descriptive_statistics.R` | v0.3.1; upoređeno sa nezavisnim rezultatima za tri izbora | `Main`, `Master`, `Options` | `descriptive_outputs/` |
+| [Klimek krive](modules/klimek/README_SER.md) | `Klimek.R` | v0.1.4; autor potvrdio PASS za tri izbora | `Main`, `Master`, `Options` | `klimek_outputs/` |
+| [Izborni otisci](modules/election_fingerprints/README_SER.md) | `Election_fingerprints.R` | **v0.1.4 stabilna**; autor potvrdio PASS za tri izbora, nacionalni nivo/4 odabrana okruga/2 opštine, sve grupe i geografske i izvozne testove | `Main`, `Options`, `Size`, `Size_JHK` | `fingerprint_outputs/` |
 
-Moduli se izvršavaju **lokalno**. Priprema baza predstavlja uslov za postojanje podataka, ali ne mora ponovo da se izvršava pred svaku analizu. Deskriptivni i Klimek modul su **nezavisni potrošači iste pripremljene baze**; jedan ne zahteva izvršavanje drugog. Shiny korisnički interfejs nije implementiran.
-
-Planirani, još nepostojeći moduli: izborni otisci, konture, dijagnostika normalnosti, regresije, Mebane FMM. Prilikom dodavanja potrebno je uskladiti dokumentaciju EN/SR, testove i evidenciju izdanja.
-
-**Ažuriran status Klimek validacije:** autor potvrđuje uspeh testova za sva tri izbora; [zapisnik i poreklo potvrde](modules/klimek/VALIDATION_RECORD_2026-10-23_SER.md).
+Nizvodni moduli nezavisno čitaju pripremljene podatke. Ne postoji automatski sistem zavisnosti ni grafički korisnički interfejs. Metode koje još nisu uključene ne predstavljaju se kao implementirane. Modul izbornih otisaka ne sadrži formalni test niti procenu obima izborne prevare.

@@ -1,16 +1,10 @@
-# Korisnički tok rada — pokretanje izabranog modula bez ponavljanja cele analize
+# Tok rada — nezavisno izvršavanje modula
 
-[English](WORKFLOW.md) · [Registar modula](MODULE_REGISTRY_SER.md)
+[English](WORKFLOW.md) · [Instalacija](INSTALLATION_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md)
 
-## 1. Jednokratna priprema podataka
+## 1. Priprema baza je odvojeni početni korak
 
-U postojećem lokalnom folderu `modules/rzs_data_preparation/` podesite `INPUTS` i, kada je to potrebno za dati izvor/format, izvršite:
-
-```r
-source("RZS_data_preparation.R")
-```
-
-Pripremljeni fajlovi ostaju u `modules/rzs_data_preparation/RZS_prepared/`, najčešće:
+Zvanični RZS fajlovi se skriptom `modules/rzs_data_preparation/RZS_data_preparation.R` obrađuju i čuvaju lokalno u `modules/rzs_data_preparation/RZS_prepared/`:
 
 ```text
 presidential_2017_RZS_prepared.xlsx
@@ -18,58 +12,31 @@ presidential_2022_RZS_prepared.xlsx
 parliamentary_2022_RZS_prepared.xlsx
 ```
 
-List `Main` je osnovni forenzički uzorak (E >= 100 i ispunjeni QC uslovi); `Master` sadrži sve pripremljene zapise sa oznakama; `Options` je šifarnik kandidata/izbornih lista. Sačuvajte lokalne kopije. Naredni moduli ove Excel baze samo **čitaju**, ne menjaju ih. GitHub repozitorijum ne sadrži njihove kopije.
+`Main` je QC-podobni uzorak sa E ≥ 100; `Master` sadrži dodatne pripremljene zapise i statuse, a `Options` šifarnik kandidata/lista. Originalni i pripremljeni Excel fajlovi **nisu deo javnog repozitorijuma**. Ako već postoje i nisu menjani, **ne treba** ponovo pokretati pripremu samo zbog novog/izmenjenog modula.
 
-## 2. Samo deskriptivna statistika
+## 2. Izabrati analitički modul
 
-U RStudio-u postavite **radni direktorijum** na `election-forensics-r-toolkit/modules/descriptive_statistics`. Proverite putanje u `INPUTS$prepared_file`, a zatim izvršite:
+U RStudio-u postaviti radni direktorijum na odgovarajući folder:
 
-```r
-source("Descriptive_statistics.R")
-```
-
-Rezultati su u `descriptive_outputs/`. Nema ponovnog izvršavanja pripreme ili modula Klimek. Testovi su preporučljivi posle instalacije ili promene koda/izvora, ali ne moraju se izvršavati pri svakom podešavanju izlaznog prikaza.
-
-## 3. Samo Klimek
-
-U RStudio-u postavite radni direktorijum na `election-forensics-r-toolkit/modules/klimek`. Podrazumevane putanje traže pripremljene fajlove u `../rzs_data_preparation/RZS_prepared/`. Za proveru Klimek modula pre prve upotrebe:
-
-```r
-source("tests/run_tests.R")
-source("tests/test_graphics_layout.R")
-source("tests/test_single_station_plots.R")
-source("tests/test_zero_station_groups.R")
-source("tests/integration_real_data.R")
-source("Klimek.R")
-source("tests/check_exports.R")
-```
-
-Kada to proverite, za kasnije izmene boja, jezika ili prikazanih opcija dovoljno je:
-
-```r
-source("Klimek.R")
-```
-
-Rezultati su u `klimek_outputs/`, bez menjanja ulaznih Excel fajlova. Skript obrađuje **sve izbore iz EDITABLE tabele `INPUTS`**. Za samo jedne izbore zadržite jedan odgovarajući red; ostale kasnije možete vratiti. `GRAPH_LANGUAGES <- "EN"`, `"SR"` ili `c("EN","SR")` određuje jezik grafikona; `CURVE_NORMALISATIONS <- "both"` uključuje oba načina normalizacije.
-
-## 4. Kada šta ponovo izvršiti
-
-| Promena | Priprema RZS | Deskriptivna statistika | Klimek |
+| Analiza | Folder | Komanda | Folder rezultata |
 |---|---|---|---|
-| Dodavanje Klimek modula, bez promena Excel baza | Ne | Ne | Testirati/pokrenuti Klimek |
-| Promena jezika, boja ili opcija grafikona Klimek | Ne | Ne | Samo Klimek |
-| Promena načina prikaza deskriptivnih izveštaja | Ne | Samo deskriptivni modul | Ne |
-| Novi ili ispravljeni zvanični RZS podaci | Ponoviti pripremu i proveru | Ponoviti ako koristi te podatke | Ponoviti ako koristi te podatke |
-| Izmena QC pravila, `Size`/`Size_JHK` ili kanonskih polja | Pripremiti i proveriti ponovo | Ponoviti relevantne izlaze | Ponoviti relevantne izlaze |
-| Dodavanje nezavisne nove statističke metode | Ne, ako je baza kompatibilna | Ne | Ne |
+| Deskriptivne tabele | `modules/descriptive_statistics/` | `source("Descriptive_statistics.R")` | `descriptive_outputs/` |
+| Klimek krive | `modules/klimek/` | `source("Klimek.R")` | `klimek_outputs/` |
+| Dvodimenzionalni izborni otisci | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
 
-**Važno:** postojeći skriptovi ne poseduju automatski sistem za otkrivanje zastarelih podataka. Ako se ulaz ili QC definicija promeni, stari rezultat može ostati pod istim imenom. Beležite hash izvora, verziju koda, parametre i datum. Rezultati istog naziva mogu biti prepisani pri ponavljanju, pa publikacione kopije čuvajte posebno.
+Prilikom **prvog izvršavanja izbornih otisaka**, instalirati potrebne R pakete, izvršiti četiri `tests/*.R` testa (uključujući `test_geography_validation.R`), ukloniti `EF_FINGERPRINT_TEST_MODE`, izvršiti `Election_fingerprints.R`, a zatim `tests/check_exports.R`. Kompletan sled dat je u [korisničkom uputstvu](modules/election_fingerprints/USER_GUIDE_SER.md). U **EDITABLE INPUTS** podešavaju se oblast, pobednik, jezik, histogram/KDE, definicije izlaznosti i pet Size/JHK grupa. Podrazumevano `INVALID_AREA_POLICY <- "error"` sprečava tiho preskakanje nepostojećih geografskih šifara.
 
-## 5. GitHub naspram lokalnih podataka
+## 3. Promene i ponovni proračun
 
-Na GitHub-u su *programski kod, metodologija i testovi*; na Vašem računaru su *originalni Excel podaci, pripremljene baze i rezultati*. Pri ažuriranju koda zaštitite lokalne `raw_data/`, `RZS_prepared/`, `descriptive_outputs/` i `klimek_outputs/`. `.gitignore` štiti pri uobičajenom Git radu, ali ne sprečava ručno prepisivanje datoteka tokom kopiranja ZIP arhive.
+| Promena | Ponoviti RZS pripremu? | Ponoviti module? |
+|---|---|---|
+| Izmena boja, jezika, podnaslova ili odabranih oblasti | Ne | Samo relevantni modul |
+| Dodavanje izbornih otisaka uz postojeće baze | Ne | Testovi i izvršavanje izbornih otisaka |
+| Izmena numeričkog algoritma jednog modula | Ne, ako šema ulaza ostaje ista | Testirati i izvršiti taj modul |
+| Izmena zvaničnog RZS izvora, QC pravila, šeme ili Size/JHK definicija | Da, uz proveru | Izvršiti sve analize na koje promena utiče |
 
-Uputstva za instalaciju i korišćenje dostupna su u glavnom [README-u](README_SER.md) i dokumentaciji svakog modula.
+Uz rezultate čuvati kontrolne sume, podešavanja i `sessionInfo()`. Izlazi se mogu prepisivati pri ponovnom izvršavanju; publikacione primerke čuvati posebno.
 
+## 4. Javni kod i lokalne baze
 
-**Klimek v0.1.4:** Pokrenite i `source("tests/test_zero_station_groups.R")`; prazne teritorijalne grupe eksplicitno se beleže, a zastarele Klimek slike izabrane oblasti uklanjaju se pre crtanja.
+`.gitignore` izuzima originalne/pripremljene podatke, rezultate i lokalne testne fajlove. **Ne kopirati** lične Excel baze i izlaze u javno preuzetu kopiju. Prilikom ažuriranja postojećeg lokalnog Git repozitorijuma sačuvati podatke i zameniti samo programske i dokumentacione fajlove. `.gitignore` ne štiti od ručnog brisanja pri prepisivanju.
