@@ -1,32 +1,25 @@
-# Instalacija i prvo pokretanje — Toolkit v1.8.4
+# Instalacija i prvo pokretanje — Toolkit v1.9.0
 
-[English](INSTALLATION.md) · [README](README_SER.md)
+[English](INSTALLATION.md) · [README](README_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md)
 
-## A. Preuzimanje javnog koda
+## 1. Preuzimanje programa
 
-Instalirati [R](https://cran.r-project.org/) i po želji [RStudio Desktop](https://posit.co/download/rstudio-desktop/). Uz **GitHub Desktop** klonirati javni repozitorijum na računar (Repository > Clone Repository), ili na GitHub stranici izabrati **Code > Download ZIP** i raspakovati arhivu. Javni kod ne sadrži zvanične izborne RZS podatke.
-
-Osnovna struktura:
+Instalirati [R](https://cran.r-project.org/) i po želji [RStudio Desktop](https://posit.co/download/rstudio-desktop/). Klonirati javni repozitorijum pomoću GitHub Desktop-a ili izabrati **Code > Download ZIP** na GitHub-u. Repozitorijum sadrži kod i dokumentaciju, **ne** originalne RZS Excel baze niti generisane analize.
 
 ```text
 election-forensics-r-toolkit/
   README.md  INSTALLATION.md  MODULE_REGISTRY.md  WORKFLOW.md
   modules/
-    rzs_data_preparation/
-      RZS_data_preparation.R
-      RZS_prepared/                    # lokalno, van Git-a
-    descriptive_statistics/
-      Descriptive_statistics.R
-    klimek/
-      Klimek.R
-    election_fingerprints/
-      Election_fingerprints.R
-      tests/
+    rzs_data_preparation/      # RZS_data_preparation.R
+    descriptive_statistics/    # Descriptive_statistics.R
+    klimek/                    # Klimek.R
+    election_fingerprints/     # Election_fingerprints.R
+    contours/                  # Contours.R
 ```
 
-## B. Pripremljene izborne baze
+## 2. Priprema ili ponovno korišćenje podataka
 
-Potrebno je da u `modules/rzs_data_preparation/RZS_prepared/` postoje tri Excel datoteke:
+Analitički moduli očekuju kompatibilne RZS baze u lokalnom folderu `modules/rzs_data_preparation/RZS_prepared/`:
 
 ```text
 presidential_2017_RZS_prepared.xlsx
@@ -34,34 +27,33 @@ presidential_2022_RZS_prepared.xlsx
 parliamentary_2022_RZS_prepared.xlsx
 ```
 
-Ako već postoje odgovarajuće validirane baze, **koristiti postojeće**. U suprotnom pribaviti zvanične RZS izvore, podesiti i izvršiti `modules/rzs_data_preparation/RZS_data_preparation.R`, pa slediti njegove validacione testove. Originalne i pripremljene Excel fajlove ne objavljivati na GitHub-u.
+Ako već postoje validirane i neizmenjene baze, **koristiti ih bez ponavljanja pripreme**. U suprotnom pribaviti zvanične RZS izvore i pratiti [dokumentaciju pripreme](modules/rzs_data_preparation/README_SER.md). Izvorne i pripremljene Excel fajlove ne objavljivati na GitHub-u. Promena izvora ili pravila zahteva ponovnu validaciju.
 
-## C. Pokretanje izbornih otisaka
+## 3. Izbor analize
 
-U RStudio-u izabrati **Session > Set Working Directory > Choose Directory…**, zatim `modules/election_fingerprints/`, i proveriti `getwd()`. Potrebne pakete instalirati jednom:
+U RStudio-u izabrati **Session > Set Working Directory > Choose Directory…**, otvoriti folder modula i proveriti `getwd()`. Instalirati samo pakete potrebne za taj modul i izvršiti testove iz odgovarajućeg README-a.
+
+| Modul | Glavni skript | Uputstvo |
+|---|---|---|
+| Deskriptivna statistika | `Descriptive_statistics.R` | [README](modules/descriptive_statistics/README_SER.md) |
+| Klimek kumulativne krive | `Klimek.R` | [README](modules/klimek/README_SER.md) |
+| Izborni otisci | `Election_fingerprints.R` | [Korisničko uputstvo](modules/election_fingerprints/USER_GUIDE_SER.md) |
+| Konturni dijagrami | `Contours.R` | [README](modules/contours/README_SER.md) |
+
+Na primer, iz foldera `modules/contours/`:
 
 ```r
-install.packages(c("readxl", "ggplot2", "MASS", "ggExtra", "cowplot", "readr"))
-```
-
-Otvoriti `Election_fingerprints.R` i u odeljku **EDITABLE INPUTS** podesiti izbore, `AREA_MODE`, prekidače okruga/opština, njihove šifre, jezike i grafičke opcije. Podrazumevana vrednost `INVALID_AREA_POLICY <- "error"` zaustavlja izvršavanje pri nepostojećoj izabranoj šifri; `"warn"` omogućava nastavak samo sa važećim oblastima.
-
-Za prvu proveru izvršiti:
-
-```r
+install.packages(c("readxl", "ggplot2", "MASS"))  # Prvi put, ako nedostaju
 source("tests/run_tests.R")
 source("tests/test_graphics.R")
-source("tests/test_geography_validation.R")
-source("tests/integration_real_data.R")
-Sys.unsetenv("EF_FINGERPRINT_TEST_MODE")
-source("Election_fingerprints.R")
-source("tests/check_exports.R")
+Sys.unsetenv("EF_CONTOUR_TEST_MODE")
+source("Contours.R")
 ```
 
-Pri kasnijoj promeni samo grafikona dovoljno je `source("Election_fingerprints.R")`, uz proveru izvoza kada se menja geografski obim. Ako se pri izvršavanju ne pojavljuju poruke `[Fingerprints]`, proveriti testni režim rada (`EF_FINGERPRINT_TEST_MODE`).
+Podrazumevana podešavanja obuhvataju tri podržana izbora; odeljak **EDITABLE SECTION** omogućava izbor godina, A/B definicija izlaznosti, klasifikacija, jezika, oblasti i grafičkih parametara. Za kraću proveru može se izabrati samo nacionalni nivo.
 
-## D. Rezultati
+## 4. Rezultati i tumačenje
 
-Svi izlazi nastaju u `modules/election_fingerprints/fingerprint_outputs/<izbori>/<oblast>/`: dvojezični PNG/PDF, tabele mreža, evidencija BM i status. Podgrupe Size/JHK su u `groups/<ŠIFRA>/`; `fingerprints_status.csv` beleži prazne grupe i slučajeve kada KDE nije izračunat. Ulazne baze se ne menjaju.
+Svaki modul čuva izlaze u svom lokalnom `*_outputs/` folderu, bez izmene pripremljenih baza. Contours generiše PNG grafikone i CSV fajlove sa standardizovanim vrednostima, QC pregledima i statusima PASS/SKIP u `modules/contours/contours_outputs/`. Potpun opis izlaza i ograničenja nalazi se u [README-u modula](modules/contours/README_SER.md).
 
-Videti [korisničko uputstvo](modules/election_fingerprints/USER_GUIDE_SER.md), [opis izlaza](modules/election_fingerprints/OUTPUT_GUIDE_SER.md) i [validaciju](modules/election_fingerprints/VALIDATION_SER.md).
+Statistički nalazi nisu pravna odluka o nepravilnostima. Uz analize čuvati izvor podataka, parametre, verzije koda i `sessionInfo()`.

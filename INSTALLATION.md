@@ -1,32 +1,25 @@
-# Installation and first run — Toolkit v1.8.4
+# Installation and first run — Toolkit v1.9.0
 
-[Srpski (latinica)](INSTALLATION_SER.md) · [README](README.md)
+[Srpski (latinica)](INSTALLATION_SER.md) · [README](README.md) · [Module registry](MODULE_REGISTRY.md)
 
-## A. Obtain the public code
+## 1. Obtain the software
 
-Install [R](https://cran.r-project.org/) and optionally [RStudio Desktop](https://posit.co/download/rstudio-desktop/). Use **GitHub Desktop** to clone the published repository to your computer (Repository > Clone Repository), or use GitHub **Code > Download ZIP** and extract it. The downloaded code contains no official RZS election data.
-
-Directory layout:
+Install [R](https://cran.r-project.org/) and optionally [RStudio Desktop](https://posit.co/download/rstudio-desktop/). Clone the public repository using GitHub Desktop or choose **Code > Download ZIP** on GitHub. The repository contains code and documentation, **not** official RZS workbooks or generated election analyses.
 
 ```text
 election-forensics-r-toolkit/
   README.md  INSTALLATION.md  MODULE_REGISTRY.md  WORKFLOW.md
   modules/
-    rzs_data_preparation/
-      RZS_data_preparation.R
-      RZS_prepared/                    # created locally, not in Git
-    descriptive_statistics/
-      Descriptive_statistics.R
-    klimek/
-      Klimek.R
-    election_fingerprints/
-      Election_fingerprints.R
-      tests/
+    rzs_data_preparation/      # RZS_data_preparation.R
+    descriptive_statistics/    # Descriptive_statistics.R
+    klimek/                    # Klimek.R
+    election_fingerprints/     # Election_fingerprints.R
+    contours/                  # Contours.R
 ```
 
-## B. Obtain the prepared election inputs
+## 2. Prepare or reuse election inputs
 
-Election Fingerprints requires the prepared RZS workbooks to exist in `modules/rzs_data_preparation/RZS_prepared/` with the exact filenames:
+The supported analytical modules expect compatible RZS workbooks in the local `modules/rzs_data_preparation/RZS_prepared/` directory:
 
 ```text
 presidential_2017_RZS_prepared.xlsx
@@ -34,34 +27,33 @@ presidential_2022_RZS_prepared.xlsx
 parliamentary_2022_RZS_prepared.xlsx
 ```
 
-If you already have compatible validated files locally, **reuse them**. Otherwise obtain official source workbooks, configure `modules/rzs_data_preparation/RZS_data_preparation.R`, run it, and follow its validation documentation. Do not publish either raw data or prepared workbooks in the GitHub repository.
+If these workbooks are already locally validated and unchanged, **reuse them**. Otherwise obtain the official Excel sources and follow the [RZS preparation documentation](modules/rzs_data_preparation/README.md) to build and validate the inputs. Do not upload raw/prepared data to GitHub. A change to source data or preparation rules requires revalidation.
 
-## C. Run Election Fingerprints
+## 3. Choose an analysis
 
-In RStudio select **Session > Set Working Directory > Choose Directory…**, select `modules/election_fingerprints/`, and confirm `getwd()` returns this directory. Install dependencies once:
+In RStudio select **Session > Set Working Directory > Choose Directory…**, select the relevant module directory and check `getwd()`. Install only the packages needed by that module and run its tests as described in the corresponding README:
+
+| Module | Entry point | Instructions |
+|---|---|---|
+| Descriptive statistics | `Descriptive_statistics.R` | [README](modules/descriptive_statistics/README.md) |
+| Klimek cumulative curves | `Klimek.R` | [README](modules/klimek/README.md) |
+| Election fingerprints | `Election_fingerprints.R` | [User guide](modules/election_fingerprints/USER_GUIDE.md) |
+| Contour diagrams | `Contours.R` | [README](modules/contours/README.md) |
+
+For example, from `modules/contours/`:
 
 ```r
-install.packages(c("readxl", "ggplot2", "MASS", "ggExtra", "cowplot", "readr"))
-```
-
-Open `Election_fingerprints.R`; in its **EDITABLE INPUTS** adjust election input paths, `AREA_MODE`, `GENERATE_DISTRICTS`, `GENERATE_MUNICIPALITIES`, geographic selection IDs, languages, plot options and `INVALID_AREA_POLICY` as needed. The default policy `"error"` stops on an unknown requested district/municipality; the alternative `"warn"` allows valid areas to continue.
-
-For installation verification, run:
-
-```r
+install.packages(c("readxl", "ggplot2", "MASS"))  # Once, if absent
 source("tests/run_tests.R")
 source("tests/test_graphics.R")
-source("tests/test_geography_validation.R")
-source("tests/integration_real_data.R")
-Sys.unsetenv("EF_FINGERPRINT_TEST_MODE")
-source("Election_fingerprints.R")
-source("tests/check_exports.R")
+Sys.unsetenv("EF_CONTOUR_TEST_MODE")
+source("Contours.R")
 ```
 
-For ordinary later figure adjustments, `source("Election_fingerprints.R")` is sufficient; check exports after changing geographic scope. `Sys.unsetenv` is useful if a test-only environment variable remains set. If the analysis returns with no `[Fingerprints]` messages, inspect the test-mode setting before assuming outputs were generated.
+Default settings process the three supported elections; modify the **EDITABLE SECTION** in `Contours.R` to select elections, A/B turnout definitions, classifications, language(s), areas and figure options. Use a national-only run first if you want a smaller output set.
 
-## D. Where results are saved
+## 4. Find and interpret outputs
 
-All results go to `modules/election_fingerprints/fingerprint_outputs/<election>/<area>/`, including bilingual PNG/PDF files, 2D count grids, audits and status summaries. Size/JHK outputs are in `groups/<CODE>/` under each area. The file `fingerprints_status.csv` lists empty groups and skipped KDE cases as well as generated figures. Inputs are never overwritten by this module.
+Each module writes its outputs to its own local `*_outputs/` folder, not to the prepared input files. Contours produces PNG diagrams and CSV files describing standardised observations, QC counts and PASS/SKIP conditions in `modules/contours/contours_outputs/`. The complete layout and interpretation are described in the [Contours module README](modules/contours/README.md).
 
-See [complete fingerprint user guide](modules/election_fingerprints/USER_GUIDE.md), [output guide](modules/election_fingerprints/OUTPUT_GUIDE.md) and [validation](modules/election_fingerprints/VALIDATION.md).
+Statistical diagnostics are not legal determinations of electoral misconduct. Consult the respective module's limitations and retain provenance, parameters, code version and `sessionInfo()` with substantive analyses.

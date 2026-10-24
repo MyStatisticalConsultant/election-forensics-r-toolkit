@@ -1,55 +1,46 @@
-# Election Forensics R Toolkit — v1.8.4
+# Election Forensics R Toolkit — v1.9.0
 
-[Srpski (latinica)](README_SER.md) · [Installation](INSTALLATION.md) · [Modules](MODULE_REGISTRY.md) · [Workflow](WORKFLOW.md) · [Release notes](RELEASE_NOTES_v1.8.4.md)
+[Srpski (latinica)](README_SER.md) · [Installation](INSTALLATION.md) · [Module registry](MODULE_REGISTRY.md) · [Workflow](WORKFLOW.md) · [Release notes](RELEASE_NOTES_v1.9.0.md)
 
-Open-source, reproducible R workflows for investigating official Serbian election results. The Toolkit prepares RZS polling-station records and offers **three independent downstream analytical modules**. The results are descriptive or diagnostic; a statistical pattern, by itself, is **not proof of election fraud**.
+An open-source R toolkit for reproducible analysis of official Serbian election returns at polling-station level. It comprises **one upstream data-preparation module and four independent analytical modules**. Outputs are descriptive or diagnostic: **a statistical anomaly alone is not proof of electoral fraud**.
 
-## Four modules
+## Modules
 
-| Module | Current release | Main function | Documentation |
+| Module | Version / status | Purpose | Documentation |
 |---|---|---|---|
-| RZS data preparation | Existing validated implementation | Read official RZS Excel, harmonise polling-station fields, quality checks, `Main`/`Master`/`Options` workbooks | [RZS preparation](modules/rzs_data_preparation/README.md) |
-| Descriptive statistics | v0.3.1 | National, district and municipality summaries; robust statistics and report tables | [Descriptive statistics](modules/descriptive_statistics/README.md) |
-| Klimek cumulative curves | v0.1.4 | Exploratory cumulative turnout–vote distributions, including Size/JHK groupings | [Klimek](modules/klimek/README.md) |
-| **Election fingerprints** | **v0.1.4 (stable)** | Count-based two-dimensional turnout–vote-share histograms; optional KDE, sensitivity plots, territorial and Size/JHK analyses | [Election fingerprints](modules/election_fingerprints/README.md) |
+| RZS data preparation | Established, previously validated | Harmonise official workbooks, apply data-quality checks, prepare the `Main`, `Master` and `Options` sheets | [RZS preparation](modules/rzs_data_preparation/README.md) |
+| Descriptive statistics | v0.3.1 | National, district and municipality statistics, robust measures and reporting tables | [Descriptive statistics](modules/descriptive_statistics/README.md) |
+| Klimek cumulative curves | v0.1.4 | Cumulative turnout–vote curves, including pre-defined Size and JHK groups | [Klimek](modules/klimek/README.md) |
+| Election fingerprints | v0.1.4 | Observed two-dimensional turnout–vote-share count histograms and supplementary KDE diagnostics | [Election fingerprints](modules/election_fingerprints/README.md) |
+| **Contour diagrams** | **v0.1.4** | Standardised, bilingual two-dimensional KDE contours comparing Small/Large and JHK groups at national, district and municipality levels | [Contours](modules/contours/README.md) |
 
-Each downstream module **reads** the validated data; it does not modify input workbooks or require other downstream modules to run. Data preparation need only be rerun when the official source, preparation rules, or required schema changes.
+Detailed methodological definitions, numerical and graphical parameters, module-specific tests and limitations are documented **in each module**, rather than reproduced in this root overview. Downstream modules read the prepared RZS data independently; they do not alter the source workbooks or require another analytical module to be executed first.
 
-## Scientific scope of election fingerprints
+## Getting started
 
-For an eligible polling station with `E` registered voters, `B` valid ballots, `C` ballots cast and `W` votes for the nationally chosen candidate/list, the primary axes are `100 B/E` (turnout) and `100 W/B` (vote share). Every station contributes one count to a 2D histogram cell. A separate `100 C/E` turnout plot and a kernel density estimate (KDE) are **supplements**, not the primary statistic. The option selected at national level stays fixed across all districts and municipalities. Two Size definitions from national preparation (`Size` and `Size_JHK`) are retained, not recalculated locally.
-
-The original empirical approach follows Klimek et al. (2012), *Statistical detection of systematic election irregularities*, PNAS, 109(41), 16469–16473, https://doi.org/10.1073/pnas.1210722109. Fingerprints alone cannot establish intentional manipulation; heterogeneous voting and turnout mechanisms can produce different shapes. See the module [methodology](modules/election_fingerprints/METHODOLOGY.md) and [validation record](modules/election_fingerprints/VALIDATION.md).
-
-## Get started
-
-1. Install R and optionally RStudio, download/clone this repository, and install the required R packages. See [installation](INSTALLATION.md).
-2. Supply the official RZS source workbooks to the upstream module, or reuse **existing locally validated** prepared workbooks in `modules/rzs_data_preparation/RZS_prepared/`. Those workbooks are *not* distributed in this GitHub repository.
-3. In RStudio set the working directory to `modules/election_fingerprints/`, then run:
+1. Install [R](https://cran.r-project.org/) and optionally [RStudio](https://posit.co/download/rstudio-desktop/); clone or download this repository. See [installation](INSTALLATION.md).
+2. Obtain the official RZS input workbooks and prepare them once, **or reuse compatible, previously validated local workbooks** in `modules/rzs_data_preparation/RZS_prepared/`. The source and prepared Excel data are not distributed with the repository.
+3. Choose an analytical module, set the RStudio working directory to that module's folder and run its script. For example, to generate contour diagrams:
 
 ```r
-install.packages(c("readxl", "ggplot2", "MASS", "ggExtra", "cowplot", "readr"))
+setwd("modules/contours")  # Adjust the path to your working directory
+install.packages(c("readxl", "ggplot2", "MASS"))  # First time only
 source("tests/run_tests.R")
 source("tests/test_graphics.R")
-source("tests/test_geography_validation.R")
-source("tests/integration_real_data.R")
-Sys.unsetenv("EF_FINGERPRINT_TEST_MODE")
-source("Election_fingerprints.R")
-source("tests/check_exports.R")
+Sys.unsetenv("EF_CONTOUR_TEST_MODE")  # Ensures a normal run
+source("Contours.R")
 ```
 
-The entry-point's **EDITABLE INPUTS** section controls elections, languages, geographic selection, figure settings and option choice. The default `INVALID_AREA_POLICY <- "error"` stops on an invalid selected geographic key; use `"warn"` only when skipping unavailable keys is intentional. National figures are generated by default; district and municipality figures require explicit selection in `AREA_MODE` and `GENERATE_*` switches. See the [user guide](modules/election_fingerprints/USER_GUIDE.md).
+`Contours.R` provides an **EDITABLE SECTION** for election selection, turnout definitions A (`B/E`) and B (`C/E`), station-size comparisons, languages and geographic scope. See [Contours README](modules/contours/README.md) and the [workflow guide](WORKFLOW.md). Other modules have their own documented entry points.
 
-Outputs appear locally in `modules/election_fingerprints/fingerprint_outputs/`. Empty station groups produce status records without figures. For too-small or constant samples the count histogram is retained and KDE is omitted.
+## Data, reproducibility and limitations
 
-## Data, reproducibility and validation
+The default prepared `Main` data used by these methods contain 8,023 polling stations for presidential 2017 and 7,787 for each supported 2022 election after upstream QC and sample restrictions. Analyses for other elections require compatible prepared workbooks and validation.
 
-- **Not committed:** RZS raw data, prepared Excel workbooks, R output images/tables, local test outputs, RStudio state. The root [`.gitignore`](.gitignore) excludes these paths.
-- **Current validation evidence:** the researcher reported PASS for unit, graphics (including 200×200 KDE in EN/SR), invalid-key diagnostics, strict geographic checking, real-data integration and export reconciliation across all three elections. Selected national/district/municipality runs checked **1 national area, 4 districts and 2 municipalities per election**, six baseline/size-group outputs per area, both turnout definitions and file consistency. These observations do **not** certify all possible future geographic settings or election datasets.
-- **Input counts:** prepared `Main` contains 8,023 polling stations for presidential 2017, and 7,787 for each 2022 election. Polling stations with `B=0` remain in audit data but are not plotted because `W/B` is undefined.
-- Retain input checksums, script settings and `sessionInfo()` alongside research results. The root [checksum manifest](MANIFEST.sha256) records published source-file hashes, not local input-file checksums.
-
-The other three modules' R source and test scripts are unchanged from the previously published validated Toolkit. Future modules (e.g. mixture models and further diagnostics) are *not* represented as implemented here.
+- The root [`.gitignore`](.gitignore) excludes official raw data, prepared workbooks and locally generated outputs, including `contours_outputs/`.
+- Keep source checksums, code versions, configuration and `sessionInfo()` alongside published analyses. A missing or too-small group is logged as `SKIP`; an algorithm should not manufacture a density plot for it.
+- Contour diagrams visualise geographically standardised distributions. Their arrows show KDE-mode displacement **descriptively**, not the separate *voter-rigging test*. No module's output alone proves intentional manipulation.
+- The root [checksum manifest](MANIFEST.sha256) lists source-file hashes. To audit a complete checkout, validate the manifest against the complete published file set, not only a ZIP of root documents.
 
 ## License and citation
 

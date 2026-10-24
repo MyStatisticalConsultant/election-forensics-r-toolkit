@@ -14,6 +14,6 @@ Datum izdanja: 24. oktobar 2026. Uključuje **Izborne otiske v0.1.4 (stabilno iz
 
 ## Validacija i ograničenja
 
-Autor je dostavio PASS rezultate numeričkih, grafičkih, geografskih, integracionih i izvoznih testova za predsedničke 2017/2022. i parlamentarne 2022. Provereno je po 1 nacionalno područje, 4 okruga i 2 opštine po izborima, uključujući obe Size klasifikacije, bez neočekivanih upozorenja. To je potvrda navedenog opsega, ne svih budućih teritorijalnih izbora ili novih baza. Otisci su eksploratorna dijagnostika, a ne dokaz prevare.
+Numerički, grafički, geografski, integracioni i izvozni testovi zabeleženi su sa statusom PASS za predsedničke 2017/2022. i parlamentarne 2022. Provera izvoza obuhvatila je nacionalni nivo, četiri odabrana okruga i dve odabrane opštine po izborima, uključujući obe Size klasifikacije. To dokumentuje provereni obim, a ne sve moguće oblasti ili buduće baze. Otisci su eksploratorna dijagnostika, a ne dokaz prevare.
 
-Devetnaest R izvornih/testnih fajlova prethodna tri modula ostalo je identično prethodnoj javnoj verziji v1.7.9. Prelaz na stabilni modul ne menja numeričke/statističke formule niti grafičke algoritme u odnosu na lokalno potvrđenu razvojnu verziju v0.1.3.1; izmene su oznake izdanja i podrazumevano stroga provera šifara.
+Izvorni i testni R fajlovi prethodna tri modula ostali su neizmenjeni u odnosu na izdanje v1.7.9. Numerički i grafički algoritmi izbornih otisaka sačuvani su iz testirane implementacije; stabilno izdanje dodalo je oznake verzije i podrazumevano strogu proveru geografskih šifara.

@@ -14,6 +14,6 @@ Release date: 24 October 2026. Includes **Election Fingerprints v0.1.4 (stable)*
 
 ## Validation and limitations
 
-The researcher reported PASS for unit, graphics, geographic QA, integration and export checks on presidential 2017/2022 and parliamentary 2022 data. An operational run produced and reconciled 1 national area, 4 districts and 2 municipalities per election, including both Size classifications; no unexpected execution warnings were reported. These checks establish the tested scope, not validity for every geographic code or a future election dataset. The model provides exploratory diagnostics, not a fraud verdict.
+Unit, graphics, geographic-key, integration and export checks were recorded as PASS for presidential 2017/2022 and parliamentary 2022 data. Export reconciliation covered one national area, four selected districts and two selected municipalities per election, including both Size classifications. These checks document the tested scope, not every possible geographic selection or future dataset. The figures are exploratory diagnostics, not a fraud verdict.
 
-The first three modules' 19 R source/test files are byte-for-byte unchanged from the prior public v1.7.9 baseline. The v1.8.4 stable promotion makes no changes to the fingerprint numerical/statistical or graphical algorithms relative to the locally tested v0.1.3.1 development code; its code edits are release metadata and the default strict key-selection policy.
+The first three modules' R source and test files were unchanged from the previous v1.7.9 release. The fingerprint numerical and graphical algorithms were preserved from the tested implementation; the stable release added metadata and strict geographic-key selection by default.

@@ -2,9 +2,9 @@
 
 [English](WORKFLOW.md) · [Instalacija](INSTALLATION_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md)
 
-## 1. Priprema baza je odvojeni početni korak
+## 1. Priprema izbornih podataka samo kada je potrebna
 
-Zvanični RZS fajlovi se skriptom `modules/rzs_data_preparation/RZS_data_preparation.R` obrađuju i čuvaju lokalno u `modules/rzs_data_preparation/RZS_prepared/`:
+`modules/rzs_data_preparation/RZS_data_preparation.R` obrađuje zvanične RZS izvore i pravi validirane lokalne fajlove u `modules/rzs_data_preparation/RZS_prepared/`:
 
 ```text
 presidential_2017_RZS_prepared.xlsx
@@ -12,31 +12,42 @@ presidential_2022_RZS_prepared.xlsx
 parliamentary_2022_RZS_prepared.xlsx
 ```
 
-`Main` je QC-podobni uzorak sa E ≥ 100; `Master` sadrži dodatne pripremljene zapise i statuse, a `Options` šifarnik kandidata/lista. Originalni i pripremljeni Excel fajlovi **nisu deo javnog repozitorijuma**. Ako već postoje i nisu menjani, **ne treba** ponovo pokretati pripremu samo zbog novog/izmenjenog modula.
+List `Main` sadrži QC-podobna biračka mesta sa `E >= 100`, `Master` dodatne zapise i statuse, a `Options` šifarnik kandidata i lista. Originalni i pripremljeni Excel fajlovi **nisu deo javnog repozitorijuma**. Kompatibilne baze se mogu ponovo koristiti: dodavanje novog analitičkog modula ne zahteva ponovnu pripremu.
 
-## 2. Izabrati analitički modul
+## 2. Pokrenuti samo potreban modul
 
-U RStudio-u postaviti radni direktorijum na odgovarajući folder:
+U RStudio-u postaviti radni direktorijum na folder modula i pokrenuti njegov glavni skript.
 
-| Analiza | Folder | Komanda | Folder rezultata |
+| Analiza | Folder | Komanda | Lokalni izlazi |
 |---|---|---|---|
-| Deskriptivne tabele | `modules/descriptive_statistics/` | `source("Descriptive_statistics.R")` | `descriptive_outputs/` |
-| Klimek krive | `modules/klimek/` | `source("Klimek.R")` | `klimek_outputs/` |
-| Dvodimenzionalni izborni otisci | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
+| Deskriptivna statistika | `modules/descriptive_statistics/` | `source("Descriptive_statistics.R")` | `descriptive_outputs/` |
+| Klimek kumulativne krive | `modules/klimek/` | `source("Klimek.R")` | `klimek_outputs/` |
+| Izborni otisci | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
+| **Konturni dijagrami** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
 
-Prilikom **prvog izvršavanja izbornih otisaka**, instalirati potrebne R pakete, izvršiti četiri `tests/*.R` testa (uključujući `test_geography_validation.R`), ukloniti `EF_FINGERPRINT_TEST_MODE`, izvršiti `Election_fingerprints.R`, a zatim `tests/check_exports.R`. Kompletan sled dat je u [korisničkom uputstvu](modules/election_fingerprints/USER_GUIDE_SER.md). U **EDITABLE INPUTS** podešavaju se oblast, pobednik, jezik, histogram/KDE, definicije izlaznosti i pet Size/JHK grupa. Podrazumevano `INVALID_AREA_POLICY <- "error"` sprečava tiho preskakanje nepostojećih geografskih šifara.
+Pri prvoj instalaciji dodati R pakete i izvršiti testove navedene u dokumentaciji odabranog modula. Za Contours:
 
-## 3. Promene i ponovni proračun
+```r
+install.packages(c("readxl", "ggplot2", "MASS"))  # Ako nedostaju
+source("tests/run_tests.R")
+source("tests/test_graphics.R")
+Sys.unsetenv("EF_CONTOUR_TEST_MODE")
+source("Contours.R")
+```
 
-| Promena | Ponoviti RZS pripremu? | Ponoviti module? |
+Contours uključuje definicije izlaznosti A (`B/E`) i B (`C/E`), `Size` i `Size_JHK`, engleske/srpske PNG grafikone i nacionalni/okružni/opštinski nivo. Opštinski leave-one-out referentni skup računa se **pre** izdvajanja grupa i prikazivanih oblasti. KDE se preskače kada jedna od grupa ima manje od podrazumevanih 15 podobnih zapisa, uz razlog u `contour_export_manifest.csv`. Za pojedinosti videti [README modula](modules/contours/README_SER.md). Posebna pravila provere geografskih šifara izbornih otisaka objašnjena su u njihovom [korisničkom uputstvu](modules/election_fingerprints/USER_GUIDE_SER.md).
+
+## 3. Kada ponavljati proračune
+
+| Promena | Ponoviti RZS pripremu? | Dalji postupak |
 |---|---|---|
-| Izmena boja, jezika, podnaslova ili odabranih oblasti | Ne | Samo relevantni modul |
-| Dodavanje izbornih otisaka uz postojeće baze | Ne | Testovi i izvršavanje izbornih otisaka |
-| Izmena numeričkog algoritma jednog modula | Ne, ako šema ulaza ostaje ista | Testirati i izvršiti taj modul |
-| Izmena zvaničnog RZS izvora, QC pravila, šeme ili Size/JHK definicija | Da, uz proveru | Izvršiti sve analize na koje promena utiče |
+| Novi modul ili promena jezika/izgleda grafikona | Ne | Testirati/izvršiti samo izmenjeni modul |
+| Izmena algoritma jednog analitičkog modula | Ne, ako su ulazi i QC isti | Testirati i izvršiti relevantni modul |
+| Novi RZS izvori, QC pravila, polja ili `Size`/`Size_JHK` | Da, uz validaciju | Ponoviti sve pogođene analize |
+| Novi izbori ili nova ulazna baza | Pripremiti i validirati kompatibilne podatke | Podesiti/testirati potrebne analize |
 
-Uz rezultate čuvati kontrolne sume, podešavanja i `sessionInfo()`. Izlazi se mogu prepisivati pri ponovnom izvršavanju; publikacione primerke čuvati posebno.
+Skriptovi ne otkrivaju automatski zastarele lokalne baze. Uz istraživačke rezultate čuvati kontrolne sume, parametre, verziju koda i `sessionInfo()`.
 
 ## 4. Javni kod i lokalne baze
 
-`.gitignore` izuzima originalne/pripremljene podatke, rezultate i lokalne testne fajlove. **Ne kopirati** lične Excel baze i izlaze u javno preuzetu kopiju. Prilikom ažuriranja postojećeg lokalnog Git repozitorijuma sačuvati podatke i zameniti samo programske i dokumentacione fajlove. `.gitignore` ne štiti od ručnog brisanja pri prepisivanju.
+Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/` i `contours_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.

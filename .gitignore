@@ -27,3 +27,6 @@ validation_results/
 *.Rproj.user
 *.tmp
 *.bak
+
+# Locally generated contour-diagram outputs
+**/contours_outputs/
