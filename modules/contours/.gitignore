@@ -1,0 +1,7 @@
+# Local outputs are regenerated and must not be committed
+/contours_outputs/
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rout
