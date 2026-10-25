@@ -1,0 +1,4 @@
+voter_rigging_outputs/
+*.RData
+.Rhistory
+.Rproj.user/

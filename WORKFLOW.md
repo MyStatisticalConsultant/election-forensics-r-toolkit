@@ -24,6 +24,7 @@ Set the RStudio working directory to the listed module directory and source its 
 | Klimek cumulative curves | `modules/klimek/` | `source("Klimek.R")` | `klimek_outputs/` |
 | Election fingerprints | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
 | **Contour diagrams** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
+| **Voter-rigging diagnostics** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
 
 For the first run, install any module-specific R packages and execute the tests listed in that module's README. For Contours specifically:
 
@@ -36,6 +37,8 @@ source("Contours.R")
 ```
 
 Contours supports turnout A (`B/E`) and B (`C/E`), `Size` and `Size_JHK`, EN/SR-Latin PNGs, and national/district/municipality selections. The municipality-level leave-one-out reference is computed **before** selecting the plotted group or reporting area. A two-group KDE is skipped where either group is too small (default threshold: 15); details appear in `contour_export_manifest.csv`. Refer to the [module README](modules/contours/README.md) for the complete interpretation and options. For Fingerprints, including strict invalid-area handling, refer to its [user guide](modules/election_fingerprints/USER_GUIDE.md).
+
+For `voter_rigging`, use the `Master` worksheet to retain small polling stations; set the working directory to `modules/voter_rigging/` and run the four validation/export checks listed in its [README](modules/voter_rigging/README.md). It calculates descriptive median-distance `D(p)` (turnout A/B) and cumulative share curves, not the international reference-standardised `δ(p)`. No prior downstream analysis needs to be rerun.
 
 ## 3. When to recompute
 
@@ -50,4 +53,4 @@ Scripts do not automatically detect stale local input workbooks. Keep checksums,
 
 ## 4. GitHub source versus local data
 
-Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/` and `contours_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.
+Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/` and `voter_rigging_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.

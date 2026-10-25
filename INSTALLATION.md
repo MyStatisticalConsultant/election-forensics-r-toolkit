@@ -1,4 +1,4 @@
-# Installation and first run — Toolkit v1.9.0
+# Installation and first run — Toolkit v1.10.0
 
 [Srpski (latinica)](INSTALLATION_SER.md) · [README](README.md) · [Module registry](MODULE_REGISTRY.md)
 
@@ -15,6 +15,7 @@ election-forensics-r-toolkit/
     klimek/                    # Klimek.R
     election_fingerprints/     # Election_fingerprints.R
     contours/                  # Contours.R
+    voter_rigging/             # Voter_rigging.R
 ```
 
 ## 2. Prepare or reuse election inputs
@@ -39,6 +40,7 @@ In RStudio select **Session > Set Working Directory > Choose Directory…**, sel
 | Klimek cumulative curves | `Klimek.R` | [README](modules/klimek/README.md) |
 | Election fingerprints | `Election_fingerprints.R` | [User guide](modules/election_fingerprints/USER_GUIDE.md) |
 | Contour diagrams | `Contours.R` | [README](modules/contours/README.md) |
+| Voter-rigging diagnostics | `Voter_rigging.R` | [README](modules/voter_rigging/README.md) |
 
 For example, from `modules/contours/`:
 
@@ -55,5 +57,7 @@ Default settings process the three supported elections; modify the **EDITABLE SE
 ## 4. Find and interpret outputs
 
 Each module writes its outputs to its own local `*_outputs/` folder, not to the prepared input files. Contours produces PNG diagrams and CSV files describing standardised observations, QC counts and PASS/SKIP conditions in `modules/contours/contours_outputs/`. The complete layout and interpretation are described in the [Contours module README](modules/contours/README.md).
+
+For `voter_rigging`, use the `Master` worksheet (including QC-eligible E<100 units); output is stored locally in `modules/voter_rigging/voter_rigging_outputs/`. The analysis reports descriptive `D(p)` and does not calculate `δ(p)` without an appropriate international reference set.
 
 Statistical diagnostics are not legal determinations of electoral misconduct. Consult the respective module's limitations and retain provenance, parameters, code version and `sessionInfo()` with substantive analyses.

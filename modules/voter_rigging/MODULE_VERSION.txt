@@ -1,0 +1,4 @@
+voter_rigging
+0.1.1
+Jimenez-Hidalgo-Klimek (2017) source-aligned D(p) exploratory release
+Stage B — no international reference-standardised delta(p)

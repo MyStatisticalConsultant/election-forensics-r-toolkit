@@ -1,4 +1,4 @@
-# Registar modula — Toolkit v1.9.0
+# Registar modula — Toolkit v1.10.0
 
 [English](MODULE_REGISTRY.md) · [README](README_SER.md) · [Tok rada](WORKFLOW_SER.md)
 
@@ -9,5 +9,6 @@
 | [Klimek kumulativne krive](modules/klimek/README_SER.md) | `Klimek.R` | v0.1.4; dokumentovani testovi za tri podržana izbora | `Main`, `Master`, `Options` | `klimek_outputs/` |
 | [Izborni otisci](modules/election_fingerprints/README_SER.md) | `Election_fingerprints.R` | v0.1.4; nacionalni i odabrani okružni/opštinski izlazi, Size/JHK, provera šifara i izvoza | `Main`, `Options`, `Size`, `Size_JHK` | `fingerprint_outputs/` |
 | [**Konturni dijagrami**](modules/contours/README_SER.md) | `Contours.R` | **v0.1.4**; sintetički testovi definicija A/B, opštinske leave-one-out standardizacije, KDE/legende/strelice i dvojezičnih slika; odabrani izvozi na stvarnim podacima | `Main`, `Size`, `Size_JHK`, `Winner_votes` | `contours_outputs/` |
+| [**Dijagnostika pritiska na birače (voter rigging)**](modules/voter_rigging/README_SER.md) | `Voter_rigging.R` | **v0.1.1**; testovi formula, grafičkog prikaza, stvarnih podataka i izvoznih datoteka; opisno `D(p)` bez nezavisne međunarodne reference za `δ(p)` | `Master`, glasovi pobednika, geografske šifre, E/B/C | `voter_rigging_outputs/` |
 
-Analitički moduli nezavisno čitaju pripremljene RZS baze i ne menjaju ih. KDE i konturni dijagrami služe opisnoj analizi, a ne formalnom dokazivanju izborne prevare. Metode koje nisu navedene još nisu uključene u ovo izdanje.
+Analitički moduli nezavisno čitaju pripremljene RZS baze i ne menjaju ih. KDE i konturni dijagrami služe opisnoj analizi, a ne formalnom dokazivanju izborne prevare. Poseban modul `voter_rigging` računa opisno `D(p)` i kumulativne krive, ali ne donosi inferencijalni zaključak na osnovu međunarodne reference `δ(p)`. Metode koje nisu navedene nisu uključene u ovo izdanje.

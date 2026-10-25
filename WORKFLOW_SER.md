@@ -24,6 +24,7 @@ U RStudio-u postaviti radni direktorijum na folder modula i pokrenuti njegov gla
 | Klimek kumulativne krive | `modules/klimek/` | `source("Klimek.R")` | `klimek_outputs/` |
 | Izborni otisci | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
 | **Konturni dijagrami** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
+| **Voter rigging (dijagnostika pritiska na birače)** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
 
 Pri prvoj instalaciji dodati R pakete i izvršiti testove navedene u dokumentaciji odabranog modula. Za Contours:
 
@@ -36,6 +37,8 @@ source("Contours.R")
 ```
 
 Contours uključuje definicije izlaznosti A (`B/E`) i B (`C/E`), `Size` i `Size_JHK`, engleske/srpske PNG grafikone i nacionalni/okružni/opštinski nivo. Opštinski leave-one-out referentni skup računa se **pre** izdvajanja grupa i prikazivanih oblasti. KDE se preskače kada jedna od grupa ima manje od podrazumevanih 15 podobnih zapisa, uz razlog u `contour_export_manifest.csv`. Za pojedinosti videti [README modula](modules/contours/README_SER.md). Posebna pravila provere geografskih šifara izbornih otisaka objašnjena su u njihovom [korisničkom uputstvu](modules/election_fingerprints/USER_GUIDE_SER.md).
+
+Modul `voter_rigging` koristi list `Master` radi obuhvata veoma malih BM. U folderu `modules/voter_rigging/` izvršiti testove i izvozne provere opisane u [README-u](modules/voter_rigging/README_SER.md). Modul računa opisno `D(p)` za definicije A/B i kumulativni udeo glasova; bez međunarodne reference ne računa inferencijalnu `δ(p)`. Prethodni analitički moduli se ne pokreću ponovo.
 
 ## 3. Kada ponavljati proračune
 
@@ -50,4 +53,4 @@ Skriptovi ne otkrivaju automatski zastarele lokalne baze. Uz istraživačke rezu
 
 ## 4. Javni kod i lokalne baze
 
-Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/` i `contours_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.
+Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/` i `voter_rigging_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.

@@ -30,3 +30,6 @@ validation_results/
 
 # Locally generated contour-diagram outputs
 **/contours_outputs/
+
+# Generated voter-rigging diagnostics, figures and QC tables
+**/voter_rigging_outputs/

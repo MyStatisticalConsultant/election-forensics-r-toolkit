@@ -1,4 +1,4 @@
-# Instalacija i prvo pokretanje — Toolkit v1.9.0
+# Instalacija i prvo pokretanje — Toolkit v1.10.0
 
 [English](INSTALLATION.md) · [README](README_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md)
 
@@ -15,6 +15,7 @@ election-forensics-r-toolkit/
     klimek/                    # Klimek.R
     election_fingerprints/     # Election_fingerprints.R
     contours/                  # Contours.R
+    voter_rigging/             # Voter_rigging.R
 ```
 
 ## 2. Priprema ili ponovno korišćenje podataka
@@ -39,6 +40,7 @@ U RStudio-u izabrati **Session > Set Working Directory > Choose Directory…**, 
 | Klimek kumulativne krive | `Klimek.R` | [README](modules/klimek/README_SER.md) |
 | Izborni otisci | `Election_fingerprints.R` | [Korisničko uputstvo](modules/election_fingerprints/USER_GUIDE_SER.md) |
 | Konturni dijagrami | `Contours.R` | [README](modules/contours/README_SER.md) |
+| Dijagnostika pritiska na birače (voter rigging) | `Voter_rigging.R` | [README](modules/voter_rigging/README_SER.md) |
 
 Na primer, iz foldera `modules/contours/`:
 
@@ -55,5 +57,7 @@ Podrazumevana podešavanja obuhvataju tri podržana izbora; odeljak **EDITABLE S
 ## 4. Rezultati i tumačenje
 
 Svaki modul čuva izlaze u svom lokalnom `*_outputs/` folderu, bez izmene pripremljenih baza. Contours generiše PNG grafikone i CSV fajlove sa standardizovanim vrednostima, QC pregledima i statusima PASS/SKIP u `modules/contours/contours_outputs/`. Potpun opis izlaza i ograničenja nalazi se u [README-u modula](modules/contours/README_SER.md).
+
+Za `voter_rigging` koristi se list `Master` (uključujući QC-podobna BM sa E<100); rezultati se čuvaju lokalno u `modules/voter_rigging/voter_rigging_outputs/`. Modul prikazuje opisno `D(p)`, ali ne računa `δ(p)` bez uporedive međunarodne reference.
 
 Statistički nalazi nisu pravna odluka o nepravilnostima. Uz analize čuvati izvor podataka, parametre, verzije koda i `sessionInfo()`.
