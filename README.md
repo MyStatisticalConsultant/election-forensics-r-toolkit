@@ -1,8 +1,8 @@
-# Election Forensics R Toolkit — v1.10.0
+# Election Forensics R Toolkit — v1.11.0
 
-[Srpski (latinica)](README_SER.md) · [Installation](INSTALLATION.md) · [Module registry](MODULE_REGISTRY.md) · [Workflow](WORKFLOW.md) · [Release notes](RELEASE_NOTES_v1.10.0.md)
+[Srpski (latinica)](README_SER.md) · [Installation](INSTALLATION.md) · [Module registry](MODULE_REGISTRY.md) · [Workflow](WORKFLOW.md) · [Release notes](RELEASE_NOTES_v1.11.0.md)
 
-An open-source R toolkit for reproducible analysis of official Serbian election returns at polling-station level. It comprises **one upstream data-preparation module and five independent analytical modules**. Outputs are descriptive or diagnostic: **a statistical anomaly alone is not proof of electoral fraud**.
+An open-source R toolkit for reproducible analysis of official Serbian election returns at polling-station level. It comprises **one upstream data-preparation module and six independent analytical modules**. Outputs are descriptive or diagnostic: **a statistical anomaly alone is not proof of electoral fraud**.
 
 ## Modules
 
@@ -14,6 +14,7 @@ An open-source R toolkit for reproducible analysis of official Serbian election 
 | Election fingerprints | v0.1.4 | Observed two-dimensional turnout–vote-share count histograms and supplementary KDE diagnostics | [Election fingerprints](modules/election_fingerprints/README.md) |
 | **Contour diagrams** | **v0.1.4** | Standardised, bilingual two-dimensional KDE contours comparing Small/Large and JHK groups at national, district and municipality levels | [Contours](modules/contours/README.md) |
 | **Voter-rigging diagnostics** | **v0.1.1** | Median-based small/large polling-station discrepancy `D(p)` and cumulative winner-share curves, with bilingual Figure 4-style plots and CSV diagnostics | [Voter rigging](modules/voter_rigging/README.md) |
+| **Approximate normality** | **v0.1.2** | Standardised logarithmic winner-vote rates, connected empirical histogram probabilities, normal-reference curves and normality statistics (EN/SR-Latin) | [Approximate normality](modules/approximate_normality/README.md) |
 
 Detailed methodological definitions, numerical and graphical parameters, module-specific tests and limitations are documented **in each module**, rather than reproduced in this root overview. Downstream modules read the prepared RZS data independently; they do not alter the source workbooks or require another analytical module to be executed first.
 
@@ -25,11 +26,11 @@ Detailed methodological definitions, numerical and graphical parameters, module-
 
 ## Data, reproducibility and limitations
 
-The default prepared `Main` data used by most methods contain 8,023 polling stations for presidential 2017 and 7,787 for each supported 2022 election after upstream QC and sample restrictions. The voter-rigging module instead uses `Master` to retain QC-eligible polling stations with fewer than 100 registered voters. Analyses for other elections require compatible prepared workbooks and validation.
+The default prepared `Main` data used by most methods contain 8,023 polling stations for presidential 2017 and 7,787 for each supported 2022 election after upstream QC and sample restrictions. The voter-rigging module instead uses `Master` to retain QC-eligible polling stations with fewer than 100 registered voters. Approximate normality also reads `Master`, but uses stations with `E >= 100` for the primary analysis, with under-100 stations shown only in a separately labelled sensitivity analysis. Analyses for other elections require compatible prepared workbooks and validation.
 
-- The root [`.gitignore`](.gitignore) excludes official raw data, prepared workbooks and locally generated outputs, including `contours_outputs/` and `voter_rigging_outputs/`.
+- The root [`.gitignore`](.gitignore) excludes official raw data, prepared workbooks and locally generated outputs, including `contours_outputs/`, `voter_rigging_outputs/` and `approximate_normality_outputs/`.
 - Keep source checksums, code versions, configuration and `sessionInfo()` alongside published analyses. A missing or too-small group is logged as `SKIP`; an algorithm should not manufacture a density plot for it.
-- Contour diagrams visualise geographically standardised distributions; their arrows show KDE-mode displacement **descriptively**. The separate voter-rigging module calculates the descriptive displacement `D(p)` and **does not** estimate the international reference-standardised `δ(p)` or its significance region. No module's output alone proves intentional manipulation.
+- Contour diagrams visualise geographically standardised distributions; their arrows show KDE-mode displacement **descriptively**. The separate voter-rigging module calculates the descriptive displacement `D(p)` and **does not** estimate the international reference-standardised `δ(p)` or its significance region. The approximate-normality module uses fixed-width empirical bins (not KDE) and reports skewness, kurtosis and Jarque–Bera diagnostics; it does **not** estimate the separate parametric fraud-model coefficients. No module's output alone proves intentional manipulation.
 - The root [checksum manifest](MANIFEST.sha256) lists source-file hashes. To audit a complete checkout, validate the manifest against the complete published file set, not only a ZIP of root documents.
 
 ## License and citation

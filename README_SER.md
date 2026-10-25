@@ -1,8 +1,8 @@
-# Election Forensics R Toolkit — v1.10.0
+# Election Forensics R Toolkit — v1.11.0
 
-[English](README.md) · [Instalacija](INSTALLATION_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md) · [Tok rada](WORKFLOW_SER.md) · [Napomene o izdanju](RELEASE_NOTES_SER_v1.10.0.md)
+[English](README.md) · [Instalacija](INSTALLATION_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md) · [Tok rada](WORKFLOW_SER.md) · [Napomene o izdanju](RELEASE_NOTES_SER_v1.11.0.md)
 
-Otvoreni R alat za reproduktivnu analizu zvaničnih rezultata izbora u Srbiji na nivou biračkih mesta. Obuhvata **jedan modul za pripremu podataka i pet nezavisnih analitičkih modula**. Nalazi su opisni ili dijagnostički: **statističko odstupanje samo po sebi nije dokaz izborne prevare**.
+Otvoreni R alat za reproduktivnu analizu zvaničnih rezultata izbora u Srbiji na nivou biračkih mesta. Obuhvata **jedan modul za pripremu podataka i šest nezavisnih analitičkih modula**. Nalazi su opisni ili dijagnostički: **statističko odstupanje samo po sebi nije dokaz izborne prevare**.
 
 ## Moduli
 
@@ -14,6 +14,7 @@ Otvoreni R alat za reproduktivnu analizu zvaničnih rezultata izbora u Srbiji na
 | Izborni otisci | v0.1.4 | Dvodimenzionalni histogrami broja biračkih mesta prema izlaznosti i udelu glasova, uz dopunski KDE | [Izborni otisci](modules/election_fingerprints/README_SER.md) |
 | **Konturni dijagrami** | **v0.1.4** | Geografski standardizovani, dvojezični 2D KDE konturni prikazi grupa Small/Large i JHK na nacionalnom, okružnom i opštinskom nivou | [Contours](modules/contours/README_SER.md) |
 | **Dijagnostika pritiska na birače (voter rigging)** | **v0.1.1** | Medijansko rastojanje `D(p)` između malih i velikih BM, kumulativne krive glasova pobednika, dvojezične slike po uzoru na Fig. 4 i numerički CSV izlazi | [Voter rigging](modules/voter_rigging/README_SER.md) |
+| **Približna normalnost** | **v0.1.2** | Standardizovane logaritamske stope glasova pobednika, povezane tačke empirijskih histograma, normalna referentna kriva i statistike normalnosti (EN/SR-Lat) | [Približna normalnost](modules/approximate_normality/README_SER.md) |
 
 Detaljne formule, podešavanja grafikona, testovi i ograničenja dati su **u dokumentaciji pojedinačnih modula**, bez ponavljanja u korenskom pregledu. Analitički moduli nezavisno čitaju pripremljene RZS podatke, ne menjaju izvore niti zahtevaju prethodno izvršavanje drugih analitičkih modula.
 
@@ -25,11 +26,11 @@ Detaljne formule, podešavanja grafikona, testovi i ograničenja dati su **u dok
 
 ## Podaci, reproduktivnost i ograničenja
 
-Podrazumevani uzorak `Main` za većinu modula posle pripreme i QC pravila obuhvata 8.023 biračka mesta za predsedničke izbore 2017. i po 7.787 za izbore 2022. Modul `voter_rigging` umesto toga koristi `Master` kako bi uključio i podobna BM sa manje od 100 upisanih birača. Analize drugih izbora zahtevaju kompatibilne pripremljene baze i dodatnu validaciju.
+Podrazumevani uzorak `Main` za većinu modula posle pripreme i QC pravila obuhvata 8.023 biračka mesta za predsedničke izbore 2017. i po 7.787 za izbore 2022. Modul `voter_rigging` umesto toga koristi `Master` kako bi uključio i podobna BM sa manje od 100 upisanih birača. Modul `approximate_normality` takođe čita `Master`, ali primarnu analizu zasniva na BM sa `E >= 100`, dok su BM sa manje od 100 upisanih birača izdvojena kao dopunska analiza osetljivosti. Analize drugih izbora zahtevaju kompatibilne pripremljene baze i dodatnu validaciju.
 
-- Korenski [`.gitignore`](.gitignore) izuzima izvorne i pripremljene Excel baze i lokalno generisane rezultate, uključujući `contours_outputs/` i `voter_rigging_outputs/`.
+- Korenski [`.gitignore`](.gitignore) izuzima izvorne i pripremljene Excel baze i lokalno generisane rezultate, uključujući `contours_outputs/`, `voter_rigging_outputs/` i `approximate_normality_outputs/`.
 - Uz istraživačke rezultate čuvati kontrolne sume ulaznih fajlova, verzije koda, podešavanja i `sessionInfo()`. Premale ili nedostajuće grupe evidentiraju se kao `SKIP`, umesto da se za njih generiše nepouzdana gustina.
-- Konturni dijagrami prikazuju geografski standardizovane raspodele, a strelica opisuje pomeranje maksimuma KDE gustine. Poseban modul `voter_rigging` računa opisno rastojanje `D(p)`, **bez** međunarodno standardizovane statistike `δ(p)` i oblasti statističkog prihvatanja. Nijedan nalaz pojedinačno ne dokazuje namernu manipulaciju.
+- Konturni dijagrami prikazuju geografski standardizovane raspodele, a strelica opisuje pomeranje maksimuma KDE gustine. Poseban modul `voter_rigging` računa opisno rastojanje `D(p)`, **bez** međunarodno standardizovane statistike `δ(p)` i oblasti statističkog prihvatanja. Modul približne normalnosti koristi empirijske histograme sa fiksnom širinom intervala (bez KDE izglađivanja) i prikazuje asimetriju, spljoštenost i Jarque–Bera test; ne procenjuje parametre posebnog modela izborne manipulacije. Nijedan nalaz pojedinačno ne dokazuje namernu manipulaciju.
 - [MANIFEST.sha256](MANIFEST.sha256) sadrži kontrolne sume objavljenih programskih fajlova. Za proveru je potrebna potpuna verzija repozitorijuma, a ne samo arhiva korenskih dokumenata.
 
 MIT licenca: [LICENSE](LICENSE). Podaci za citiranje: [CITATION.cff](CITATION.cff). © 2026 Zlatko J. Kovačić.

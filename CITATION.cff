@@ -4,7 +4,7 @@ title: "Election Forensics R Toolkit"
 authors:
   - family-names: "Kovačić"
     given-names: "Zlatko J."
-version: "1.10.0"
+version: "1.11.0"
 type: software
 license: MIT
 keywords:
@@ -19,3 +19,6 @@ keywords:
   - kernel density estimation
   - voter rigging
   - statistical diagnostics
+  - approximate normality
+  - logarithmic vote rates
+  - Jarque-Bera test

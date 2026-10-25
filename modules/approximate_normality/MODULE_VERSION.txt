@@ -1,0 +1,3 @@
+Module: approximate_normality
+Version: 0.1.2
+Reference: Klimek et al. (2012), PNAS, doi:10.1073/pnas.1210722109

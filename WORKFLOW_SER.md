@@ -25,6 +25,7 @@ U RStudio-u postaviti radni direktorijum na folder modula i pokrenuti njegov gla
 | Izborni otisci | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
 | **Konturni dijagrami** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
 | **Voter rigging (dijagnostika pritiska na birače)** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
+| **Približna normalnost** | `modules/approximate_normality/` | `source("Approximate_normality.R")` | `approximate_normality_outputs/` |
 
 Pri prvoj instalaciji dodati R pakete i izvršiti testove navedene u dokumentaciji odabranog modula. Za Contours:
 
@@ -40,6 +41,8 @@ Contours uključuje definicije izlaznosti A (`B/E`) i B (`C/E`), `Size` i `Size_
 
 Modul `voter_rigging` koristi list `Master` radi obuhvata veoma malih BM. U folderu `modules/voter_rigging/` izvršiti testove i izvozne provere opisane u [README-u](modules/voter_rigging/README_SER.md). Modul računa opisno `D(p)` za definicije A/B i kumulativni udeo glasova; bez međunarodne reference ne računa inferencijalnu `δ(p)`. Prethodni analitički moduli se ne pokreću ponovo.
 
+Modul `approximate_normality` čita list `Master`, koristi QC-podobna BM sa `E >= 100` za primarne prikaze, a manja BM prikazuje zasebno, kao analizu osetljivosti. Iz foldera `modules/approximate_normality/` pokrenuti `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` i `source("tests/check_exports.R")`. Dvojezični grafikoni zasnovani su na *empirijskim učestalostima po intervalima*, uz referentnu raspodelu `N(0,1)` i detaljne CSV izlaze; pogledati [README](modules/approximate_normality/README_SER.md). Modul ne procenjuje parametarski model izborne manipulacije.
+
 ## 3. Kada ponavljati proračune
 
 | Promena | Ponoviti RZS pripremu? | Dalji postupak |
@@ -53,4 +56,4 @@ Skriptovi ne otkrivaju automatski zastarele lokalne baze. Uz istraživačke rezu
 
 ## 4. Javni kod i lokalne baze
 
-Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/` i `voter_rigging_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.
+Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` i `approximate_normality_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.

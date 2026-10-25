@@ -25,6 +25,7 @@ Set the RStudio working directory to the listed module directory and source its 
 | Election fingerprints | `modules/election_fingerprints/` | `source("Election_fingerprints.R")` | `fingerprint_outputs/` |
 | **Contour diagrams** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
 | **Voter-rigging diagnostics** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
+| **Approximate normality** | `modules/approximate_normality/` | `source("Approximate_normality.R")` | `approximate_normality_outputs/` |
 
 For the first run, install any module-specific R packages and execute the tests listed in that module's README. For Contours specifically:
 
@@ -40,6 +41,8 @@ Contours supports turnout A (`B/E`) and B (`C/E`), `Size` and `Size_JHK`, EN/SR-
 
 For `voter_rigging`, use the `Master` worksheet to retain small polling stations; set the working directory to `modules/voter_rigging/` and run the four validation/export checks listed in its [README](modules/voter_rigging/README.md). It calculates descriptive median-distance `D(p)` (turnout A/B) and cumulative share curves, not the international reference-standardised `δ(p)`. No prior downstream analysis needs to be rerun.
 
+For `approximate_normality`, use the `Master` worksheet, retaining QC-eligible stations with `E >= 100` for primary figures and reporting under-100 stations separately as a sensitivity analysis. From `modules/approximate_normality/`, run `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` and `source("tests/check_exports.R")`. The figures reproduce the *binned empirical* approach to approximate normality, with one standard `N(0,1)` reference per standardized-election comparison, and export detailed CSVs; see its [README](modules/approximate_normality/README.md). It does not implement a parametric fraud model.
+
 ## 3. When to recompute
 
 | Change | Rerun RZS preparation? | Downstream action |
@@ -53,4 +56,4 @@ Scripts do not automatically detect stale local input workbooks. Keep checksums,
 
 ## 4. GitHub source versus local data
 
-Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/` and `voter_rigging_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.
+Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` and `approximate_normality_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.

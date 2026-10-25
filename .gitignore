@@ -33,3 +33,6 @@ validation_results/
 
 # Generated voter-rigging diagnostics, figures and QC tables
 **/voter_rigging_outputs/
+
+# Generated approximate-normality graphs and numerical diagnostics
+**/approximate_normality_outputs/
