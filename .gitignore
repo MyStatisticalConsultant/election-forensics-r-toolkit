@@ -36,3 +36,6 @@ validation_results/
 
 # Generated approximate-normality graphs and numerical diagnostics
 **/approximate_normality_outputs/
+
+# Generated Shpilkin/Kobak diagnostics, Monte Carlo and conditional scenario results
+**/shpilkin_outputs/

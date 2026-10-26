@@ -1,0 +1,5 @@
+shpilkin_outputs/
+*.Rhistory
+.Rproj.user/
+.RData
+__pycache__/

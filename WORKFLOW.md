@@ -26,6 +26,7 @@ Set the RStudio working directory to the listed module directory and source its 
 | **Contour diagrams** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
 | **Voter-rigging diagnostics** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
 | **Approximate normality** | `modules/approximate_normality/` | `source("Approximate_normality.R")` | `approximate_normality_outputs/` |
+| **Shpilkin/Kobak diagnostics** | `modules/shpilkin/` | `source("Shpilkin.R")` | `shpilkin_outputs/` |
 
 For the first run, install any module-specific R packages and execute the tests listed in that module's README. For Contours specifically:
 
@@ -43,6 +44,8 @@ For `voter_rigging`, use the `Master` worksheet to retain small polling stations
 
 For `approximate_normality`, use the `Master` worksheet, retaining QC-eligible stations with `E >= 100` for primary figures and reporting under-100 stations separately as a sensitivity analysis. From `modules/approximate_normality/`, run `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` and `source("tests/check_exports.R")`. The figures reproduce the *binned empirical* approach to approximate normality, with one standard `N(0,1)` reference per standardized-election comparison, and export detailed CSVs; see its [README](modules/approximate_normality/README.md). It does not implement a parametric fraud model.
 
+The `shpilkin` module includes three separate procedures: descriptive turnout/winner histograms; an integer-percentage Monte Carlo test (default 999 repetitions, optional 10,000 for source-comparable precision); and a conditional turnout-reference excess-votes estimate. From `modules/shpilkin/` run the four tests described in its [README](modules/shpilkin/README.md) as needed. **A zero conditional excess estimate cannot be interpreted as no fraud**, and a positive value is not a verified fraud tally. No other analytical module needs to be rerun.
+
 ## 3. When to recompute
 
 | Change | Rerun RZS preparation? | Downstream action |
@@ -56,4 +59,4 @@ Scripts do not automatically detect stale local input workbooks. Keep checksums,
 
 ## 4. GitHub source versus local data
 
-Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` and `approximate_normality_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.
+Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` and `approximate_normality_outputs/` and `shpilkin_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.

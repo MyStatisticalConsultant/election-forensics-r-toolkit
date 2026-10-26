@@ -26,6 +26,7 @@ U RStudio-u postaviti radni direktorijum na folder modula i pokrenuti njegov gla
 | **Konturni dijagrami** | `modules/contours/` | `source("Contours.R")` | `contours_outputs/` |
 | **Voter rigging (dijagnostika pritiska na birače)** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
 | **Približna normalnost** | `modules/approximate_normality/` | `source("Approximate_normality.R")` | `approximate_normality_outputs/` |
+| **Špiljkin/Kobak dijagnostika** | `modules/shpilkin/` | `source("Shpilkin.R")` | `shpilkin_outputs/` |
 
 Pri prvoj instalaciji dodati R pakete i izvršiti testove navedene u dokumentaciji odabranog modula. Za Contours:
 
@@ -43,6 +44,8 @@ Modul `voter_rigging` koristi list `Master` radi obuhvata veoma malih BM. U fold
 
 Modul `approximate_normality` čita list `Master`, koristi QC-podobna BM sa `E >= 100` za primarne prikaze, a manja BM prikazuje zasebno, kao analizu osetljivosti. Iz foldera `modules/approximate_normality/` pokrenuti `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` i `source("tests/check_exports.R")`. Dvojezični grafikoni zasnovani su na *empirijskim učestalostima po intervalima*, uz referentnu raspodelu `N(0,1)` i detaljne CSV izlaze; pogledati [README](modules/approximate_normality/README_SER.md). Modul ne procenjuje parametarski model izborne manipulacije.
 
+Modul `shpilkin` obuhvata tri odvojena postupka: opisne histograme, Monte Karlo test celobrojnih procenata (999 ponavljanja podrazumevano; 10.000 za preciznost uporedivu sa izvornim radom) i uslovnu procenu viška glasova. Iz foldera `modules/shpilkin/` izvršiti testove opisane u [README-u](modules/shpilkin/README_SER.md). **Nulta uslovna procena ne potvrđuje odsustvo nepravilnosti**, a pozitivna procena nije utvrđen broj falsifikovanih glasova. Ostale analitičke module nije potrebno ponovo pokretati.
+
 ## 3. Kada ponavljati proračune
 
 | Promena | Ponoviti RZS pripremu? | Dalji postupak |
@@ -56,4 +59,4 @@ Skriptovi ne otkrivaju automatski zastarele lokalne baze. Uz istraživačke rezu
 
 ## 4. Javni kod i lokalne baze
 
-Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` i `approximate_normality_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.
+Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` i `approximate_normality_outputs/` i `shpilkin_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.

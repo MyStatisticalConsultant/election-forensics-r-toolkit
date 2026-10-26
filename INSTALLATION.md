@@ -1,4 +1,4 @@
-# Installation and first run — Toolkit v1.11.0
+# Installation and first run — Toolkit v1.12.0
 
 [Srpski (latinica)](INSTALLATION_SER.md) · [README](README.md) · [Module registry](MODULE_REGISTRY.md)
 
@@ -17,6 +17,7 @@ election-forensics-r-toolkit/
     contours/                  # Contours.R
     voter_rigging/             # Voter_rigging.R
     approximate_normality/     # Approximate_normality.R
+    shpilkin/                  # Shpilkin.R
 ```
 
 ## 2. Prepare or reuse election inputs
@@ -43,6 +44,7 @@ In RStudio select **Session > Set Working Directory > Choose Directory…**, sel
 | Contour diagrams | `Contours.R` | [README](modules/contours/README.md) |
 | Voter-rigging diagnostics | `Voter_rigging.R` | [README](modules/voter_rigging/README.md) |
 | Approximate normality | `Approximate_normality.R` | [README](modules/approximate_normality/README.md) |
+| Shpilkin/Kobak diagnostics | `Shpilkin.R` | [README](modules/shpilkin/README.md) |
 
 For example, from `modules/contours/`:
 
@@ -63,5 +65,7 @@ Each module writes its outputs to its own local `*_outputs/` folder, not to the 
 For `voter_rigging`, use the `Master` worksheet (including QC-eligible E<100 units); output is stored locally in `modules/voter_rigging/voter_rigging_outputs/`. The analysis reports descriptive `D(p)` and does not calculate `δ(p)` without an appropriate international reference set.
 
 The `approximate_normality` module reads `Master`, uses QC-eligible `E >= 100` units for primary comparisons and keeps stations below that size threshold in a separate sensitivity analysis. From `modules/approximate_normality/`, install `readxl`, `ggplot2` and `scales` if needed; run `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, then `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` and `source("tests/check_exports.R")`. Results (EN/SR-Latin PNG figures and numeric CSVs) are saved to `approximate_normality_outputs/`. Its fixed-bin distributions are descriptive normality diagnostics, not a fraud classification.
+
+The `shpilkin` module runs from `modules/shpilkin/` with `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_SHPILKIN_TEST_MODE")`, `source("Shpilkin.R")`, and `source("tests/check_exports.R")`. It reads `Master` and writes only `shpilkin_outputs/`; its default Monte Carlo count (999) is exploratory, while the original study used 10,000. The excess-votes calculation requires sensitivity to its reference turnout range and does **not** certify fraud or its absence.
 
 Statistical diagnostics are not legal determinations of electoral misconduct. Consult the respective module's limitations and retain provenance, parameters, code version and `sessionInfo()` with substantive analyses.

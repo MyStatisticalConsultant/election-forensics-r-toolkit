@@ -1,0 +1,5 @@
+module=shpilkin
+version=0.1.3
+status=public
+entrypoint=Shpilkin.R
+source=Kobak-Shpilkin-Pshenichnikov-2016-and-documented-conditional-adaptation
