@@ -39,3 +39,6 @@ validation_results/
 
 # Generated Shpilkin/Kobak diagnostics, Monte Carlo and conditional scenario results
 **/shpilkin_outputs/
+
+# Generated regression-analysis graphs, model tables and station-level diagnostics
+**/regression_analysis_outputs/

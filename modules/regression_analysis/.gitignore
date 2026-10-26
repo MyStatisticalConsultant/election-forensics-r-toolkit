@@ -1,0 +1,5 @@
+regression_analysis_outputs/
+.Rhistory
+.RData
+.Rproj.user/
+*.Rout

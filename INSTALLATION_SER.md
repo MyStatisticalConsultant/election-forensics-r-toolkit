@@ -1,4 +1,4 @@
-# Instalacija i prvo pokretanje — Toolkit v1.12.0
+# Instalacija i prvo pokretanje — Toolkit v1.13.0
 
 [English](INSTALLATION.md) · [README](README_SER.md) · [Registar modula](MODULE_REGISTRY_SER.md)
 
@@ -18,6 +18,7 @@ election-forensics-r-toolkit/
     voter_rigging/             # Voter_rigging.R
     approximate_normality/     # Approximate_normality.R
     shpilkin/                  # Shpilkin.R
+    regression_analysis/       # Regression_analysis.R
 ```
 
 ## 2. Priprema ili ponovno korišćenje podataka
@@ -45,6 +46,7 @@ U RStudio-u izabrati **Session > Set Working Directory > Choose Directory…**, 
 | Dijagnostika pritiska na birače (voter rigging) | `Voter_rigging.R` | [README](modules/voter_rigging/README_SER.md) |
 | Približna normalnost | `Approximate_normality.R` | [README](modules/approximate_normality/README_SER.md) |
 | Špiljkin/Kobak dijagnostika | `Shpilkin.R` | [README](modules/shpilkin/README_SER.md) |
+| Regresiona analiza | `Regression_analysis.R` | [README](modules/regression_analysis/README_SER.md) |
 
 Na primer, iz foldera `modules/contours/`:
 
@@ -67,5 +69,21 @@ Za `voter_rigging` koristi se list `Master` (uključujući QC-podobna BM sa E<10
 Modul `approximate_normality` čita `Master`; primarne analize koriste QC-podobna BM sa `E >= 100`, a BM ispod tog praga obrađuju se odvojeno kao analiza osetljivosti. Iz foldera `modules/approximate_normality/`, po potrebi instalirati `readxl`, `ggplot2` i `scales`, zatim izvršiti `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` i `source("tests/check_exports.R")`. Rezultati (EN/SR-Lat PNG i numerički CSV) čuvaju se u `approximate_normality_outputs/`. Empirijske raspodele po intervalima služe dijagnostici normalnosti, ne klasifikaciji izborne prevare.
 
 Modul `shpilkin` pokreće se iz `modules/shpilkin/` komandama `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_SHPILKIN_TEST_MODE")`, `source("Shpilkin.R")` i `source("tests/check_exports.R")`. Čita `Master`, a rezultate čuva u `shpilkin_outputs/`. Podrazumevanih 999 Monte Karlo ponavljanja namenjeno je preliminarnoj analizi (originalni rad koristi 10.000). Procena viška glasova zavisi od referentnog intervala izlaznosti i **nije** potvrda izborne prevare niti njenog odsustva.
+
+## Regresiona analiza: prvo izvršavanje
+
+U folderu `modules/regression_analysis/` proveriti da su dostupni `readxl` i `ggplot2` (instalirati samo ako nedostaju). Modul koristi postojeće pripremljene listove `Master` i `Options`:
+
+```r
+install.packages(c("readxl", "ggplot2"))  # Samo po potrebi
+source("tests/run_tests.R")
+source("tests/test_graphics.R")
+source("tests/integration_real_data.R")
+Sys.unsetenv("EF_REGRESSION_TEST_MODE")
+source("Regression_analysis.R")
+source("tests/check_exports.R")
+```
+
+Podesivi odeljak podržava tri izbora, nacionalni nivo (podrazumevano) ili odabrane okruge/opštine, `C/E` (osnovno) i `B/E` (osetljivost), kao i `Size` i `Size_JHK`. Imena kandidata/lista preuzimaju se iz `Options`. U lokalnom folderu `regression_analysis_outputs/` nalaze se numerički CSV koeficijenti, OLS/HC3 dijagnostike, reziduali i grafikoni na oba jezika. Grafikoni A upoređuju izlaznost i glasove **u odnosu na upisane birače**, a B1/B2 udeo glasova pobednika **u važećim glasovima** sa brojem/stopom nevažećih listića. Sam koeficijent regresije nije dokaz nepravilnosti. Videti [metodologiju](modules/regression_analysis/METHODOLOGY_SER.md) i [vodič kroz izlaze](modules/regression_analysis/OUTPUT_GUIDE_SER.md).
 
 Statistički nalazi nisu pravna odluka o nepravilnostima. Uz analize čuvati izvor podataka, parametre, verzije koda i `sessionInfo()`.

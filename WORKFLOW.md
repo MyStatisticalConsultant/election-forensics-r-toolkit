@@ -27,6 +27,7 @@ Set the RStudio working directory to the listed module directory and source its 
 | **Voter-rigging diagnostics** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
 | **Approximate normality** | `modules/approximate_normality/` | `source("Approximate_normality.R")` | `approximate_normality_outputs/` |
 | **Shpilkin/Kobak diagnostics** | `modules/shpilkin/` | `source("Shpilkin.R")` | `shpilkin_outputs/` |
+| **Regression analysis** | `modules/regression_analysis/` | `source("Regression_analysis.R")` | `regression_analysis_outputs/` |
 
 For the first run, install any module-specific R packages and execute the tests listed in that module's README. For Contours specifically:
 
@@ -46,6 +47,8 @@ For `approximate_normality`, use the `Master` worksheet, retaining QC-eligible s
 
 The `shpilkin` module includes three separate procedures: descriptive turnout/winner histograms; an integer-percentage Monte Carlo test (default 999 repetitions, optional 10,000 for source-comparable precision); and a conditional turnout-reference excess-votes estimate. From `modules/shpilkin/` run the four tests described in its [README](modules/shpilkin/README.md) as needed. **A zero conditional excess estimate cannot be interpreted as no fraud**, and a positive value is not a verified fraud tally. No other analytical module needs to be rerun.
 
+For `regression_analysis`, use compatible `Master` and `Options` sheets from the same prepared election workbook. From `modules/regression_analysis/` run the numerical, graphics and real-data tests, the main script and the export check in the sequence given in its [README](modules/regression_analysis/README.md). The primary turnout definition is `C/E`, with `B/E` as sensitivity. All eligible `E >= 100` stations are analysed alongside `Size` and `Size_JHK` Small/Large groups, and `E < 100` stations are a separate sensitivity group. Candidate/list names are resolved from `Options`; the national winner and runner-up candidates/lists are compared. The A model regresses candidate votes per registered voter on turnout; B1 and B2 regress winner's valid-vote share on invalid-ballot counts and rates. Controlled models, OLS/HC3 coefficients, diagnostics, PNGs and station-level CSVs are saved under `regression_analysis_outputs/`. Apparent associations must not be interpreted as evidence that fraud occurred.
+
 ## 3. When to recompute
 
 | Change | Rerun RZS preparation? | Downstream action |
@@ -59,4 +62,4 @@ Scripts do not automatically detect stale local input workbooks. Keep checksums,
 
 ## 4. GitHub source versus local data
 
-Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` and `approximate_normality_outputs/` and `shpilkin_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.
+Version-control code, tests and documentation; keep official raw XLSX, prepared XLSX and generated graphs/tables locally. The root [`.gitignore`](.gitignore) excludes `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` and `approximate_normality_outputs/`, `shpilkin_outputs/` and `regression_analysis_outputs/`. Git ignore rules do not prevent accidental manual deletion or overwriting. Preserve these directories during updates.

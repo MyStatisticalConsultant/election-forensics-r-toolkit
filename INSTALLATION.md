@@ -1,4 +1,4 @@
-# Installation and first run — Toolkit v1.12.0
+# Installation and first run — Toolkit v1.13.0
 
 [Srpski (latinica)](INSTALLATION_SER.md) · [README](README.md) · [Module registry](MODULE_REGISTRY.md)
 
@@ -18,6 +18,7 @@ election-forensics-r-toolkit/
     voter_rigging/             # Voter_rigging.R
     approximate_normality/     # Approximate_normality.R
     shpilkin/                  # Shpilkin.R
+    regression_analysis/       # Regression_analysis.R
 ```
 
 ## 2. Prepare or reuse election inputs
@@ -45,6 +46,7 @@ In RStudio select **Session > Set Working Directory > Choose Directory…**, sel
 | Voter-rigging diagnostics | `Voter_rigging.R` | [README](modules/voter_rigging/README.md) |
 | Approximate normality | `Approximate_normality.R` | [README](modules/approximate_normality/README.md) |
 | Shpilkin/Kobak diagnostics | `Shpilkin.R` | [README](modules/shpilkin/README.md) |
+| Regression analysis | `Regression_analysis.R` | [README](modules/regression_analysis/README.md) |
 
 For example, from `modules/contours/`:
 
@@ -67,5 +69,21 @@ For `voter_rigging`, use the `Master` worksheet (including QC-eligible E<100 uni
 The `approximate_normality` module reads `Master`, uses QC-eligible `E >= 100` units for primary comparisons and keeps stations below that size threshold in a separate sensitivity analysis. From `modules/approximate_normality/`, install `readxl`, `ggplot2` and `scales` if needed; run `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, then `Sys.unsetenv("EF_APPROX_NORMALITY_TEST_MODE")`, `source("Approximate_normality.R")` and `source("tests/check_exports.R")`. Results (EN/SR-Latin PNG figures and numeric CSVs) are saved to `approximate_normality_outputs/`. Its fixed-bin distributions are descriptive normality diagnostics, not a fraud classification.
 
 The `shpilkin` module runs from `modules/shpilkin/` with `source("tests/run_tests.R")`, `source("tests/test_graphics.R")`, `source("tests/integration_real_data.R")`, `Sys.unsetenv("EF_SHPILKIN_TEST_MODE")`, `source("Shpilkin.R")`, and `source("tests/check_exports.R")`. It reads `Master` and writes only `shpilkin_outputs/`; its default Monte Carlo count (999) is exploratory, while the original study used 10,000. The excess-votes calculation requires sensitivity to its reference turnout range and does **not** certify fraud or its absence.
+
+## Regression analysis: first run
+
+From `modules/regression_analysis/`, ensure `readxl` and `ggplot2` are available (install only if absent) and use the existing RZS-prepared `Master` and `Options` worksheets:
+
+```r
+install.packages(c("readxl", "ggplot2"))  # Only if needed
+source("tests/run_tests.R")
+source("tests/test_graphics.R")
+source("tests/integration_real_data.R")
+Sys.unsetenv("EF_REGRESSION_TEST_MODE")
+source("Regression_analysis.R")
+source("tests/check_exports.R")
+```
+
+The editable section supports the three elections, national analyses by default, optional districts/municipalities, `C/E` (primary) and `B/E` turnout, and `Size`/`Size_JHK`. Candidate/list labels are read from `Options`. The output directory `regression_analysis_outputs/` contains reproducible model summaries, coefficients, OLS/HC3 diagnostics, residuals and bilingual plots. The A figures compare turnout with votes **per registered voter**; B1/B2 regress winner votes **as a share of valid votes** on invalid-ballot counts/rates. No regression slope alone proves electoral misconduct. See the module [methodology](modules/regression_analysis/METHODOLOGY.md) and [output guide](modules/regression_analysis/OUTPUT_GUIDE.md).
 
 Statistical diagnostics are not legal determinations of electoral misconduct. Consult the respective module's limitations and retain provenance, parameters, code version and `sessionInfo()` with substantive analyses.

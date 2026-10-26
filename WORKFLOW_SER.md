@@ -27,6 +27,7 @@ U RStudio-u postaviti radni direktorijum na folder modula i pokrenuti njegov gla
 | **Voter rigging (dijagnostika pritiska na birače)** | `modules/voter_rigging/` | `source("Voter_rigging.R")` | `voter_rigging_outputs/` |
 | **Približna normalnost** | `modules/approximate_normality/` | `source("Approximate_normality.R")` | `approximate_normality_outputs/` |
 | **Špiljkin/Kobak dijagnostika** | `modules/shpilkin/` | `source("Shpilkin.R")` | `shpilkin_outputs/` |
+| **Regresiona analiza** | `modules/regression_analysis/` | `source("Regression_analysis.R")` | `regression_analysis_outputs/` |
 
 Pri prvoj instalaciji dodati R pakete i izvršiti testove navedene u dokumentaciji odabranog modula. Za Contours:
 
@@ -46,6 +47,8 @@ Modul `approximate_normality` čita list `Master`, koristi QC-podobna BM sa `E >
 
 Modul `shpilkin` obuhvata tri odvojena postupka: opisne histograme, Monte Karlo test celobrojnih procenata (999 ponavljanja podrazumevano; 10.000 za preciznost uporedivu sa izvornim radom) i uslovnu procenu viška glasova. Iz foldera `modules/shpilkin/` izvršiti testove opisane u [README-u](modules/shpilkin/README_SER.md). **Nulta uslovna procena ne potvrđuje odsustvo nepravilnosti**, a pozitivna procena nije utvrđen broj falsifikovanih glasova. Ostale analitičke module nije potrebno ponovo pokretati.
 
+Za `regression_analysis` koriste se kompatibilni listovi `Master` i `Options` iste pripremljene baze. U folderu `modules/regression_analysis/` pokrenuti numeričke, grafičke i integracione testove, glavni skript i proveru izvoza po redosledu iz [README-a](modules/regression_analysis/README_SER.md). Izlaznost `C/E` je osnovna, a `B/E` analiza osetljivosti. Pored svih QC-podobnih BM sa `E >= 100`, postoje `Size` i `Size_JHK` male/velike grupe; `E < 100` se analizira posebno. Imena pobednika i drugoplasiranog preuzimaju se iz `Options`, a izbor se vrši na osnovu nacionalnih rezultata. Model A poredi izlaznost sa glasovima u odnosu na sve upisane, dok modeli B1/B2 porede broj ili stopu nevažećih listića sa udelom pobednika u važećim glasovima. Numerički OLS/HC3 nalazi, kontrolni modeli, PNG i CSV izlazi čuvaju se u `regression_analysis_outputs/`. Povezanost ne dokazuje da je došlo do izborne prevare.
+
 ## 3. Kada ponavljati proračune
 
 | Promena | Ponoviti RZS pripremu? | Dalji postupak |
@@ -59,4 +62,4 @@ Skriptovi ne otkrivaju automatski zastarele lokalne baze. Uz istraživačke rezu
 
 ## 4. Javni kod i lokalne baze
 
-Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` i `approximate_normality_outputs/` i `shpilkin_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.
+Verzionisati kod, testove i dokumentaciju; izvorne i pripremljene Excel baze, tabele i slike čuvati lokalno. Korenski [`.gitignore`](.gitignore) izuzima `raw_data/`, `RZS_prepared/`, `descriptive_outputs/`, `klimek_outputs/`, `fingerprint_outputs/`, `contours_outputs/`, `voter_rigging_outputs/` i `approximate_normality_outputs/`, `shpilkin_outputs/` i `regression_analysis_outputs/`. Pravila ignorisanja ne sprečavaju slučajno ručno brisanje/prepisivanje; sačuvati lokalne kopije pri ažuriranju.

@@ -4,7 +4,7 @@ title: "Election Forensics R Toolkit"
 authors:
   - family-names: "Kovačić"
     given-names: "Zlatko J."
-version: "1.12.0"
+version: "1.13.0"
 type: software
 license: MIT
 keywords:
@@ -26,3 +26,8 @@ keywords:
   - Kobak integer percentage anomalies
   - Monte Carlo election diagnostics
   - conditional excess votes
+  - regression analysis
+  - turnout-vote relationship
+  - invalid ballots
+  - HC3 robust standard errors
+  - JHK polling station classification
